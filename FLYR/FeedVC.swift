@@ -12,20 +12,26 @@ class FeedVC: UIViewController {
     let feedVM: FeedVM
     let feedView: FeedView
 
-    required init(feedVM: FeedVM, feedView: FeedView) {
+    init(feedVM: FeedVM, feedView: FeedView) {
         self.feedVM = feedVM
         self.feedView = feedView
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.feedVM = FeedVMImpl()
+        self.feedVM = FeedVM(photoFetcher: PhotoFetcher())
         self.feedView = FeedView()
         super.init(coder: aDecoder)
     }
 
     override func loadView() {
-        feedView.backgroundColor = .greenColor()
+        feedView.backgroundColor = .whiteColor()
         view = feedView
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        feedVM.imageOutput.bindTo(feedView.imageInput)
     }
 }

@@ -6,6 +6,17 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-protocol FeedVM {}
+import ReactiveKit
+import UIKit
 
-struct FeedVMImpl: FeedVM {}
+protocol FeedVMProtocol {
+    var imageOutput: Stream<UIImage> { get }
+}
+
+struct FeedVM: FeedVMProtocol {
+    let imageOutput: Stream<UIImage>
+
+    init(photoFetcher: PhotoFetcher) {
+        imageOutput = photoFetcher.imageOutput
+    }
+}

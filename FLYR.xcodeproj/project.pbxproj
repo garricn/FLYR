@@ -7,15 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3AA7266E47E1CBAC20E97C39 /* Pods_FLYRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */; };
 		4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D73E61D50521F00648603 /* AppDelegate.swift */; };
 		4E1D73EE1D50521F00648603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E1D73ED1D50521F00648603 /* Assets.xcassets */; };
 		4E1D73F11D50521F00648603 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E1D73EF1D50521F00648603 /* LaunchScreen.storyboard */; };
-		4E1D73FC1D50521F00648603 /* FLYRTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D73FB1D50521F00648603 /* FLYRTests.swift */; };
 		4E1D74071D50521F00648603 /* FLYRUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74061D50521F00648603 /* FLYRUITests.swift */; };
 		4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74151D50561700648603 /* AppCoordinator.swift */; };
 		4E1D74181D50594100648603 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74171D50594100648603 /* FeedVC.swift */; };
 		4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74191D505E2700648603 /* FeedVM.swift */; };
 		4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D741B1D505E6C00648603 /* FeedView.swift */; };
+		4E309AFF1D56A83A005867E7 /* FeedVMImplSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMImplSpec.swift */; };
+		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
+		4EC34E431D56824E001DF486 /* PhotoFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* PhotoFetcher.swift */; };
+		4EC34E451D5682A0001DF486 /* PhotoFetcherImplSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* PhotoFetcherImplSpec.swift */; };
+		847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,13 +41,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.release.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.release.xcconfig"; sourceTree = "<group>"; };
+		22B38C085B34210483957ECC /* Pods-FLYRTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.release.xcconfig"; sourceTree = "<group>"; };
 		4E1D73E31D50521E00648603 /* FLYR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FLYR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1D73E61D50521F00648603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E1D73ED1D50521F00648603 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E1D73F01D50521F00648603 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4E1D73F21D50521F00648603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E1D73F71D50521F00648603 /* FLYRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FLYRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4E1D73FB1D50521F00648603 /* FLYRTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLYRTests.swift; sourceTree = "<group>"; };
 		4E1D73FD1D50521F00648603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E1D74021D50521F00648603 /* FLYRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FLYRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1D74061D50521F00648603 /* FLYRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLYRUITests.swift; sourceTree = "<group>"; };
@@ -51,6 +57,14 @@
 		4E1D74171D50594100648603 /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		4E1D74191D505E2700648603 /* FeedVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVM.swift; sourceTree = "<group>"; };
 		4E1D741B1D505E6C00648603 /* FeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
+		4E309AFE1D56A83A005867E7 /* FeedVMImplSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMImplSpec.swift; sourceTree = "<group>"; };
+		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		4EC34E421D56824E001DF486 /* PhotoFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoFetcher.swift; sourceTree = "<group>"; };
+		4EC34E441D5682A0001DF486 /* PhotoFetcherImplSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoFetcherImplSpec.swift; sourceTree = "<group>"; };
+		636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.debug.xcconfig"; sourceTree = "<group>"; };
+		A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FLYRTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FLYR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +80,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AA7266E47E1CBAC20E97C39 /* Pods_FLYRTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +94,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		448E940B3E209C5F93A9FF7F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */,
+				073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */,
+				636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */,
+				22B38C085B34210483957ECC /* Pods-FLYRTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		4E1D73DA1D50521E00648603 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +112,8 @@
 				4E1D73FA1D50521F00648603 /* FLYRTests */,
 				4E1D74051D50521F00648603 /* FLYRUITests */,
 				4E1D73E41D50521E00648603 /* Products */,
+				448E940B3E209C5F93A9FF7F /* Pods */,
+				DF26F170CA0A977037507FCD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,9 +132,11 @@
 			children = (
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
+				4E5EBE251D51BDB700E4768D /* BaseView.swift */,
 				4E1D74171D50594100648603 /* FeedVC.swift */,
 				4E1D741B1D505E6C00648603 /* FeedView.swift */,
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
+				4EC34E421D56824E001DF486 /* PhotoFetcher.swift */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
 			);
 			path = FLYR;
@@ -114,8 +145,9 @@
 		4E1D73FA1D50521F00648603 /* FLYRTests */ = {
 			isa = PBXGroup;
 			children = (
-				4E1D73FB1D50521F00648603 /* FLYRTests.swift */,
 				4E1D73FD1D50521F00648603 /* Info.plist */,
+				4EC34E441D5682A0001DF486 /* PhotoFetcherImplSpec.swift */,
+				4E309AFE1D56A83A005867E7 /* FeedVMImplSpec.swift */,
 			);
 			path = FLYRTests;
 			sourceTree = "<group>";
@@ -139,6 +171,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		DF26F170CA0A977037507FCD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */,
+				A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -146,9 +187,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4E1D740B1D50521F00648603 /* Build configuration list for PBXNativeTarget "FLYR" */;
 			buildPhases = (
+				1A7F17A6F65D56B1CF5B84CE /* [CP] Check Pods Manifest.lock */,
 				4E1D73DF1D50521E00648603 /* Sources */,
 				4E1D73E01D50521E00648603 /* Frameworks */,
 				4E1D73E11D50521E00648603 /* Resources */,
+				5365506DF08A1666186C513C /* [CP] Embed Pods Frameworks */,
+				2425595CE557D30BF22ED5C8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -163,9 +207,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4E1D740E1D50521F00648603 /* Build configuration list for PBXNativeTarget "FLYRTests" */;
 			buildPhases = (
+				78D936AD910419BB640D5FCB /* [CP] Check Pods Manifest.lock */,
 				4E1D73F31D50521F00648603 /* Sources */,
 				4E1D73F41D50521F00648603 /* Frameworks */,
 				4E1D73F51D50521F00648603 /* Resources */,
+				3B727BC228E90760CDD0DE00 /* [CP] Embed Pods Frameworks */,
+				A2B374B47A2827C850357768 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -265,6 +312,99 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		1A7F17A6F65D56B1CF5B84CE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		2425595CE557D30BF22ED5C8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FLYR/Pods-FLYR-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		3B727BC228E90760CDD0DE00 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5365506DF08A1666186C513C /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FLYR/Pods-FLYR-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		78D936AD910419BB640D5FCB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		A2B374B47A2827C850357768 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4E1D73DF1D50521E00648603 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -272,7 +412,9 @@
 			files = (
 				4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */,
 				4E1D74181D50594100648603 /* FeedVC.swift in Sources */,
+				4EC34E431D56824E001DF486 /* PhotoFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
+				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
 				4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */,
 			);
@@ -282,7 +424,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E1D73FC1D50521F00648603 /* FLYRTests.swift in Sources */,
+				4E309AFF1D56A83A005867E7 /* FeedVMImplSpec.swift in Sources */,
+				4EC34E451D5682A0001DF486 /* PhotoFetcherImplSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,6 +549,7 @@
 		};
 		4E1D740C1D50521F00648603 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -418,6 +562,7 @@
 		};
 		4E1D740D1D50521F00648603 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -430,6 +575,7 @@
 		};
 		4E1D740F1D50521F00648603 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = FLYRTests/Info.plist;
@@ -442,6 +588,7 @@
 		};
 		4E1D74101D50521F00648603 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 22B38C085B34210483957ECC /* Pods-FLYRTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = FLYRTests/Info.plist;
@@ -493,6 +640,7 @@
 				4E1D740D1D50521F00648603 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4E1D740E1D50521F00648603 /* Build configuration list for PBXNativeTarget "FLYRTests" */ = {
 			isa = XCConfigurationList;
@@ -501,6 +649,7 @@
 				4E1D74101D50521F00648603 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4E1D74111D50521F00648603 /* Build configuration list for PBXNativeTarget "FLYRUITests" */ = {
 			isa = XCConfigurationList;
@@ -509,6 +658,7 @@
 				4E1D74131D50521F00648603 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

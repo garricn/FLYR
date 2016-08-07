@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
-        let frame = UIScreen.mainScreen().nativeBounds
+        let frame = UIScreen.mainScreen().bounds
         window = UIWindow(frame: frame)
         window?.rootViewController = appCoordinator.rootViewController(from: launchOptions)
         window?.makeKeyAndVisible()
@@ -22,5 +22,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 }
 
-let appCoordinator = AppCoordinatorImpl()
+let appCoordinator = AppCoordinator()
 typealias LaunchOptions = [NSObject : AnyObject]?
