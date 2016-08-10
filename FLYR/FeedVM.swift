@@ -6,17 +6,24 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-import ReactiveKit
 import UIKit
+import Bond
+import CloudKit
 
 protocol FeedVMProtocol {
-    var imageOutput: Stream<UIImage> { get }
+    var imageOutput: EventProducer<UIImage> { get }
 }
 
 struct FeedVM: FeedVMProtocol {
-    let imageOutput: Stream<UIImage>
+    var imageOutput = EventProducer<UIImage>()
 
-    init(photoFetcher: PhotoFetcher) {
-        imageOutput = photoFetcher.imageOutput
+    init(recordFetcher: RecordFetchable) {
+        imageOutput = recordFetcher.recordOutput.map(toImage)
     }
+}
+
+func toImage(record: CKRecord) -> UIImage {
+    let imageAsset = record["image"] as! CKAsset
+    let path = imageAsset.fileURL.path!
+    return UIImage(contentsOfFile: path)!
 }

@@ -7,21 +7,18 @@
 //
 
 import UIKit
-import ReactiveKit
-import ReactiveUIKit
+import Bond
 import Cartography
 
-let screenHeight = UIScreen.mainScreen().nativeBounds.height
-
 class FeedView: BaseView {
-    var imageInput: ReactiveKit.Property<UIImage?> {
-        return imageView.rImage
+    var imageInput: Observable<UIImage?> {
+        return imageView.bnd_image
     }
 
     private let imageView = UIImageView()
 
     override func bind() {
-        imageInput.bindTo(imageView.rImage)
+        imageInput.bindTo(imageView.bnd_image)
     }
 
     override func setup() {

@@ -16,10 +16,11 @@
 		4E1D74181D50594100648603 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74171D50594100648603 /* FeedVC.swift */; };
 		4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74191D505E2700648603 /* FeedVM.swift */; };
 		4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D741B1D505E6C00648603 /* FeedView.swift */; };
-		4E309AFF1D56A83A005867E7 /* FeedVMImplSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMImplSpec.swift */; };
+		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
 		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
-		4EC34E431D56824E001DF486 /* PhotoFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* PhotoFetcher.swift */; };
-		4EC34E451D5682A0001DF486 /* PhotoFetcherImplSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* PhotoFetcherImplSpec.swift */; };
+		4EC34E431D56824E001DF486 /* RecordFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* RecordFetcher.swift */; };
+		4EC34E451D5682A0001DF486 /* RecordFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */; };
+		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
 		847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,10 +58,12 @@
 		4E1D74171D50594100648603 /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		4E1D74191D505E2700648603 /* FeedVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVM.swift; sourceTree = "<group>"; };
 		4E1D741B1D505E6C00648603 /* FeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
-		4E309AFE1D56A83A005867E7 /* FeedVMImplSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMImplSpec.swift; sourceTree = "<group>"; };
+		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
 		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
-		4EC34E421D56824E001DF486 /* PhotoFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoFetcher.swift; sourceTree = "<group>"; };
-		4EC34E441D5682A0001DF486 /* PhotoFetcherImplSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoFetcherImplSpec.swift; sourceTree = "<group>"; };
+		4EC34E421D56824E001DF486 /* RecordFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordFetcher.swift; sourceTree = "<group>"; };
+		4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordFetcherSpec.swift; sourceTree = "<group>"; };
+		4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FLYR.entitlements; sourceTree = "<group>"; };
+		4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.debug.xcconfig"; sourceTree = "<group>"; };
 		A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FLYRTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */,
+				4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,13 +134,14 @@
 		4E1D73E51D50521F00648603 /* FLYR */ = {
 			isa = PBXGroup;
 			children = (
+				4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */,
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
 				4E5EBE251D51BDB700E4768D /* BaseView.swift */,
 				4E1D74171D50594100648603 /* FeedVC.swift */,
 				4E1D741B1D505E6C00648603 /* FeedView.swift */,
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
-				4EC34E421D56824E001DF486 /* PhotoFetcher.swift */,
+				4EC34E421D56824E001DF486 /* RecordFetcher.swift */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
 			);
 			path = FLYR;
@@ -146,8 +151,8 @@
 			isa = PBXGroup;
 			children = (
 				4E1D73FD1D50521F00648603 /* Info.plist */,
-				4EC34E441D5682A0001DF486 /* PhotoFetcherImplSpec.swift */,
-				4E309AFE1D56A83A005867E7 /* FeedVMImplSpec.swift */,
+				4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */,
+				4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */,
 			);
 			path = FLYRTests;
 			sourceTree = "<group>";
@@ -174,6 +179,7 @@
 		DF26F170CA0A977037507FCD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */,
 				A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */,
 				A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */,
 			);
@@ -255,6 +261,11 @@
 					4E1D73E21D50521E00648603 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = Y642MFHN82;
+						SystemCapabilities = {
+							com.apple.iCloud = {
+								enabled = 1;
+							};
+						};
 					};
 					4E1D73F61D50521F00648603 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -412,7 +423,7 @@
 			files = (
 				4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */,
 				4E1D74181D50594100648603 /* FeedVC.swift in Sources */,
-				4EC34E431D56824E001DF486 /* PhotoFetcher.swift in Sources */,
+				4EC34E431D56824E001DF486 /* RecordFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
@@ -424,8 +435,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E309AFF1D56A83A005867E7 /* FeedVMImplSpec.swift in Sources */,
-				4EC34E451D5682A0001DF486 /* PhotoFetcherImplSpec.swift in Sources */,
+				4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */,
+				4EC34E451D5682A0001DF486 /* RecordFetcherSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -552,6 +563,7 @@
 			baseConfigurationReference = 6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FLYR/FLYR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = FLYR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -565,6 +577,7 @@
 			baseConfigurationReference = 073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = FLYR/FLYR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				INFOPLIST_FILE = FLYR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

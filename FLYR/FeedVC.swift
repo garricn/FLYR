@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Bond
 
 class FeedVC: UIViewController {
     let feedVM: FeedVM
@@ -19,8 +20,12 @@ class FeedVC: UIViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.feedVM = FeedVM(photoFetcher: PhotoFetcher())
         self.feedView = FeedView()
+        self.feedVM = FeedVM(
+            recordFetcher: RecordFetcher(
+                database: resolvedPublicDatabase()
+            )
+        )
         super.init(coder: aDecoder)
     }
 
@@ -32,6 +37,8 @@ class FeedVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        feedVM.imageOutput.bindTo(feedView.imageInput)
+        feedVM.imageOutput
+            .deliverOn(Queue.Main)
+            .bindTo(feedView.imageInput)
     }
 }
