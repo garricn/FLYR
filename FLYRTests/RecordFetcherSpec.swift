@@ -15,28 +15,24 @@ import CloudKit
 
 class RecordFetcherSpec: QuickSpec {
     override func spec() {
-        let subject = RecordFetcher(database: MockDatabase())
-        let recordInput = Observable<CKRecord?>(nil)
-
-        beforeEach {
-            subject.recordOutput.bindTo(recordInput)
-        }
+        var subject: FlyrFetcher!
+        let flyrInput: Observable<Flyrs?> = Observable(nil)
 
         describe("By default") {
-            it("fetches and outputs records") {
-                expect(recordInput.value).toNot(beNil())
+            beforeEach {
+                subject = FlyrFetcher(
+                    database: MockDatabase(),
+                    query: mockQuery
+                )
+
+                subject.output.bindTo(flyrInput)
+
+                subject.fetch()
+            }
+
+            it("fetches and outputs Flyrs") {
+                expect(flyrInput.value).toNot(beNil())
             }
         }
-    }
-}
-
-struct MockDatabase: DatabaseProtocol {
-    func performQuery(
-        query: CKQuery,
-        inZoneWithID zoneID: CKRecordZoneID?,
-        completionHandler: ([CKRecord]?, NSError?) -> Void
-    ) {
-        let record = CKRecord(recordType: "Flyr")
-        completionHandler([record], nil)
     }
 }

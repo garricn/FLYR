@@ -11,15 +11,32 @@ import Bond
 import CloudKit
 
 protocol FeedVMProtocol {
-    var imageOutput: EventProducer<UIImage> { get }
+    var imageOutput: ObservableArray<UIImage> { get }
 }
 
 struct FeedVM: FeedVMProtocol {
-    var imageOutput = EventProducer<UIImage>()
+    var imageOutput: ObservableArray<UIImage> = []
 
-    init(recordFetcher: RecordFetchable) {
-        imageOutput = recordFetcher.recordOutput.map(toImage)
+    init(flyrFetcher: FlyrFetchable) {
+        flyrFetcher
+            .output
+            .map(toImages)
+            .observe { self.imageOutput.extend($0) }
+
+        flyrFetcher.fetch()
     }
+}
+
+func toCKRecords(data: Data) -> CKRecords {
+    return data as! CKRecords
+}
+
+func toImages(flyrs: Flyrs) -> [UIImage] {
+    return flyrs.map(toImage)
+}
+
+func toImage(flyr: Flyr) -> UIImage {
+    return flyr.image
 }
 
 func toImage(record: CKRecord) -> UIImage {

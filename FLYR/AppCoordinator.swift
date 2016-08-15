@@ -37,7 +37,9 @@ func resolvedFeedVC() -> FeedVC {
 
 func resolvedFeedVM() -> FeedVM {
     return FeedVM(
-        recordFetcher: RecordFetcher(database: resolvedPublicDatabase()
+        flyrFetcher: FlyrFetcher(
+            database: resolvedPublicDatabase(),
+            query: resolvedFlyrQuery()
         )
     )
 }
@@ -45,4 +47,13 @@ func resolvedFeedVM() -> FeedVM {
 func resolvedPublicDatabase() -> CKDatabase {
     let container = CKContainer(identifier: "iCloud.com.flyrapp.FLYR")
     return container.publicCloudDatabase
+}
+
+
+func resolvedFlyrQuery() -> CKQuery {
+    return CKQuery(
+        recordType: "Flyr",
+        predicate: NSPredicate(
+            format: "TRUEPREDICATE")
+    )
 }

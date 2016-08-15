@@ -15,24 +15,20 @@ import CloudKit
 
 class FeedVMSpec: QuickSpec {
     override func spec() {
-        let _ = FeedVM(
-            recordFetcher: MockRecordFetcher()
+        let subject = FeedVM(
+            flyrFetcher: MockFlyrFetcher()
         )
 
-        let imageInput = Observable<UIImage?>(nil)
+        var imageInput: [UIImage] = []
 
-        describe("By default") {
-            it("emits an image") {
-                expect(imageInput.value).toNot(beNil())
+        describe("Given a flyr fetcher") {
+            beforeEach {
+                imageInput += subject.imageOutput.array
+            }
+
+            it("emits an array of images") {
+                expect(imageInput).toNot(beNil())
             }
         }
-    }
-}
-
-struct MockRecordFetcher: RecordFetchable {
-    let recordOutput: EventProducer<CKRecord>
-
-    init() {
-        recordOutput = EventProducer<CKRecord>()
     }
 }

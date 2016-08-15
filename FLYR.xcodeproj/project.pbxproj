@@ -8,14 +8,17 @@
 
 /* Begin PBXBuildFile section */
 		3AA7266E47E1CBAC20E97C39 /* Pods_FLYRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */; };
+		4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0C2D701D60DD08008BA952 /* FeedCell.swift */; };
 		4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D73E61D50521F00648603 /* AppDelegate.swift */; };
 		4E1D73EE1D50521F00648603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E1D73ED1D50521F00648603 /* Assets.xcassets */; };
 		4E1D73F11D50521F00648603 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E1D73EF1D50521F00648603 /* LaunchScreen.storyboard */; };
-		4E1D74071D50521F00648603 /* FLYRUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74061D50521F00648603 /* FLYRUITests.swift */; };
 		4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74151D50561700648603 /* AppCoordinator.swift */; };
 		4E1D74181D50594100648603 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74171D50594100648603 /* FeedVC.swift */; };
 		4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74191D505E2700648603 /* FeedVM.swift */; };
 		4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D741B1D505E6C00648603 /* FeedView.swift */; };
+		4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AB1D614F1900962E29 /* Flyr.swift */; };
+		4E1E23AE1D61784300962E29 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AD1D61784300962E29 /* Database.swift */; };
+		4E1E23B01D617CF100962E29 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AF1D617CF100962E29 /* Mocks.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
 		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
 		4EC34E431D56824E001DF486 /* RecordFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* RecordFetcher.swift */; };
@@ -44,6 +47,7 @@
 /* Begin PBXFileReference section */
 		073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.release.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.release.xcconfig"; sourceTree = "<group>"; };
 		22B38C085B34210483957ECC /* Pods-FLYRTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.release.xcconfig"; sourceTree = "<group>"; };
+		4E0C2D701D60DD08008BA952 /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		4E1D73E31D50521E00648603 /* FLYR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FLYR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1D73E61D50521F00648603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E1D73ED1D50521F00648603 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,12 +56,14 @@
 		4E1D73F71D50521F00648603 /* FLYRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FLYRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1D73FD1D50521F00648603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E1D74021D50521F00648603 /* FLYRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FLYRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4E1D74061D50521F00648603 /* FLYRUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLYRUITests.swift; sourceTree = "<group>"; };
 		4E1D74081D50521F00648603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E1D74151D50561700648603 /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		4E1D74171D50594100648603 /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		4E1D74191D505E2700648603 /* FeedVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVM.swift; sourceTree = "<group>"; };
 		4E1D741B1D505E6C00648603 /* FeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
+		4E1E23AB1D614F1900962E29 /* Flyr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flyr.swift; sourceTree = "<group>"; };
+		4E1E23AD1D61784300962E29 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
+		4E1E23AF1D617CF100962E29 /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
 		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		4EC34E421D56824E001DF486 /* RecordFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordFetcher.swift; sourceTree = "<group>"; };
@@ -143,6 +149,9 @@
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
 				4EC34E421D56824E001DF486 /* RecordFetcher.swift */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
+				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
+				4E1E23AB1D614F1900962E29 /* Flyr.swift */,
+				4E1E23AD1D61784300962E29 /* Database.swift */,
 			);
 			path = FLYR;
 			sourceTree = "<group>";
@@ -153,6 +162,7 @@
 				4E1D73FD1D50521F00648603 /* Info.plist */,
 				4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */,
 				4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */,
+				4E1E23AF1D617CF100962E29 /* Mocks.swift */,
 			);
 			path = FLYRTests;
 			sourceTree = "<group>";
@@ -160,7 +170,6 @@
 		4E1D74051D50521F00648603 /* FLYRUITests */ = {
 			isa = PBXGroup;
 			children = (
-				4E1D74061D50521F00648603 /* FLYRUITests.swift */,
 				4E1D74081D50521F00648603 /* Info.plist */,
 			);
 			path = FLYRUITests;
@@ -426,7 +435,10 @@
 				4EC34E431D56824E001DF486 /* RecordFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
+				4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */,
+				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
+				4E1E23AE1D61784300962E29 /* Database.swift in Sources */,
 				4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +449,7 @@
 			files = (
 				4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */,
 				4EC34E451D5682A0001DF486 /* RecordFetcherSpec.swift in Sources */,
+				4E1E23B01D617CF100962E29 /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,7 +457,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4E1D74071D50521F00648603 /* FLYRUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
