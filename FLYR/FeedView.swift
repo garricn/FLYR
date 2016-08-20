@@ -7,37 +7,50 @@
 //
 
 import UIKit
-import ReactiveKit
-import ReactiveUIKit
+import Bond
 import Cartography
 
-let screenHeight = UIScreen.mainScreen().nativeBounds.height
-
 class FeedView: BaseView {
-    var imageInput: ReactiveKit.Property<UIImage?> {
-        return imageView.rImage
-    }
-
-    private let imageView = UIImageView()
-
-    override func bind() {
-        imageInput.bindTo(imageView.rImage)
-    }
+    let tableView = UITableView()
 
     override func setup() {
-        addSubview(imageView)
+        tableView.registerClass(
+            FeedCell.self,
+            forCellReuseIdentifier: FeedCell.description()
+        )
+        addSubview(tableView)
     }
 
     override func style() {
-        imageView.contentMode = .ScaleAspectFit
+        backgroundColor = .whiteColor()
+        
+        tableView
+            .estimatedRowHeight = UIScreen
+            .mainScreen()
+            .bounds
+            .width
+        tableView.rowHeight = UITableViewAutomaticDimension
     }
 
     override func layout() {
-        constrain(imageView) { imageView in
-            imageView.top == imageView.superview!.top + 8
-            imageView.leading == imageView.superview!.leading + 8
-            imageView.trailing == imageView.superview!.trailing - 8
-            imageView.bottom == imageView.superview!.bottom - 8
+        constrain(tableView) { tableView in
+            tableView.top == tableView.superview!.top + 8
+            tableView.leading == tableView.superview!.leading + 8
+            tableView.trailing == tableView.superview!.trailing - 8
+            tableView.bottom == tableView.superview!.bottom - 8
         }
     }
 }
+
+//extension FeedView: UITableViewDelegate {
+//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+//        let image = Model.sharedInstance.items[indexPath.row].image
+//        let ratio = image.size.height / image.size.width
+//        return (view.bounds.width * ratio) //+ 88
+//    }
+//}
+
+
+
+
+

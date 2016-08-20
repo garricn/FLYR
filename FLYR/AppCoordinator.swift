@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CloudKit
 
 protocol AppCoordinatorProtocol {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
@@ -27,17 +28,32 @@ struct AppCoordinator: AppCoordinatorProtocol {
 }
 
 // Resolvers
-extension AppCoordinator {
-    func resolvedFeedVC() -> FeedVC {
-        return FeedVC(
-            feedVM: resolvedFeedVM(),
-            feedView: FeedView()
-        )
-    }
+func resolvedFeedVC() -> FeedVC {
+    return FeedVC(
+        feedVM: resolvedFeedVM(),
+        feedView: FeedView()
+    )
+}
 
-    func resolvedFeedVM() -> FeedVM {
-        return FeedVM(
-            photoFetcher: PhotoFetcher()
+func resolvedFeedVM() -> FeedVM {
+    return FeedVM(
+        flyrFetcher: FlyrFetcher(
+            database: resolvedPublicDatabase(),
+            query: resolvedFlyrQuery()
         )
-    }
+    )
+}
+
+func resolvedPublicDatabase() -> CKDatabase {
+    let container = CKContainer(identifier: "iCloud.com.flyrapp.FLYR")
+    return container.publicCloudDatabase
+}
+
+
+func resolvedFlyrQuery() -> CKQuery {
+    return CKQuery(
+        recordType: "Flyr",
+        predicate: NSPredicate(
+            format: "TRUEPREDICATE")
+    )
 }
