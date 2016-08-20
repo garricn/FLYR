@@ -14,14 +14,16 @@ typealias CKRecords = [CKRecord]
 typealias Flyrs = [Flyr]
 protocol FlyrFetchable {
     var output: EventProducer<Flyrs> { get }
+    var database: Database { get }
+    var query: CKQuery { get }
     func fetch()
 }
 
 struct FlyrFetcher: FlyrFetchable {
     let output = EventProducer<Flyrs>()
 
-    private let database: Database
-    private let query: CKQuery
+    internal let database: Database
+    internal let query: CKQuery
 
     init(database: Database, query: CKQuery) {
         self.database = database

@@ -16,7 +16,10 @@ import CloudKit
 class FeedVMSpec: QuickSpec {
     override func spec() {
         let subject = FeedVM(
-            flyrFetcher: MockFlyrFetcher()
+            flyrFetcher: MockFlyrFetcher(
+                database: MockDatabase(),
+                query: mockQuery
+            )
         )
 
         var imageInput: [UIImage] = []

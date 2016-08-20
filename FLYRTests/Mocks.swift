@@ -44,6 +44,13 @@ var mockRecord: CKRecord {
 
 struct MockFlyrFetcher: FlyrFetchable {
     let output = EventProducer<Flyrs>()
+    let database: Database
+    let query: CKQuery
+
+    init(database: Database, query: CKQuery) {
+        self.database = database
+        self.query = query
+    }
 
     func fetch() {
         output.next([mockFlyr])

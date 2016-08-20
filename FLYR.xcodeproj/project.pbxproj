@@ -21,8 +21,8 @@
 		4E1E23B01D617CF100962E29 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AF1D617CF100962E29 /* Mocks.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
 		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
-		4EC34E431D56824E001DF486 /* RecordFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* RecordFetcher.swift */; };
-		4EC34E451D5682A0001DF486 /* RecordFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */; };
+		4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* FlyrFetcher.swift */; };
+		4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */; };
 		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
 		847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */; };
 /* End PBXBuildFile section */
@@ -66,8 +66,8 @@
 		4E1E23AF1D617CF100962E29 /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
 		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
-		4EC34E421D56824E001DF486 /* RecordFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordFetcher.swift; sourceTree = "<group>"; };
-		4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordFetcherSpec.swift; sourceTree = "<group>"; };
+		4EC34E421D56824E001DF486 /* FlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcher.swift; sourceTree = "<group>"; };
+		4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcherSpec.swift; sourceTree = "<group>"; };
 		4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FLYR.entitlements; sourceTree = "<group>"; };
 		4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -147,7 +147,7 @@
 				4E1D74171D50594100648603 /* FeedVC.swift */,
 				4E1D741B1D505E6C00648603 /* FeedView.swift */,
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
-				4EC34E421D56824E001DF486 /* RecordFetcher.swift */,
+				4EC34E421D56824E001DF486 /* FlyrFetcher.swift */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
 				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
 				4E1E23AB1D614F1900962E29 /* Flyr.swift */,
@@ -160,7 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				4E1D73FD1D50521F00648603 /* Info.plist */,
-				4EC34E441D5682A0001DF486 /* RecordFetcherSpec.swift */,
+				4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */,
 				4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */,
 				4E1E23AF1D617CF100962E29 /* Mocks.swift */,
 			);
@@ -432,7 +432,7 @@
 			files = (
 				4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */,
 				4E1D74181D50594100648603 /* FeedVC.swift in Sources */,
-				4EC34E431D56824E001DF486 /* RecordFetcher.swift in Sources */,
+				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
 				4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */,
@@ -448,7 +448,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */,
-				4EC34E451D5682A0001DF486 /* RecordFetcherSpec.swift in Sources */,
+				4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */,
 				4E1E23B01D617CF100962E29 /* Mocks.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
