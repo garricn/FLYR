@@ -16,18 +16,31 @@ protocol AppCoordinatorProtocol {
 struct AppCoordinator: AppCoordinatorProtocol {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
         guard launchOptions != nil else {
-            return resolvedFeedVC()
+            return resolvedTabBarController()
         }
 
         return launchOptions.map(toRootViewController)!
     }
 
-    func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
+    private func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
         return UIViewController()
     }
 }
 
 // Resolvers
+func resolvedTabBarController() -> UITabBarController {
+    let viewControllers = [
+        resolvedFeedVC()
+    ]
+
+    let tabBarController = UITabBarController()
+    tabBarController.setViewControllers(
+        viewControllers,
+        animated: false
+    )
+    return tabBarController
+}
+
 func resolvedFeedVC() -> FeedVC {
     return FeedVC(
         feedVM: resolvedFeedVM(),

@@ -34,6 +34,8 @@ class FeedVC: UIViewController {
 
     override func loadView() {
         view = feedView
+        tabBarItem = UITabBarItem(title: "FEED", image: nil, tag: 0)
+        tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0.0, vertical: -8.0)
     }
 
     override func viewDidLoad() {
