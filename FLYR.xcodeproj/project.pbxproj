@@ -21,6 +21,7 @@
 		4E1E23B01D617CF100962E29 /* Mocks.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AF1D617CF100962E29 /* Mocks.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
 		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
+		4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA439F11D8BAD3A005B0570 /* Globals.swift */; };
 		4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* FlyrFetcher.swift */; };
 		4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */; };
 		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
@@ -66,6 +67,7 @@
 		4E1E23AF1D617CF100962E29 /* Mocks.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mocks.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
 		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		4EA439F11D8BAD3A005B0570 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		4EC34E421D56824E001DF486 /* FlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcher.swift; sourceTree = "<group>"; };
 		4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcherSpec.swift; sourceTree = "<group>"; };
 		4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FLYR.entitlements; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
 				4E1E23AB1D614F1900962E29 /* Flyr.swift */,
 				4E1E23AD1D61784300962E29 /* Database.swift */,
+				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
 			);
 			path = FLYR;
 			sourceTree = "<group>";
@@ -435,6 +438,7 @@
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
+				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
 				4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */,
 				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,

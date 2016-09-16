@@ -7,32 +7,42 @@
 //
 
 import UIKit
-import Bond
 import Cartography
 
 class FeedView: BaseView {
-    let tableView = UITableView()
-
-    override func setup() {
+    let tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.hidden = true
+        tableView.showsVerticalScrollIndicator = false
+        tableView.estimatedRowHeight = screenWidth
+        tableView.rowHeight = UITableViewAutomaticDimension
         tableView.registerClass(
             FeedCell.self,
             forCellReuseIdentifier: FeedCell.description()
         )
+        return tableView
+    }()
+
+    let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        spinner.startAnimating()
+        return spinner
+    }()
+
+    override func setup() {
+        addSubview(spinner)
         addSubview(tableView)
     }
 
     override func style() {
         backgroundColor = .whiteColor()
-        
-        tableView
-            .estimatedRowHeight = UIScreen
-            .mainScreen()
-            .bounds
-            .width
-        tableView.rowHeight = UITableViewAutomaticDimension
     }
 
     override func layout() {
+        constrain(spinner) { spinner in
+            spinner.center == spinner.superview!.center
+        }
+
         constrain(tableView) { tableView in
             tableView.top == tableView.superview!.top + 8
             tableView.leading == tableView.superview!.leading + 8
@@ -41,16 +51,3 @@ class FeedView: BaseView {
         }
     }
 }
-
-//extension FeedView: UITableViewDelegate {
-//    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-//        let image = Model.sharedInstance.items[indexPath.row].image
-//        let ratio = image.size.height / image.size.width
-//        return (view.bounds.width * ratio) //+ 88
-//    }
-//}
-
-
-
-
-
