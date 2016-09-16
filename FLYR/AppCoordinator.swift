@@ -41,10 +41,14 @@ func resolvedTabBarController() -> UITabBarController {
     return tabBarController
 }
 
-func resolvedFeedVC() -> FeedVC {
-    return FeedVC(
+func resolvedFeedVC() -> UINavigationController {
+    let feedVC = FeedVC(
         feedVM: resolvedFeedVM(),
         feedView: FeedView()
+    )
+
+    return UINavigationController(
+        rootViewController: feedVC
     )
 }
 

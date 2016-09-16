@@ -56,6 +56,8 @@ class FeedVC: UIViewController {
             ) as! FeedCell
 
             cell._imageView.image = image
+            tableView.hidden = false
+            self.feedView.spinner.stopAnimating()
             return cell
         }
     }
