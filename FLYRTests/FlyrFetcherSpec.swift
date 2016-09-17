@@ -15,32 +15,50 @@ import CloudKit
 
 class FlyrFetcherSpec: QuickSpec {
     override func spec() {
-        var subject: FlyrFetcher!
+        let subject = FlyrFetcher(database: MockDatabase())
         let flyrInput: Observable<Flyrs?> = Observable(nil)
+        let errorInput: Observable<ErrorType?> = Observable(nil)
 
-        describe("FlyrFetcher") {
-            context("Given a database and a query") {
+        subject.output.bindTo(flyrInput)
+        subject.errorOutput.bindTo(errorInput)
+
+        describe("#fetch(with:)") {
+            context("Given a valid query") {
                 beforeEach {
-                    subject = FlyrFetcher(
-                        database: MockDatabase(),
-                        query: mockQuery
-                    )
+                    errorInput.value = nil
+                    flyrInput.value = nil
+                    subject.fetch(with: validQuery)
                 }
 
-                it("sets its database and query") {
-                    expect(subject.database).toNot(beNil())
-                    expect(subject.query).toNot(beNil())
+                it("performs the query on its database and outputs the reponse") {
+                    expect(flyrInput.value).toNot(beNil())
+                    expect(errorInput.value).to(beNil())
+                }
+            }
+
+            context("Given a valid query where the response contains no records") {
+                beforeEach {
+                    errorInput.value = nil
+                    flyrInput.value = nil
+                    subject.fetch(with: noRecordsQuery)
                 }
 
-                describe("#fetch") {
-                    beforeEach {
-                        subject.output.bindTo(flyrInput)
-                        subject.fetch()
-                    }
+                it("outputs an error") {
+                    expect(errorInput.value).toNot(beNil())
+                    expect(flyrInput.value).to(beNil())
+                }
+            }
 
-                    it("performs query on database and updates output") {
-                        expect(flyrInput.value).toNot(beNil())
-                    }
+            context("Given an invalid query") {
+                beforeEach {
+                    errorInput.value = nil
+                    flyrInput.value = nil
+                    subject.fetch(with: invalidQuery)
+                }
+
+                it("outputs an error") {
+                    expect(errorInput.value).toNot(beNil())
+                    expect(flyrInput.value).to(beNil())
                 }
             }
         }

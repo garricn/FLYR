@@ -25,6 +25,7 @@ struct AppCoordinator: AppCoordinatorProtocol {
     private func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
         return UIViewController()
     }
+
 }
 
 // Resolvers
@@ -54,18 +55,19 @@ func resolvedFeedVC() -> UINavigationController {
 
 func resolvedFeedVM() -> FeedVM {
     return FeedVM(
-        flyrFetcher: FlyrFetcher(
-            database: resolvedPublicDatabase(),
-            query: resolvedFlyrQuery()
-        )
+        flyrFetcher: resolvedFlyrFetcher(),
+        locationManager: LocationManager()
     )
+}
+
+func resolvedFlyrFetcher() -> FlyrFetchable {
+    return FlyrFetcher(database: resolvedPublicDatabase())
 }
 
 func resolvedPublicDatabase() -> CKDatabase {
     let container = CKContainer(identifier: "iCloud.com.flyrapp.FLYR")
     return container.publicCloudDatabase
 }
-
 
 func resolvedFlyrQuery() -> CKQuery {
     return CKQuery(
