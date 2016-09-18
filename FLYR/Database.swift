@@ -9,24 +9,26 @@
 import CloudKit
 
 protocol Database {
-    func perform(query: CKQuery, with completion: (Response) -> Void)
+    func perform(query: CKQuery, completion: (with: Response) -> Void)
 }
 
 extension CKDatabase: Database {
-    func perform(query: CKQuery, with completion: (Response) -> Void) {
+    func perform(query: CKQuery, completion: (with: Response) -> Void) {
         performQuery(query, inZoneWithID: nil) { records, error in
-            guard let records = records else { return }
-            let response = Response.Success(with: records)
-            completion(response)
+            let response: Response
+
+            if let records = records {
+                response = .Successful(with: records)
+            } else {
+                response = .NotSuccessful(with: error)
+            }
+
+            completion(with: response)
         }
     }
 }
 
 extension CKRecord: Datum {}
-
-enum Response {
-    case Success(with: Data)
-}
 
 @objc protocol Datum {}
 typealias Data = [Datum]

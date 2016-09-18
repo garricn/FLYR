@@ -16,6 +16,7 @@ class FeedView: BaseView {
         tableView.showsVerticalScrollIndicator = false
         tableView.estimatedRowHeight = screenWidth
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.contentOffset = CGPoint(x: 0.0, y: 64.0)
         tableView.registerClass(
             FeedCell.self,
             forCellReuseIdentifier: FeedCell.description()
@@ -25,6 +26,7 @@ class FeedView: BaseView {
 
     let spinner: UIActivityIndicatorView = {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .Gray)
+        spinner.hidden = true
         spinner.startAnimating()
         return spinner
     }()
