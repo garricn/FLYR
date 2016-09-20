@@ -7,7 +7,7 @@ use_frameworks!
 target 'FLYR' do
     pod 'Cartography'
     pod 'Bond', '~> 4.0'
-    pod 'LocationPicker'
+    pod 'GGNLocationPicker'
 end
 
 def testing_pods

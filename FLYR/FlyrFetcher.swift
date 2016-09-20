@@ -37,13 +37,8 @@ struct FlyrFetcher: FlyrFetchable {
                 return
             }
 
-            if records.isEmpty {
-                let error = Error(message: "No records found")
-                self.errorOutput.next(error)
-            } else {
-                let flyrs = records.map(toFlyr)
-                self.output.next(flyrs)
-            }
+            let flyrs = records.map(toFlyr)
+            self.output.next(flyrs)
         }
     }
 }
@@ -54,12 +49,17 @@ struct Error: ErrorType {
 
 func toFlyr(record: CKRecord) -> Flyr {
     return Flyr(
-        image: toImage(record)
+        image: toImage(from: record),
+        location: toLocation(from: record)
     )
 }
 
-func toImage(record: CKRecord) -> UIImage {
+func toImage(from record: CKRecord) -> UIImage {
     let imageAsset = record["image"] as! CKAsset
     let path = imageAsset.fileURL.path!
     return UIImage(contentsOfFile: path)!
+}
+
+func toLocation(from record: CKRecord) -> CLLocation {
+    return record["location"] as! CLLocation
 }

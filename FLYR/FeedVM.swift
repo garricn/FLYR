@@ -10,7 +10,11 @@ import UIKit
 import Bond
 import CloudKit
 
-protocol FeedVMProtocol {
+protocol AlertOutputing {
+    var alertOutput: EventProducer<UIAlertController> { get set }
+}
+
+protocol FeedVMProtocol: AlertOutputing {
     var imageOutput: ObservableArray<UIImage> { get }
     var flyrFetcher: FlyrFetchable { get }
 }
@@ -35,12 +39,12 @@ struct FeedVM: FeedVMProtocol {
             let alert: UIAlertController
 
             if let error = error {
-                alert = self.makeAlert(
+                alert = makeAlert(
                     title: "Error Fetching Flyrs",
                     message: "Error: \(error)"
                 )
             } else {
-                alert = self.makeAlert(
+                alert = makeAlert(
                     title: "Error Fetching Flyrs",
                     message: "Unknown Error"
                 )
@@ -61,27 +65,27 @@ struct FeedVM: FeedVMProtocol {
 
                 switch response {
                 case .ServicesNotEnabled:
-                    alert = self.makeAlert(
+                    alert = makeAlert(
                         title: "Location Services Disabled",
                         message: "You can enable location services in Settings > Privacy."
                     )
                 case .AuthorizationDenied:
-                    alert = self.makeAlert(
+                    alert = makeAlert(
                         title: "Authorization Denied",
                         message: "You denied location services authorization."
                     )
                 case .AuthorizationRestricted:
-                    alert = self.makeAlert(
+                    alert = makeAlert(
                         title: "Authorization Restricted",
                         message: "Location services are restricted on this device."
                     )
                 case .DidFail(let error):
-                    alert = self.makeAlert(
+                    alert = makeAlert(
                         title: "Location Services Error",
                         message: "Error: \(error)."
                     )
                 default:
-                    alert = self.makeAlert(
+                    alert = makeAlert(
                         title: "Location Services Error",
                         message: "There was an error."
                     )
@@ -101,23 +105,27 @@ struct FeedVM: FeedVMProtocol {
             location,
             radius
         )
-        return CKQuery(recordType: "Flyr", predicate: predicate)
+        return CKQuery(recordType: "Flyr", predicate: truePredicate)
     }
+}
 
-    private func makeAlert(title title: String?, message: String?) -> UIAlertController {
-        let okAction = UIAlertAction(
-            title: "OK",
-            style: .Default,
-            handler: nil
-        )
-        let alert = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .Alert
-        )
-        alert.addAction(okAction)
-        return alert
-    }
+func makeAlert(from error: ErrorType?) -> UIAlertController {
+    return makeAlert(title: "Error", message: "\(error)")
+}
+
+func makeAlert(title title: String?, message: String?) -> UIAlertController {
+    let okAction = UIAlertAction(
+        title: "OK",
+        style: .Default,
+        handler: nil
+    )
+    let alert = UIAlertController(
+        title: title,
+        message: message,
+        preferredStyle: .Alert
+    )
+    alert.addAction(okAction)
+    return alert
 }
 
 func toCKRecords(data: Data) -> CKRecords {

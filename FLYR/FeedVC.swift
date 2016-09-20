@@ -33,12 +33,16 @@ class FeedVC: UIViewController {
 
     override func loadView() {
         view = feedView
-        tabBarItem = UITabBarItem(title: "FEED", image: nil, tag: 0)
-        tabBarItem.titlePositionAdjustment = UIOffset(horizontal: 0.0, vertical: -8.0)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .Add,
+            target: self,
+            action: #selector(addButtonTapped)
+        )
 
         tableView.delegate = self
 
@@ -49,7 +53,8 @@ class FeedVC: UIViewController {
                 self.presentViewController(
                     alertController,
                     animated: true,
-                    completion: { self.resetUI(forState: .ErrorLoading) })
+                    completion: { self.resetUI(forState: .ErrorLoading) }
+                )
             }.disposeIn(bnd_bag)
 
         viewModel
@@ -89,12 +94,15 @@ class FeedVC: UIViewController {
     enum UIState {
         case Loading, DoneLoading, ErrorLoading
     }
+
+    func addButtonTapped(sender: UIBarButtonItem) {
+        appCoordinator.addButtonTapped()
+    }
 }
 
 extension FeedVC: UITableViewDelegate {
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let image = viewModel.imageOutput.array[indexPath.row]
-        let ratio = image.size.height / image.size.width
-        return view.bounds.width * ratio
+        return rowHeight(from: image)
     }
 }

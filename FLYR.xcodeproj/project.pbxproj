@@ -21,14 +21,22 @@
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
 		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
 		4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA439F11D8BAD3A005B0570 /* Globals.swift */; };
+		4EBDE4861D9344760042A874 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDE4851D9344760042A874 /* Private.swift */; };
 		4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* FlyrFetcher.swift */; };
 		4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */; };
+		4EC9F49F1D90FD970097A2DC /* Resolvers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC9F49E1D90FD970097A2DC /* Resolvers.swift */; };
 		4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */; };
 		4ED7E2271D8DDB0300DB2F4E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E2261D8DDB0300DB2F4E /* Response.swift */; };
 		4ED7E22B1D8F160A00DB2F4E /* MockDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E22A1D8F160A00DB2F4E /* MockDatabase.swift */; };
 		4ED7E22D1D8F169A00DB2F4E /* MockRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E22C1D8F169A00DB2F4E /* MockRecords.swift */; };
 		4ED7E22F1D8F16CB00DB2F4E /* MockFlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E22E1D8F16CB00DB2F4E /* MockFlyrFetcher.swift */; };
 		4ED7E2311D8F175600DB2F4E /* MockLocationManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */; };
+		4EDCC2801D8F3FA30010FEEA /* AppLaunchUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC27F1D8F3FA30010FEEA /* AppLaunchUITestCase.swift */; };
+		4EDCC2821D8F4AA00010FEEA /* AddFlyrUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC2811D8F4AA00010FEEA /* AddFlyrUITestCase.swift */; };
+		4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */; };
+		4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */; };
+		4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */; };
+		4EDCC28F1D8F50B50010FEEA /* AddImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */; };
 		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
 		847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */; };
 /* End PBXBuildFile section */
@@ -72,14 +80,22 @@
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
 		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		4EA439F11D8BAD3A005B0570 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
+		4EBDE4851D9344760042A874 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		4EC34E421D56824E001DF486 /* FlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcher.swift; sourceTree = "<group>"; };
 		4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcherSpec.swift; sourceTree = "<group>"; };
+		4EC9F49E1D90FD970097A2DC /* Resolvers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resolvers.swift; sourceTree = "<group>"; };
 		4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		4ED7E2261D8DDB0300DB2F4E /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
 		4ED7E22A1D8F160A00DB2F4E /* MockDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDatabase.swift; sourceTree = "<group>"; };
 		4ED7E22C1D8F169A00DB2F4E /* MockRecords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRecords.swift; sourceTree = "<group>"; };
 		4ED7E22E1D8F16CB00DB2F4E /* MockFlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFlyrFetcher.swift; sourceTree = "<group>"; };
 		4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockLocationManagers.swift; sourceTree = "<group>"; };
+		4EDCC27F1D8F3FA30010FEEA /* AppLaunchUITestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppLaunchUITestCase.swift; sourceTree = "<group>"; };
+		4EDCC2811D8F4AA00010FEEA /* AddFlyrUITestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFlyrUITestCase.swift; sourceTree = "<group>"; };
+		4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFlyrVC.swift; sourceTree = "<group>"; };
+		4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFlyrVM.swift; sourceTree = "<group>"; };
+		4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSaver.swift; sourceTree = "<group>"; };
+		4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddImageCell.swift; sourceTree = "<group>"; };
 		4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FLYR.entitlements; sourceTree = "<group>"; };
 		4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -152,21 +168,18 @@
 		4E1D73E51D50521F00648603 /* FLYR */ = {
 			isa = PBXGroup;
 			children = (
+				4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */,
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
 				4E5EBE251D51BDB700E4768D /* BaseView.swift */,
-				4E1E23AD1D61784300962E29 /* Database.swift */,
-				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
-				4E1D74171D50594100648603 /* FeedVC.swift */,
-				4E1D741B1D505E6C00648603 /* FeedView.swift */,
-				4E1D74191D505E2700648603 /* FeedVM.swift */,
-				4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */,
 				4E1E23AB1D614F1900962E29 /* Flyr.swift */,
-				4EC34E421D56824E001DF486 /* FlyrFetcher.swift */,
 				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
-				4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */,
-				4ED7E2261D8DDB0300DB2F4E /* Response.swift */,
+				4EDCC28A1D8F4E070010FEEA /* ADD FLYR */,
+				4EDCC2871D8F4DE90010FEEA /* FEED */,
+				4EDCC28D1D8F50530010FEEA /* SERVICES */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
+				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
+				4EBDE4851D9344760042A874 /* Private.swift */,
 			);
 			path = FLYR;
 			sourceTree = "<group>";
@@ -186,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				4E1D74081D50521F00648603 /* Info.plist */,
+				4EDCC27F1D8F3FA30010FEEA /* AppLaunchUITestCase.swift */,
+				4EDCC2811D8F4AA00010FEEA /* AddFlyrUITestCase.swift */,
 			);
 			path = FLYRUITests;
 			sourceTree = "<group>";
@@ -209,6 +224,39 @@
 				4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */,
 			);
 			name = Mocks;
+			sourceTree = "<group>";
+		};
+		4EDCC2871D8F4DE90010FEEA /* FEED */ = {
+			isa = PBXGroup;
+			children = (
+				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
+				4E1D74171D50594100648603 /* FeedVC.swift */,
+				4E1D741B1D505E6C00648603 /* FeedView.swift */,
+				4E1D74191D505E2700648603 /* FeedVM.swift */,
+			);
+			name = FEED;
+			sourceTree = "<group>";
+		};
+		4EDCC28A1D8F4E070010FEEA /* ADD FLYR */ = {
+			isa = PBXGroup;
+			children = (
+				4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */,
+				4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */,
+				4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */,
+			);
+			name = "ADD FLYR";
+			sourceTree = "<group>";
+		};
+		4EDCC28D1D8F50530010FEEA /* SERVICES */ = {
+			isa = PBXGroup;
+			children = (
+				4ED7E2261D8DDB0300DB2F4E /* Response.swift */,
+				4E1E23AD1D61784300962E29 /* Database.swift */,
+				4EC34E421D56824E001DF486 /* FlyrFetcher.swift */,
+				4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */,
+				4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */,
+			);
+			name = SERVICES;
 			sourceTree = "<group>";
 		};
 		DF26F170CA0A977037507FCD /* Frameworks */ = {
@@ -456,17 +504,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */,
 				4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */,
+				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
 				4E1D74181D50594100648603 /* FeedVC.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
+				4EBDE4861D9344760042A874 /* Private.swift in Sources */,
 				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
 				4ED7E2271D8DDB0300DB2F4E /* Response.swift in Sources */,
 				4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */,
 				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,
+				4EC9F49F1D90FD970097A2DC /* Resolvers.swift in Sources */,
+				4EDCC28F1D8F50B50010FEEA /* AddImageCell.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
 				4E1E23AE1D61784300962E29 /* Database.swift in Sources */,
+				4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */,
 				4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */,
 				4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */,
 			);
@@ -489,6 +543,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4EDCC2821D8F4AA00010FEEA /* AddFlyrUITestCase.swift in Sources */,
+				4EDCC2801D8F3FA30010FEEA /* AppLaunchUITestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -659,10 +715,12 @@
 		4E1D74121D50521F00648603 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = FLYRUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_TARGET_NAME = FLYR;
 			};
 			name = Debug;
@@ -670,6 +728,7 @@
 		4E1D74131D50521F00648603 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				INFOPLIST_FILE = FLYRUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRUITests;

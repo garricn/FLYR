@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 protocol FlyrProtocol {
     var image: UIImage { get }
@@ -14,6 +15,7 @@ protocol FlyrProtocol {
 
 struct Flyr: FlyrProtocol {
     let image: UIImage
+    let location: CLLocation
 }
 
-protocol Record {}
+//protocol Record {}

@@ -31,6 +31,10 @@ struct MockDatabase: Database {
 
         completion(with: response)
     }
+
+    func save(record: CKRecord, completion: (with: Response) -> Void) {
+
+    }
 }
 
 let predicate = NSPredicate(value: true)
