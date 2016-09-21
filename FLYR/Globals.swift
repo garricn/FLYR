@@ -8,6 +8,13 @@
 
 import UIKit
 
+// MARK: - Properties
 let screenBounds = UIScreen.mainScreen().bounds
 let screenWidth = screenBounds.width
 let screenHeight = screenBounds.height
+
+// MARK: - Functions
+func rowHeight(from image: UIImage) -> CGFloat {
+    let ratio = image.size.height / image.size.width
+    return UIScreen.mainScreen().bounds.width * ratio
+}

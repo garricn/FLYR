@@ -13,10 +13,13 @@ protocol AppCoordinatorProtocol {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
 }
 
-struct AppCoordinator: AppCoordinatorProtocol {
+class AppCoordinator: NSObject, AppCoordinatorProtocol {
+    var tabBarController: UITabBarController!
+
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
         guard launchOptions != nil else {
-            return resolvedTabBarController()
+            tabBarController = resolvedTabBarController()
+            return tabBarController
         }
 
         return launchOptions.map(toRootViewController)!
@@ -26,53 +29,25 @@ struct AppCoordinator: AppCoordinatorProtocol {
         return UIViewController()
     }
 
+    func addButtonTapped() {
+        let addFlyrVC = resolvedAddFlyrVC()
+        tabBarController.presentViewController(addFlyrVC, animated: true, completion: nil)
+    }
+
+    func cancelButtonTapped() {
+        tabBarController.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func didFinishAddingFlyr() {
+        tabBarController.dismissViewControllerAnimated(true, completion: nil)
+    }
 }
 
-// Resolvers
-func resolvedTabBarController() -> UITabBarController {
-    let viewControllers = [
-        resolvedFeedVC()
-    ]
+extension AppCoordinator: AddFlyrDelegate {
+    func controllerDidFinish() {
+        tabBarController.selectedIndex = 0
+    }
 
-    let tabBarController = UITabBarController()
-    tabBarController.setViewControllers(
-        viewControllers,
-        animated: false
-    )
-    return tabBarController
-}
-
-func resolvedFeedVC() -> UINavigationController {
-    let feedVC = FeedVC(
-        feedVM: resolvedFeedVM(),
-        feedView: FeedView()
-    )
-
-    return UINavigationController(
-        rootViewController: feedVC
-    )
-}
-
-func resolvedFeedVM() -> FeedVM {
-    return FeedVM(
-        flyrFetcher: resolvedFlyrFetcher(),
-        locationManager: LocationManager()
-    )
-}
-
-func resolvedFlyrFetcher() -> FlyrFetchable {
-    return FlyrFetcher(database: resolvedPublicDatabase())
-}
-
-func resolvedPublicDatabase() -> CKDatabase {
-    let container = CKContainer(identifier: "iCloud.com.flyrapp.FLYR")
-    return container.publicCloudDatabase
-}
-
-func resolvedFlyrQuery() -> CKQuery {
-    return CKQuery(
-        recordType: "Flyr",
-        predicate: NSPredicate(
-            format: "TRUEPREDICATE")
-    )
+    func controllerFailed(with error: ErrorType) {
+    }
 }
