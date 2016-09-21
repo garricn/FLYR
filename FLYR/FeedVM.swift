@@ -10,21 +10,122 @@ import UIKit
 import Bond
 import CloudKit
 
-protocol FeedVMProtocol {
+protocol AlertOutputing {
+    var alertOutput: EventProducer<UIAlertController> { get set }
+}
+
+protocol FeedVMProtocol: AlertOutputing {
     var imageOutput: ObservableArray<UIImage> { get }
+    var flyrFetcher: FlyrFetchable { get }
 }
 
 struct FeedVM: FeedVMProtocol {
     var imageOutput: ObservableArray<UIImage> = []
+    var alertOutput = EventProducer<UIAlertController>()
 
-    init(flyrFetcher: FlyrFetchable) {
-        flyrFetcher
+    let flyrFetcher: FlyrFetchable
+    let locationManager: LocationManageable
+
+    init(flyrFetcher: FlyrFetchable, locationManager: LocationManageable) {
+        self.flyrFetcher = flyrFetcher
+        self.locationManager = locationManager
+
+        self.flyrFetcher
             .output
             .map(toImages)
             .observe { self.imageOutput.extend($0) }
 
-        flyrFetcher.fetch()
+        self.flyrFetcher.errorOutput.observe { error in
+            let alert: UIAlertController
+
+            if let error = error {
+                alert = makeAlert(
+                    title: "Error Fetching Flyrs",
+                    message: "Error: \(error)"
+                )
+            } else {
+                alert = makeAlert(
+                    title: "Error Fetching Flyrs",
+                    message: "Unknown Error"
+                )
+            }
+
+            self.alertOutput.next(alert)
+
+        }
     }
+
+    func refreshFeed() {
+        self.locationManager.requestLocation { response in
+            if case .DidUpdateLocations(let locations) = response {
+                let query = self.makeQuery(from: locations)
+                self.flyrFetcher.fetch(with: query)
+            } else {
+                let alert: UIAlertController
+
+                switch response {
+                case .ServicesNotEnabled:
+                    alert = makeAlert(
+                        title: "Location Services Disabled",
+                        message: "You can enable location services in Settings > Privacy."
+                    )
+                case .AuthorizationDenied:
+                    alert = makeAlert(
+                        title: "Authorization Denied",
+                        message: "You denied location services authorization."
+                    )
+                case .AuthorizationRestricted:
+                    alert = makeAlert(
+                        title: "Authorization Restricted",
+                        message: "Location services are restricted on this device."
+                    )
+                case .DidFail(let error):
+                    alert = makeAlert(
+                        title: "Location Services Error",
+                        message: "Error: \(error)."
+                    )
+                default:
+                    alert = makeAlert(
+                        title: "Location Services Error",
+                        message: "There was an error."
+                    )
+                }
+
+                self.alertOutput.next(alert)
+            }
+        }
+    }
+
+    private func makeQuery(from locations: [CLLocation]) -> CKQuery {
+        let location = locations.last!
+        let radius: CGFloat = 100000000.0
+        let format = "(distanceToLocation:fromLocation:(location, %@) < %f)"
+        let predicate = NSPredicate(
+            format: format,
+            location,
+            radius
+        )
+        return CKQuery(recordType: "Flyr", predicate: truePredicate)
+    }
+}
+
+func makeAlert(from error: ErrorType?) -> UIAlertController {
+    return makeAlert(title: "Error", message: "\(error)")
+}
+
+func makeAlert(title title: String?, message: String?) -> UIAlertController {
+    let okAction = UIAlertAction(
+        title: "OK",
+        style: .Default,
+        handler: nil
+    )
+    let alert = UIAlertController(
+        title: title,
+        message: message,
+        preferredStyle: .Alert
+    )
+    alert.addAction(okAction)
+    return alert
 }
 
 func toCKRecords(data: Data) -> CKRecords {
@@ -39,8 +140,4 @@ func toImage(flyr: Flyr) -> UIImage {
     return flyr.image
 }
 
-func toImage(record: CKRecord) -> UIImage {
-    let imageAsset = record["image"] as! CKAsset
-    let path = imageAsset.fileURL.path!
-    return UIImage(contentsOfFile: path)!
-}
+let truePredicate = NSPredicate(format: "TRUEPREDICATE")

@@ -13,47 +13,41 @@ protocol AppCoordinatorProtocol {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
 }
 
-struct AppCoordinator: AppCoordinatorProtocol {
+class AppCoordinator: NSObject, AppCoordinatorProtocol {
+    var tabBarController: UITabBarController!
+
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
         guard launchOptions != nil else {
-            return resolvedFeedVC()
+            tabBarController = resolvedTabBarController()
+            return tabBarController
         }
 
         return launchOptions.map(toRootViewController)!
     }
 
-    func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
+    private func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
         return UIViewController()
+    }
+
+    func addButtonTapped() {
+        let addFlyrVC = resolvedAddFlyrVC()
+        tabBarController.presentViewController(addFlyrVC, animated: true, completion: nil)
+    }
+
+    func cancelButtonTapped() {
+        tabBarController.dismissViewControllerAnimated(true, completion: nil)
+    }
+
+    func didFinishAddingFlyr() {
+        tabBarController.dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
-// Resolvers
-func resolvedFeedVC() -> FeedVC {
-    return FeedVC(
-        feedVM: resolvedFeedVM(),
-        feedView: FeedView()
-    )
-}
+extension AppCoordinator: AddFlyrDelegate {
+    func controllerDidFinish() {
+        tabBarController.selectedIndex = 0
+    }
 
-func resolvedFeedVM() -> FeedVM {
-    return FeedVM(
-        flyrFetcher: FlyrFetcher(
-            database: resolvedPublicDatabase(),
-            query: resolvedFlyrQuery()
-        )
-    )
-}
-
-func resolvedPublicDatabase() -> CKDatabase {
-    let container = CKContainer(identifier: "iCloud.com.flyrapp.FLYR")
-    return container.publicCloudDatabase
-}
-
-
-func resolvedFlyrQuery() -> CKQuery {
-    return CKQuery(
-        recordType: "Flyr",
-        predicate: NSPredicate(
-            format: "TRUEPREDICATE")
-    )
+    func controllerFailed(with error: ErrorType) {
+    }
 }

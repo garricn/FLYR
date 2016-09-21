@@ -15,22 +15,48 @@ import CloudKit
 
 class FeedVMSpec: QuickSpec {
     override func spec() {
-        let subject = FeedVM(
-            flyrFetcher: MockFlyrFetcher(
-                database: MockDatabase(),
-                query: mockQuery
-            )
+        let mockFlyrFetcher = MockFlyrFetcher(database: MockDatabase())
+        var subject = FeedVM(
+            flyrFetcher: mockFlyrFetcher,
+            locationManager: MockLocationManager()
         )
 
         var imageInput: [UIImage] = []
+        var alertInput = Observable<UIAlertController?>(nil)
 
-        describe("Given a flyr fetcher") {
+        describe("Given a flyr fetcher and a location manager") {
             beforeEach {
-                imageInput += subject.imageOutput.array
+                imageInput = []
+                alertInput = Observable<UIAlertController?>(nil)
             }
 
-            it("emits an array of images") {
-                expect(imageInput).toNot(beNil())
+            context("and if the location manager returns a location") {
+                beforeEach {
+                    subject.alertOutput.bindTo(alertInput)
+                    subject.refreshFeed()
+                    imageInput += subject.imageOutput.array
+                }
+                it("emits an array of images") {
+                    expect(imageInput).toNot(beEmpty())
+                    expect(alertInput.value).to(beNil())
+                }
+            }
+
+            context("but if the location manager returns anything else") {
+                beforeEach {
+                    subject = FeedVM(
+                        flyrFetcher: mockFlyrFetcher,
+                        locationManager: MockInValidLocationManager()
+                    )
+                    subject.alertOutput.bindTo(alertInput)
+                    subject.refreshFeed()
+                    imageInput += subject.imageOutput.array
+                }
+
+                it("emits an alert") {
+                    expect(alertInput.value).toNot(beNil())
+                    expect(imageInput).to(beEmpty())
+                }
             }
         }
     }

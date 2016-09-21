@@ -8,3 +8,4 @@ build/
 *.xcsettings
 *.xcworkspace
 xcuserdata
+Private.swift
