@@ -38,6 +38,7 @@
 		4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */; };
 		4EDCC28F1D8F50B50010FEEA /* AddImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */; };
 		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
+		4EF7E70C1D960E7D009B3F36 /* Datum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF7E70B1D960E7D009B3F36 /* Datum.swift */; };
 		847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */; };
 /* End PBXBuildFile section */
 
@@ -98,6 +99,7 @@
 		4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddImageCell.swift; sourceTree = "<group>"; };
 		4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FLYR.entitlements; sourceTree = "<group>"; };
 		4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		4EF7E70B1D960E7D009B3F36 /* Datum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Datum.swift; sourceTree = "<group>"; };
 		636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.debug.xcconfig"; sourceTree = "<group>"; };
 		A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FLYRTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -180,6 +182,7 @@
 				4E1D74141D5053C600648603 /* Supporting Files */,
 				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
 				4EBDE4851D9344760042A874 /* Private.swift */,
+				4EF7E70B1D960E7D009B3F36 /* Datum.swift */,
 			);
 			path = FLYR;
 			sourceTree = "<group>";
@@ -513,6 +516,7 @@
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
 				4EBDE4861D9344760042A874 /* Private.swift in Sources */,
 				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
+				4EF7E70C1D960E7D009B3F36 /* Datum.swift in Sources */,
 				4ED7E2271D8DDB0300DB2F4E /* Response.swift in Sources */,
 				4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */,
 				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,

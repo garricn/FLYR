@@ -22,6 +22,8 @@ protocol FeedVMProtocol: AlertOutputing {
 struct FeedVM: FeedVMProtocol {
     var imageOutput: ObservableArray<UIImage> = []
     var alertOutput = EventProducer<UIAlertController>()
+    let items = ObservableArray<UIImage>()
+    let doneLoadingOutput = EventProducer<Void>()
 
     let flyrFetcher: FlyrFetchable
     let locationManager: LocationManageable
@@ -33,7 +35,10 @@ struct FeedVM: FeedVMProtocol {
         self.flyrFetcher
             .output
             .map(toImages)
-            .observe { self.imageOutput.extend($0) }
+            .observe {
+                self.items.extend($0)
+                self.doneLoadingOutput.next()
+        }
 
         self.flyrFetcher.errorOutput.observe { error in
             let alert: UIAlertController
