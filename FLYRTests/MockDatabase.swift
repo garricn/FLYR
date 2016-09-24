@@ -20,7 +20,8 @@ struct MockDatabase: Database {
             let mockRecords = [mockRecord]
             response = .Successful(with: mockRecords)
         case "NoRecords":
-            response = .Successful(with: [])
+            let error = Error(message: "No records found.")
+            response = .NotSuccessful(with: error)
         case "Invalid":
             let error = Error(message: "Invalid Query")
             response = .NotSuccessful(with: error)

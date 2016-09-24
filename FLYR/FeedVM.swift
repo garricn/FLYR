@@ -100,7 +100,7 @@ struct FeedVM: FeedVMProtocol {
         let location = locations.last!
         let radius: CGFloat = 100000000.0
         let format = "(distanceToLocation:fromLocation:(location, %@) < %f)"
-        let predicate = NSPredicate(
+        _ = NSPredicate(
             format: format,
             location,
             radius
@@ -126,10 +126,6 @@ func makeAlert(title title: String?, message: String?) -> UIAlertController {
     )
     alert.addAction(okAction)
     return alert
-}
-
-func toCKRecords(data: Data) -> CKRecords {
-    return data as! CKRecords
 }
 
 func toImages(flyrs: Flyrs) -> [UIImage] {

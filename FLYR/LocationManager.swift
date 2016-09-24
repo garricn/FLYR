@@ -84,7 +84,6 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 }
 
-extension CLLocation: Datum {}
 typealias Locations = [CLLocation]
 
 enum LocationManagerResponse {
@@ -96,4 +95,3 @@ enum LocationManagerResponse {
     case DidFail(with: NSError)
     case DidUpdateLocations(Locations)
 }
-

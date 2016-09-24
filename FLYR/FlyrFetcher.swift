@@ -32,7 +32,7 @@ struct FlyrFetcher: FlyrFetchable {
 
     func fetch(with query: CKQuery) {
         database.perform(query) { response in
-            guard case .Successful(let data) = response, let records = data as? CKRecords else {
+            guard case .Successful(let records) = response else {
                 if case .NotSuccessful(let error) = response { self.errorOutput.next(error) }
                 return
             }

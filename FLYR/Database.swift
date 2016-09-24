@@ -45,8 +45,3 @@ extension CKDatabase: Database {
         }
     }
 }
-
-extension CKRecord: Datum {}
-
-@objc protocol Datum {}
-typealias Data = [Datum]

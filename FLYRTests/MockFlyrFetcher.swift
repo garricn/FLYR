@@ -7,6 +7,7 @@
 //
 
 import CloudKit
+import CoreLocation
 import Bond
 
 @testable import FLYR
@@ -26,6 +27,9 @@ struct MockFlyrFetcher: FlyrFetchable {
     }
 }
 
-let mockFlyr = Flyr(image: mockImage)
+let mockFlyr = Flyr(
+    image: mockImage,
+    location: CLLocation()
+)
 
 let mockImage = UIImage(named: "photo")!
