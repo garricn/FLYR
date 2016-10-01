@@ -25,8 +25,7 @@ func resolvedTabBarController() -> UITabBarController {
 // FEED
 func resolvedFeedVC() -> UINavigationController {
     let feedVC = FeedVC(
-        feedVM: resolvedFeedVM(),
-        feedView: FeedView()
+        feedVM: resolvedFeedVM()
     )
 
     feedVC.tabBarItem = UITabBarItem(

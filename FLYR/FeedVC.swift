@@ -9,21 +9,15 @@
 import UIKit
 import Bond
 
-class FeedVC: UIViewController {
+class FeedVC: UITableViewController {
     let viewModel: FeedVM
-    let feedView: FeedView
 
-    private var tableView: UITableView { return feedView.tableView }
-    private var spinner: UIActivityIndicatorView { return feedView.spinner }
-
-    init(feedVM: FeedVM, feedView: FeedView) {
+    init(feedVM: FeedVM) {
         self.viewModel = feedVM
-        self.feedView = feedView
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.feedView = FeedView()
         self.viewModel = FeedVM(
             flyrFetcher: FlyrFetcher(database: resolvedPublicDatabase()),
             locationManager: LocationManager()
@@ -31,21 +25,37 @@ class FeedVC: UIViewController {
         super.init(coder: aDecoder)
     }
 
-    override func loadView() {
-        view = feedView
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupView()
+        setupObservers()
+        resetUI(forState: .Loading)
+        viewModel.refreshFeed()
+    }
 
+    func setupView() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .Add,
             target: self,
             action: #selector(addButtonTapped)
         )
 
-        tableView.delegate = self
+        tableView.registerClass(
+            FeedCell.self,
+            forCellReuseIdentifier: FeedCell.description()
+        )
 
+        tableView.showsVerticalScrollIndicator = false
+
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(
+            self,
+            action: #selector(refreshControlValueChanged),
+            forControlEvents: .ValueChanged
+        )
+    }
+
+    func setupObservers() {
         viewModel
             .alertOutput
             .deliverOn(Queue.Main)
@@ -58,36 +68,23 @@ class FeedVC: UIViewController {
             }.disposeIn(bnd_bag)
 
         viewModel
-            .imageOutput
+            .doneLoadingOutput
             .deliverOn(Queue.Main)
-            .lift()
-            .bindTo(tableView) { indexPath, dataSource, tableView in
-                let image = dataSource[indexPath.section][indexPath.row]
-                let cell = tableView
-                    .dequeueReusableCellWithIdentifier(
-                        FeedCell.description(),
-                        forIndexPath: indexPath
-                    ) as! FeedCell
-
-                cell._imageView.image = image
+            .observe {
                 self.resetUI(forState: .DoneLoading)
-                return cell
-            }
-
-        viewModel.refreshFeed()
+            }.disposeIn(bnd_bag)
     }
 
     func resetUI(forState state: UIState) {
         switch state {
         case .ErrorLoading:
             tableView.hidden = true
-            spinner.stopAnimating()
         case .Loading:
-            tableView.hidden = true
-            spinner.startAnimating()
+            break
         case .DoneLoading:
+            tableView.reloadData()
             tableView.hidden = false
-            spinner.stopAnimating()
+            refreshControl?.endRefreshing()
         }
     }
 
@@ -98,11 +95,30 @@ class FeedVC: UIViewController {
     func addButtonTapped(sender: UIBarButtonItem) {
         appCoordinator.addButtonTapped()
     }
+
+    func refreshControlValueChanged(sender: UIRefreshControl) {
+        viewModel.refreshFeed()
+    }
 }
 
-extension FeedVC: UITableViewDelegate {
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let image = viewModel.imageOutput.array[indexPath.row]
+extension FeedVC {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1
+    }
+
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.items.array.count
+    }
+
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let item = viewModel.items.array[indexPath.row]
+        let cell = tableView.dequeueReusableCellWithIdentifier(FeedCell.description()) as! FeedCell
+        cell._imageView.image = item
+        return cell
+    }
+
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        let image = viewModel.items.array[indexPath.row]
         return rowHeight(from: image)
     }
 }
