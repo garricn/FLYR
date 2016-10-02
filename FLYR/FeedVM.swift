@@ -105,12 +105,12 @@ struct FeedVM: FeedVMProtocol {
         let location = locations.last!
         let radius: CGFloat = 100000000.0
         let format = "(distanceToLocation:fromLocation:(location, %@) < %f)"
-        _ = NSPredicate(
+        let predicate = NSPredicate(
             format: format,
             location,
             radius
         )
-        return CKQuery(recordType: "Flyr", predicate: truePredicate)
+        return CKQuery(recordType: "Flyr", predicate: predicate)
     }
 }
 

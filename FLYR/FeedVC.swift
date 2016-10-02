@@ -46,6 +46,7 @@ class FeedVC: UITableViewController {
         )
 
         tableView.showsVerticalScrollIndicator = false
+        tableView.hidden = true
 
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(

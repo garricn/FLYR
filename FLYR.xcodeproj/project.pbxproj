@@ -15,7 +15,6 @@
 		4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74151D50561700648603 /* AppCoordinator.swift */; };
 		4E1D74181D50594100648603 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74171D50594100648603 /* FeedVC.swift */; };
 		4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74191D505E2700648603 /* FeedVM.swift */; };
-		4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D741B1D505E6C00648603 /* FeedView.swift */; };
 		4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AB1D614F1900962E29 /* Flyr.swift */; };
 		4E1E23AE1D61784300962E29 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AD1D61784300962E29 /* Database.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
@@ -74,7 +73,6 @@
 		4E1D74151D50561700648603 /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		4E1D74171D50594100648603 /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		4E1D74191D505E2700648603 /* FeedVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVM.swift; sourceTree = "<group>"; };
-		4E1D741B1D505E6C00648603 /* FeedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedView.swift; sourceTree = "<group>"; };
 		4E1E23AB1D614F1900962E29 /* Flyr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flyr.swift; sourceTree = "<group>"; };
 		4E1E23AD1D61784300962E29 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
@@ -231,7 +229,6 @@
 			children = (
 				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
 				4E1D74171D50594100648603 /* FeedVC.swift */,
-				4E1D741B1D505E6C00648603 /* FeedView.swift */,
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
 			);
 			name = FEED;
@@ -505,7 +502,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */,
-				4E1D741C1D505E6C00648603 /* FeedView.swift in Sources */,
 				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
 				4E1D74181D50594100648603 /* FeedVC.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,

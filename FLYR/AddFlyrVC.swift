@@ -91,6 +91,8 @@ class AddFlyrVC: UIViewController {
             )
             return item
         }()
+
+        navigationItem.title = "Add Flyr"
     }
 
     func setupObservers() {
