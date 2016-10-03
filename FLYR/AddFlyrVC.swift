@@ -22,19 +22,28 @@ class AddFlyrVC: UIViewController {
     private let viewModel: AddFlyrVMProtocol
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private var shouldEnableDoneButton: Bool {
-        return pickedImage != nil && pickedAnnotation != nil
+        return pickedImage != nil
+            && pickedLocation != nil
+            && startDate != nil
     }
     private var pickedImage: UIImage? {
         didSet {
-            navigationItem.rightBarButtonItem?.enabled = shouldEnableDoneButton
+            navigationItem.leftBarButtonItem?.enabled = shouldEnableDoneButton
             let indexPath = NSIndexPath(forRow: 0, inSection: 0)
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
-    private var pickedAnnotation: MKAnnotation? {
+    private var pickedLocation: MKAnnotation? {
         didSet {
-            navigationItem.rightBarButtonItem?.enabled = shouldEnableDoneButton
+            navigationItem.leftBarButtonItem?.enabled = shouldEnableDoneButton
             let indexPath = NSIndexPath(forRow: 0, inSection: 1)
+            tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+        }
+    }
+    private var startDate: NSDate? {
+        didSet {
+            navigationItem.leftBarButtonItem?.enabled = shouldEnableDoneButton
+            let indexPath = NSIndexPath(forRow: 0, inSection: 2)
             tableView.reloadRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
         }
     }
@@ -73,7 +82,7 @@ class AddFlyrVC: UIViewController {
     }
 
     func setupNavigationItems() {
-        navigationItem.rightBarButtonItem = {
+        navigationItem.leftBarButtonItem = {
             let item = UIBarButtonItem(
             barButtonSystemItem: .Done,
             target: self,
@@ -83,7 +92,7 @@ class AddFlyrVC: UIViewController {
             return item
         }()
 
-        navigationItem.leftBarButtonItem = {
+        navigationItem.rightBarButtonItem = {
             let item = UIBarButtonItem(
                 barButtonSystemItem: .Cancel,
                 target: self,
@@ -110,7 +119,6 @@ class AddFlyrVC: UIViewController {
                 self?.presentViewController(alert, animated: true) {
                     self?.navigationItem.rightBarButtonItem?.enabled = true
                     self?.navigationItem.leftBarButtonItem?.enabled = true
-
                 }
         }.disposeIn(bnd_bag)
     }
@@ -125,7 +133,8 @@ class AddFlyrVC: UIViewController {
 
         let flyr = Flyr(
             image: pickedImage!,
-            location: toLocation(from: pickedAnnotation!)
+            location: toLocation(from: pickedLocation!),
+            startDate: startDate!
         )
         viewModel.flyrInput.next(flyr)
     }
@@ -133,7 +142,7 @@ class AddFlyrVC: UIViewController {
 
 extension AddFlyrVC: UITableViewDataSource {
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -156,13 +165,20 @@ extension AddFlyrVC: UITableViewDataSource {
                 text = "Add Image"
             }
         case 1:
-            if let annotation = pickedAnnotation {
+            if let annotation = pickedLocation {
                 let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: nil)
                 cell.textLabel?.text = annotation.title!
                 cell.detailTextLabel?.text = annotation.subtitle!
                 return cell
             } else {
                 text = "Add Location"
+            }
+        case 2:
+            if let date = startDate {
+                cell.textLabel?.text = date.description
+                return cell
+            } else {
+                text = "Add Start Date & Time"
             }
         default:
             text = ""
@@ -191,6 +207,7 @@ extension AddFlyrVC: UITableViewDelegate {
         switch indexPath.section {
         case 0: presentImagePicker()
         case 1: presentLocationPicker()
+        case 2: presentDatePicker()
         default: break
         }
     }
@@ -240,14 +257,50 @@ extension AddFlyrVC: UINavigationControllerDelegate, UIImagePickerControllerDele
     }
 }
 
+// MARK: - Location Picker
 extension AddFlyrVC {
     func presentLocationPicker() {
-        let locationPicker = LocationPickerVC()
-        locationPicker.didPickLocation = { annotation in
-            self.pickedAnnotation = annotation
-            self.navigationController?.popViewControllerAnimated(true)
+        let locationPickerVC: LocationPickerVC = {
+            let picker = LocationPickerVC()
+            picker.didPickLocation = { annotation in
+                self.pickedLocation = annotation
+                self.dismissViewControllerAnimated(true, completion: nil)
+            }
+            let cancelButton = UIBarButtonItem(
+                barButtonSystemItem: .Cancel,
+                target: self,
+                action: #selector(pickerDidCancel)
+            )
+            picker.navigationItem.rightBarButtonItem = cancelButton
+            picker.navigationItem.title = "Add Location"
+            return picker
+        }()
+
+        let navVC = UINavigationController(rootViewController: locationPickerVC)
+        presentViewController(navVC, animated: true, completion: nil)
+    }
+
+    func pickerDidCancel() {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
+}
+
+extension AddFlyrVC {
+    func presentDatePicker() {
+        let datePickerVC = DatePickerVC()
+        let cancelButton = UIBarButtonItem(
+            barButtonSystemItem: .Cancel,
+            target: self,
+            action: #selector(pickerDidCancel)
+        )
+        datePickerVC.navigationItem.rightBarButtonItem = cancelButton
+        let navVC = UINavigationController(rootViewController: datePickerVC)
+        presentViewController(navVC, animated: true, completion: nil)
+
+        datePickerVC.didPick = { date in
+            self.startDate = date
+            self.dismissViewControllerAnimated(true, completion: nil)
         }
-        navigationController?.pushViewController(locationPicker, animated: true)
     }
 }
 
