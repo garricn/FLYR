@@ -48,6 +48,10 @@ func toFlyrRecord(from flyr: Flyr) -> CKRecord {
 
     let location = flyr.location
     flyrRecord.setObject(location, forKey: "location")
+
+    let startDate = flyr.startDate
+    flyrRecord.setObject(startDate, forKey: "startDate")
+
     return flyrRecord
 }
 

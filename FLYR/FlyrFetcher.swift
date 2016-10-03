@@ -50,7 +50,8 @@ struct Error: ErrorType {
 func toFlyr(record: CKRecord) -> Flyr {
     return Flyr(
         image: toImage(from: record),
-        location: toLocation(from: record)
+        location: toLocation(from: record),
+        startDate: toStartDate(from: record)
     )
 }
 
@@ -62,4 +63,8 @@ func toImage(from record: CKRecord) -> UIImage {
 
 func toLocation(from record: CKRecord) -> CLLocation {
     return record["location"] as! CLLocation
+}
+
+func toStartDate(from record: CKRecord) -> NSDate {
+    return record["startDate"] as! NSDate
 }
