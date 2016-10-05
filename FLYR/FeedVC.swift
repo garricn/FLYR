@@ -8,6 +8,8 @@
 
 import UIKit
 import Bond
+import CoreLocation
+import MapKit
 
 class FeedVC: UITableViewController {
     let viewModel: FeedVM
@@ -140,12 +142,12 @@ extension FeedVC {
             where sender.state == .Began
             else { return }
 
-        let image = viewModel.flyrOutput.array[indexPath.row].image
+        let item = viewModel.flyrOutput.array[indexPath.row]
         let save = UIAlertAction(
             title: "Save",
             style: .Default
         ) { _ in
-            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            UIImageWriteToSavedPhotosAlbum(item.image, nil, nil, nil)
         }
 
         let share = UIAlertAction(
@@ -153,10 +155,22 @@ extension FeedVC {
             style: .Default
         ) { _ in
             let shareSheet = UIActivityViewController(
-                activityItems: [image],
+                activityItems: [item.image],
                 applicationActivities: nil
             )
             self.presentViewController(shareSheet, animated: true, completion: nil)
+        }
+
+        let directions = UIAlertAction(title: "Directions", style: .Default) { _ in
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(item.location) { placemarks, error in
+                if let placemark = placemarks?.first {
+                    let mapItem = MKMapItem(placemark: MKPlacemark(placemark: placemark))
+                    mapItem.openInMapsWithLaunchOptions(nil)
+                } else {
+                    print("Error reverse geocoding: \(error)")
+                }
+            }
         }
 
         let cancel = UIAlertAction(
@@ -168,6 +182,7 @@ extension FeedVC {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         alertController.addAction(save)
         alertController.addAction(share)
+        alertController.addAction(directions)
         alertController.addAction(cancel)
         presentViewController(alertController, animated: true, completion: nil)
     }
