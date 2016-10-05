@@ -21,7 +21,6 @@ class FeedCell: UITableViewCell {
         constrain(_imageView) { imageView in
             imageView.edges == imageView.superview!.edges
         }
-
     }
 
     required init?(coder aDecoder: NSCoder) {
