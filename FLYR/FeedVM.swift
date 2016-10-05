@@ -128,5 +128,3 @@ func makeAlert(title title: String?, message: String?) -> UIAlertController {
     alert.addAction(okAction)
     return alert
 }
-
-let truePredicate = NSPredicate(format: "TRUEPREDICATE")
