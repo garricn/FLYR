@@ -148,6 +148,17 @@ extension FeedVC {
             UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
         }
 
+        let share = UIAlertAction(
+            title: "Share",
+            style: .Default
+        ) { _ in
+            let shareSheet = UIActivityViewController(
+                activityItems: [image],
+                applicationActivities: nil
+            )
+            self.presentViewController(shareSheet, animated: true, completion: nil)
+        }
+
         let cancel = UIAlertAction(
             title: "Cancel",
             style: .Cancel,
@@ -156,6 +167,7 @@ extension FeedVC {
 
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
         alertController.addAction(save)
+        alertController.addAction(share)
         alertController.addAction(cancel)
         presentViewController(alertController, animated: true, completion: nil)
     }
