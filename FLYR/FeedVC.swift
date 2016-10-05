@@ -46,7 +46,7 @@ class FeedVC: UITableViewController {
         )
 
         tableView.showsVerticalScrollIndicator = false
-        tableView.hidden = true
+        tableView.alpha = 0.0
 
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(
@@ -79,13 +79,18 @@ class FeedVC: UITableViewController {
     func resetUI(forState state: UIState) {
         switch state {
         case .ErrorLoading:
-            tableView.hidden = true
+            tableView.alpha = 0.0
         case .Loading:
             break
         case .DoneLoading:
             tableView.reloadData()
-            tableView.hidden = false
             refreshControl?.endRefreshing()
+            if tableView.alpha == 0.0 {
+                UIView.animateWithDuration(
+                    0.3,
+                    animations: { self.tableView.alpha = 1.0 }
+                )
+            }
         }
     }
 
