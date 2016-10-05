@@ -15,17 +15,15 @@ protocol AlertOutputing {
 }
 
 protocol FeedVMProtocol: AlertOutputing {
-    var imageOutput: ObservableArray<UIImage> { get }
+    var flyrOutput: ObservableArray<Flyr> { get }
     var flyrFetcher: FlyrFetchable { get }
 }
 
 struct FeedVM: FeedVMProtocol {
-    var imageOutput: ObservableArray<UIImage> = []
     var alertOutput = EventProducer<UIAlertController>()
-    let items = ObservableArray<UIImage>()
-    let doneLoadingOutput = EventProducer<Void>()
-
+    let flyrOutput = ObservableArray<Flyr>()
     let flyrFetcher: FlyrFetchable
+    let doneLoadingOutput = EventProducer<Void>()
     let locationManager: LocationManageable
 
     init(flyrFetcher: FlyrFetchable, locationManager: LocationManageable) {
@@ -34,9 +32,8 @@ struct FeedVM: FeedVMProtocol {
 
         self.flyrFetcher
             .output
-            .map(toImages)
             .observe {
-                self.items.extend($0)
+                self.flyrOutput.extend($0)
                 self.doneLoadingOutput.next()
         }
 
@@ -56,7 +53,6 @@ struct FeedVM: FeedVMProtocol {
             }
 
             self.alertOutput.next(alert)
-
         }
     }
 
@@ -132,13 +128,3 @@ func makeAlert(title title: String?, message: String?) -> UIAlertController {
     alert.addAction(okAction)
     return alert
 }
-
-func toImages(flyrs: Flyrs) -> [UIImage] {
-    return flyrs.map(toImage)
-}
-
-func toImage(flyr: Flyr) -> UIImage {
-    return flyr.image
-}
-
-let truePredicate = NSPredicate(format: "TRUEPREDICATE")

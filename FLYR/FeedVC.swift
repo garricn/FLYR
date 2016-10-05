@@ -117,18 +117,18 @@ extension FeedVC {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.items.array.count
+        return viewModel.flyrOutput.array.count
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let item = viewModel.items.array[indexPath.row]
+        let item = viewModel.flyrOutput.array[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier(FeedCell.description()) as! FeedCell
-        cell._imageView.image = item
+        cell._imageView.image = item.image
         return cell
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let image = viewModel.items.array[indexPath.row]
+        let image = viewModel.flyrOutput.array[indexPath.row].image
         return rowHeight(from: image)
     }
 }
@@ -140,7 +140,7 @@ extension FeedVC {
             where sender.state == .Began
             else { return }
 
-        let image = viewModel.items.array[indexPath.row]
+        let image = viewModel.flyrOutput.array[indexPath.row].image
         let save = UIAlertAction(
             title: "Save",
             style: .Default
