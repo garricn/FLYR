@@ -58,7 +58,6 @@ class FeedVC: UITableViewController {
             FeedCell.self,
             forCellReuseIdentifier: FeedCell.description()
         )
-
     }
 
     func setupObservers() {
