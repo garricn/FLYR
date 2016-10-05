@@ -40,20 +40,25 @@ class FeedVC: UITableViewController {
             action: #selector(addButtonTapped)
         )
 
-        tableView.registerClass(
-            FeedCell.self,
-            forCellReuseIdentifier: FeedCell.description()
-        )
-
-        tableView.showsVerticalScrollIndicator = false
-        tableView.alpha = 0.0
-
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(
             self,
             action: #selector(refreshControlValueChanged),
             forControlEvents: .ValueChanged
         )
+
+        let longPressGestureRecognizer = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(onLongPress)
+        )
+        tableView.addGestureRecognizer(longPressGestureRecognizer)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.alpha = 0.0
+        tableView.registerClass(
+            FeedCell.self,
+            forCellReuseIdentifier: FeedCell.description()
+        )
+
     }
 
     func setupObservers() {
@@ -126,5 +131,33 @@ extension FeedVC {
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let image = viewModel.items.array[indexPath.row]
         return rowHeight(from: image)
+    }
+}
+
+extension FeedVC {
+    func onLongPress(sender: UILongPressGestureRecognizer) {
+        guard
+            let indexPath = tableView.indexPathForRowAtPoint(sender.locationInView(tableView))
+            where sender.state == .Began
+            else { return }
+
+        let image = viewModel.items.array[indexPath.row]
+        let save = UIAlertAction(
+            title: "Save",
+            style: .Default
+        ) { _ in
+            UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+        }
+
+        let cancel = UIAlertAction(
+            title: "Cancel",
+            style: .Cancel,
+            handler: nil
+        )
+
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        alertController.addAction(save)
+        alertController.addAction(cancel)
+        presentViewController(alertController, animated: true, completion: nil)
     }
 }
