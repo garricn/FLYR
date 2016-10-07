@@ -8,17 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		3AA7266E47E1CBAC20E97C39 /* Pods_FLYRTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */; };
-		4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0C2D701D60DD08008BA952 /* FeedCell.swift */; };
+		4E0C2D711D60DD08008BA952 /* FlyrCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E0C2D701D60DD08008BA952 /* FlyrCell.swift */; };
 		4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D73E61D50521F00648603 /* AppDelegate.swift */; };
 		4E1D73EE1D50521F00648603 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E1D73ED1D50521F00648603 /* Assets.xcassets */; };
 		4E1D73F11D50521F00648603 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4E1D73EF1D50521F00648603 /* LaunchScreen.storyboard */; };
 		4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74151D50561700648603 /* AppCoordinator.swift */; };
-		4E1D74181D50594100648603 /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74171D50594100648603 /* FeedVC.swift */; };
 		4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74191D505E2700648603 /* FeedVM.swift */; };
 		4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AB1D614F1900962E29 /* Flyr.swift */; };
 		4E1E23AE1D61784300962E29 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AD1D61784300962E29 /* Database.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
+		4E401A491DA8988800AA1C1F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E401A481DA8988800AA1C1F /* LoadingView.swift */; };
 		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
+		4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443D1DA5D69C009AE862 /* ProfileVM.swift */; };
+		4E9944401DA5D7CA009AE862 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443F1DA5D7CA009AE862 /* User.swift */; };
+		4E9944421DA5D893009AE862 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9944411DA5D893009AE862 /* AuthenticationService.swift */; };
 		4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA439F11D8BAD3A005B0570 /* Globals.swift */; };
 		4EA7BDD51DA1E162004D3723 /* DatePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */; };
 		4EBDE4861D9344760042A874 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDE4851D9344760042A874 /* Private.swift */; };
@@ -38,6 +41,8 @@
 		4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */; };
 		4EDCC28F1D8F50B50010FEEA /* AddImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */; };
 		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
+		4EF2E12A1DA9895A00DED55E /* FlyrViewModeling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */; };
+		4EF2E12C1DA98A4000DED55E /* FlyrTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */; };
 		847BE13F1002C344CE8D214C /* Pods_FLYR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B8EF890F1D13089E58D6BE /* Pods_FLYR.framework */; };
 /* End PBXBuildFile section */
 
@@ -61,7 +66,7 @@
 /* Begin PBXFileReference section */
 		073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.release.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.release.xcconfig"; sourceTree = "<group>"; };
 		22B38C085B34210483957ECC /* Pods-FLYRTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.release.xcconfig"; sourceTree = "<group>"; };
-		4E0C2D701D60DD08008BA952 /* FeedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
+		4E0C2D701D60DD08008BA952 /* FlyrCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrCell.swift; sourceTree = "<group>"; };
 		4E1D73E31D50521E00648603 /* FLYR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FLYR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1D73E61D50521F00648603 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4E1D73ED1D50521F00648603 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -72,12 +77,15 @@
 		4E1D74021D50521F00648603 /* FLYRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FLYRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4E1D74081D50521F00648603 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4E1D74151D50561700648603 /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
-		4E1D74171D50594100648603 /* FeedVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 		4E1D74191D505E2700648603 /* FeedVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVM.swift; sourceTree = "<group>"; };
 		4E1E23AB1D614F1900962E29 /* Flyr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flyr.swift; sourceTree = "<group>"; };
 		4E1E23AD1D61784300962E29 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
+		4E401A481DA8988800AA1C1F /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		4E99443D1DA5D69C009AE862 /* ProfileVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVM.swift; sourceTree = "<group>"; };
+		4E99443F1DA5D7CA009AE862 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4E9944411DA5D893009AE862 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
 		4EA439F11D8BAD3A005B0570 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerVC.swift; sourceTree = "<group>"; };
 		4EBDE4851D9344760042A874 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
@@ -98,6 +106,8 @@
 		4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddImageCell.swift; sourceTree = "<group>"; };
 		4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = FLYR.entitlements; sourceTree = "<group>"; };
 		4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrViewModeling.swift; sourceTree = "<group>"; };
+		4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrTableVC.swift; sourceTree = "<group>"; };
 		636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYRTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYRTests/Pods-FLYRTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FLYR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FLYR/Pods-FLYR.debug.xcconfig"; sourceTree = "<group>"; };
 		A4678778D52FA4D2011F6373 /* Pods_FLYRTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FLYRTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,14 +182,19 @@
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
 				4E5EBE251D51BDB700E4768D /* BaseView.swift */,
-				4E1E23AB1D614F1900962E29 /* Flyr.swift */,
 				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
+				4E401A481DA8988800AA1C1F /* LoadingView.swift */,
+				4EBDE4851D9344760042A874 /* Private.swift */,
+				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
+				4E0C2D701D60DD08008BA952 /* FlyrCell.swift */,
+				4E1D74191D505E2700648603 /* FeedVM.swift */,
+				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
+				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
+				4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */,
 				4EDCC28A1D8F4E070010FEEA /* ADD FLYR */,
-				4EDCC2871D8F4DE90010FEEA /* FEED */,
+				4E401A4A1DA8AE0F00AA1C1F /* MODEL OBJECTS */,
 				4EDCC28D1D8F50530010FEEA /* SERVICES */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
-				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
-				4EBDE4851D9344760042A874 /* Private.swift */,
 			);
 			path = FLYR;
 			sourceTree = "<group>";
@@ -215,6 +230,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		4E401A4A1DA8AE0F00AA1C1F /* MODEL OBJECTS */ = {
+			isa = PBXGroup;
+			children = (
+				4E1E23AB1D614F1900962E29 /* Flyr.swift */,
+				4E99443F1DA5D7CA009AE862 /* User.swift */,
+			);
+			name = "MODEL OBJECTS";
+			sourceTree = "<group>";
+		};
 		4ED7E2321D8F17F200DB2F4E /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -224,16 +248,6 @@
 				4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */,
 			);
 			name = Mocks;
-			sourceTree = "<group>";
-		};
-		4EDCC2871D8F4DE90010FEEA /* FEED */ = {
-			isa = PBXGroup;
-			children = (
-				4E0C2D701D60DD08008BA952 /* FeedCell.swift */,
-				4E1D74171D50594100648603 /* FeedVC.swift */,
-				4E1D74191D505E2700648603 /* FeedVM.swift */,
-			);
-			name = FEED;
 			sourceTree = "<group>";
 		};
 		4EDCC28A1D8F4E070010FEEA /* ADD FLYR */ = {
@@ -255,6 +269,7 @@
 				4EC34E421D56824E001DF486 /* FlyrFetcher.swift */,
 				4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */,
 				4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */,
+				4E9944411DA5D893009AE862 /* AuthenticationService.swift */,
 			);
 			name = SERVICES;
 			sourceTree = "<group>";
@@ -506,14 +521,17 @@
 			files = (
 				4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */,
 				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
-				4E1D74181D50594100648603 /* FeedVC.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
+				4E401A491DA8988800AA1C1F /* LoadingView.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
 				4EBDE4861D9344760042A874 /* Private.swift in Sources */,
 				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
+				4EF2E12C1DA98A4000DED55E /* FlyrTableVC.swift in Sources */,
+				4EF2E12A1DA9895A00DED55E /* FlyrViewModeling.swift in Sources */,
 				4ED7E2271D8DDB0300DB2F4E /* Response.swift in Sources */,
-				4E0C2D711D60DD08008BA952 /* FeedCell.swift in Sources */,
+				4E9944401DA5D7CA009AE862 /* User.swift in Sources */,
+				4E0C2D711D60DD08008BA952 /* FlyrCell.swift in Sources */,
 				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,
 				4EA7BDD51DA1E162004D3723 /* DatePickerVC.swift in Sources */,
 				4EC9F49F1D90FD970097A2DC /* Resolvers.swift in Sources */,
@@ -522,7 +540,9 @@
 				4E1E23AE1D61784300962E29 /* Database.swift in Sources */,
 				4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */,
 				4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */,
+				4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */,
 				4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */,
+				4E9944421DA5D893009AE862 /* AuthenticationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

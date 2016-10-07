@@ -11,7 +11,8 @@ import CloudKit
 
 func resolvedTabBarController() -> UITabBarController {
     let viewControllers = [
-        resolvedFeedVC()
+        resolvedFeedVC(),
+        resolvedProfileVC()
     ]
 
     let tabBarController = UITabBarController()
@@ -22,10 +23,10 @@ func resolvedTabBarController() -> UITabBarController {
     return tabBarController
 }
 
-// FEED
+// MARK: - FEED
 func resolvedFeedVC() -> UINavigationController {
-    let feedVC = FeedVC(
-        feedVM: resolvedFeedVM()
+    let feedVC = FlyrTableVC(
+        viewModel: resolvedFeedVM()
     )
 
     feedVC.tabBarItem = UITabBarItem(
@@ -36,9 +37,7 @@ func resolvedFeedVC() -> UINavigationController {
 
     feedVC.tabBarItem.accessibilityLabel = "FEED"
 
-    return UINavigationController(
-        rootViewController: feedVC
-    )
+    return UINavigationController(rootViewController: feedVC)
 }
 
 func resolvedFeedVM() -> FeedVM {
@@ -62,10 +61,35 @@ func resolvedFlyrQuery() -> CKQuery {
     )
 }
 
-// ADD FLYR
-func resolvedAddFlyrVC() -> UINavigationController {
+// MARK: - PROFILE
+func resolvedProfileVC() -> UINavigationController {
+
+
+
+    let profileVC = FlyrTableVC(
+        viewModel: resolvedProfileVM()
+    )
+
+    profileVC.tabBarItem = UITabBarItem(
+        title: "PROFILE",
+        image: UIImage(),
+        tag: 1
+    )
+
+    return UINavigationController(rootViewController: profileVC)
+}
+
+func resolvedProfileVM() -> ProfileVM {
+    return ProfileVM(
+        flyrFetcher: resolvedFlyrFetcher()
+    )
+}
+
+// MARK: - ADD FLYR
+func resolvedAddFlyrVC(with ownerReference: CKReference) -> UINavigationController {
     let addFlyrVC = AddFlyrVC(
-        viewModel: resolvedAddFlyrVM()
+        viewModel: resolvedAddFlyrVM(),
+        ownerReference: ownerReference
     )
 
     addFlyrVC.tabBarItem = UITabBarItem(
@@ -91,7 +115,7 @@ func resolvedRecordSaver() -> RecordSaver {
     return RecordSaver(database: resolvedPublicDatabase())
 }
 
-// CloudKit
+// MARK: - CloudKit
 func resolvedPublicDatabase() -> CKDatabase {
     let container = CKContainer(identifier: Private.iCloudContainerID)
     return container.publicCloudDatabase

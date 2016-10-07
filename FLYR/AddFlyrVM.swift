@@ -31,7 +31,7 @@ struct AddFlyrVM: AddFlyrVMProtocol {
                 case .Successful:
                     self.responseOutput.next(response)
                 case .NotSuccessful(let error):
-                    let alert = makeAlert(from: error!)
+                    let alert = makeAlert(from: error)
                     self.alertOutput.next(alert)
                 }
             }
@@ -51,6 +51,9 @@ func toFlyrRecord(from flyr: Flyr) -> CKRecord {
 
     let startDate = flyr.startDate
     flyrRecord.setObject(startDate, forKey: "startDate")
+
+    let ownerReference = flyr.ownerReference
+    flyrRecord.setObject(ownerReference, forKey: "ownerReference")
 
     return flyrRecord
 }

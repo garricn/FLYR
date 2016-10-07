@@ -1,5 +1,5 @@
 //
-//  FeedCell.swift
+//  FlyrCell.swift
 //  FLYR
 //
 //  Created by Garric Nahapetian on 8/14/16.
@@ -9,8 +9,9 @@
 import UIKit
 import Cartography
 
-class FeedCell: UITableViewCell {
+class FlyrCell: UITableViewCell {
     let _imageView = UIImageView()
+    static let identifier = FlyrCell.description()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

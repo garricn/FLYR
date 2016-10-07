@@ -18,21 +18,27 @@ protocol FlyrFetchable {
     var errorOutput: EventProducer<ErrorType?> { get }
     var database: Database { get }
     func fetch(with query: CKQuery)
+    func fetch(with operation: CKQueryOperation, and query: CKQuery)
 }
 
 struct FlyrFetcher: FlyrFetchable {
     let output = EventProducer<Flyrs>()
     let errorOutput = EventProducer<ErrorType?>()
 
-    internal let database: Database
+    let database: Database
 
     init(database: Database) {
         self.database = database
     }
 
+    func fetch(with operation: CKQueryOperation, and query: CKQuery) {
+        database.add(operation)
+        fetch(with: query)
+    }
+
     func fetch(with query: CKQuery) {
         database.perform(query) { response in
-            guard case .Successful(let records) = response else {
+            guard case .Successful(let records as CKRecords) = response else {
                 if case .NotSuccessful(let error) = response { self.errorOutput.next(error) }
                 return
             }
@@ -49,22 +55,27 @@ struct Error: ErrorType {
 
 func toFlyr(record: CKRecord) -> Flyr {
     return Flyr(
-        image: toImage(from: record),
-        location: toLocation(from: record),
-        startDate: toStartDate(from: record)
+        image: image(from: record),
+        location: location(from: record),
+        startDate: startDate(from: record),
+        ownerReference: ownerReference(from: record)
     )
 }
 
-func toImage(from record: CKRecord) -> UIImage {
+func image(from record: CKRecord) -> UIImage {
     let imageAsset = record["image"] as! CKAsset
     let path = imageAsset.fileURL.path!
     return UIImage(contentsOfFile: path)!
 }
 
-func toLocation(from record: CKRecord) -> CLLocation {
+func location(from record: CKRecord) -> CLLocation {
     return record["location"] as! CLLocation
 }
 
-func toStartDate(from record: CKRecord) -> NSDate {
+func startDate(from record: CKRecord) -> NSDate {
     return record["startDate"] as! NSDate
+}
+
+func ownerReference(from record: CKRecord) -> CKReference {
+    return record["ownerReference"] as! CKReference
 }

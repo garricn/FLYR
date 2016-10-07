@@ -10,18 +10,9 @@ import UIKit
 import Bond
 import CloudKit
 
-protocol AlertOutputing {
-    var alertOutput: EventProducer<UIAlertController> { get set }
-}
-
-protocol FeedVMProtocol: AlertOutputing {
-    var flyrOutput: ObservableArray<Flyr> { get }
-    var flyrFetcher: FlyrFetchable { get }
-}
-
-struct FeedVM: FeedVMProtocol {
-    var alertOutput = EventProducer<UIAlertController>()
-    let flyrOutput = ObservableArray<Flyr>()
+struct FeedVM: FlyrViewModeling {
+    let alertOutput = EventProducer<UIAlertController>()
+    let output = ObservableArray<Flyr>()
     let flyrFetcher: FlyrFetchable
     let doneLoadingOutput = EventProducer<Void>()
     let locationManager: LocationManageable
@@ -33,7 +24,7 @@ struct FeedVM: FeedVMProtocol {
         self.flyrFetcher
             .output
             .observe {
-                self.flyrOutput.extend($0)
+                self.output.extend($0)
                 self.doneLoadingOutput.next()
         }
 
@@ -56,7 +47,7 @@ struct FeedVM: FeedVMProtocol {
         }
     }
 
-    func refreshFeed() {
+    func refresh() {
         self.locationManager.requestLocation { response in
             if case .DidUpdateLocations(let locations) = response {
                 let query = self.makeQuery(from: locations)
