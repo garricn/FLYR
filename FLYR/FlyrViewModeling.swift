@@ -30,6 +30,11 @@ protocol FlyrInteractionHandling {
 extension FlyrViewModeling {
     func onLongPress(at indexPath: NSIndexPath, from vc: FlyrTableVC) {
         let item = output.array[indexPath.row]
+        let actionSheet = makeActionSheet(on: item, fore: vc)
+        alertOutput.next(actionSheet)
+    }
+
+    private func makeActionSheet(on item: Flyr, fore vc: UIViewController) -> UIAlertController {
         let save = UIAlertAction(
             title: "Save",
             style: .Default
@@ -72,6 +77,6 @@ extension FlyrViewModeling {
         alertController.addAction(directions)
         alertController.addAction(cancel)
 
-        alertOutput.next(alertController)
+        return alertController
     }
 }
