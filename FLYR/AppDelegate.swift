@@ -17,11 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let frame = screenBounds
         window = UIWindow(frame: frame)
         window?.backgroundColor = .whiteColor()
-        window?.rootViewController = appCoordinator.rootViewController(from: launchOptions)
+        window?.rootViewController = AppCoordinator.sharedInstance.rootViewController(from: launchOptions)
         window?.makeKeyAndVisible()
         return true
     }
 }
 
-let appCoordinator = AppCoordinator()
+//let appCoordinator = AppCoordinator()
 typealias LaunchOptions = [NSObject : AnyObject]?

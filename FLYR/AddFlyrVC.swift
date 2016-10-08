@@ -10,6 +10,7 @@ import UIKit
 import MapKit
 import Bond
 import GGNLocationPicker
+import CloudKit
 
 protocol AddFlyrDelegate: class {
     func controllerDidFinish()
@@ -20,6 +21,7 @@ class AddFlyrVC: UIViewController {
     weak var addFlyrDelegate: AddFlyrDelegate?
 
     private let viewModel: AddFlyrVMProtocol
+    private let ownerReference: CKReference
     private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
     private var shouldEnableDoneButton: Bool {
         return pickedImage != nil
@@ -48,13 +50,18 @@ class AddFlyrVC: UIViewController {
         }
     }
 
-    init(viewModel: AddFlyrVMProtocol) {
+    init(viewModel: AddFlyrVMProtocol, ownerReference: CKReference) {
         self.viewModel = viewModel
+        self.ownerReference = ownerReference
         super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder aDecoder: NSCoder) {
         self.viewModel = resolvedAddFlyrVM()
+        self.ownerReference = CKReference(
+            recordID: CKRecordID(recordName: ""),
+            action: .None
+        )
         super.init(coder: aDecoder)
     }
 
@@ -109,7 +116,7 @@ class AddFlyrVC: UIViewController {
             .responseOutput
             .deliverOn(Queue.Main)
             .observe { response in
-                appCoordinator.didFinishAddingFlyr()
+                AppCoordinator.sharedInstance.didFinishAddingFlyr()
         }.disposeIn(bnd_bag)
 
         viewModel
@@ -124,7 +131,7 @@ class AddFlyrVC: UIViewController {
     }
 
     func cancelButtonTapped() {
-        appCoordinator.cancelButtonTapped()
+        AppCoordinator.sharedInstance.cancelButtonTapped()
     }
 
     func doneButtonTapped() {
@@ -134,7 +141,8 @@ class AddFlyrVC: UIViewController {
         let flyr = Flyr(
             image: pickedImage!,
             location: toLocation(from: pickedLocation!),
-            startDate: startDate!
+            startDate: startDate!,
+            ownerReference: ownerReference
         )
         viewModel.flyrInput.next(flyr)
     }
