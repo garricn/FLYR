@@ -15,7 +15,6 @@ struct ProfileVM: FlyrViewModeling {
     let alertOutput = EventProducer<UIAlertController>()
     let doneLoadingOutput = EventProducer<Void>()
 
-
     init(flyrFetcher: FlyrFetchable) {
         self.flyrFetcher = flyrFetcher
 

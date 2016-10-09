@@ -10,16 +10,18 @@ import UIKit
 import CloudKit
 import Bond
 
-protocol AppCoordinatorProtocol {
+typealias LaunchOptions = [NSObject : AnyObject]?
+
+protocol AppCoordinatoring {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
 }
 
-class AppCoordinator: NSObject, AppCoordinatorProtocol {
+class AppCoordinator: NSObject, AppCoordinatoring {
     static let sharedInstance = AppCoordinator()
 
-    var tabBarController: UITabBarController!
+    private var tabBarController: UITabBarController!
     private var user: User?
-    let authenticationService = AuthenticationService(
+    private let authenticationService = AuthenticationService(
         container: CKContainer.defaultContainer()
     )
 
@@ -49,7 +51,9 @@ class AppCoordinator: NSObject, AppCoordinatorProtocol {
 
     func addButtonTapped() {
         if let user = user {
-            let addFlyrVC = resolvedAddFlyrVC(with: user.ownerReference)
+            let addFlyrVC = UINavigationController(
+                rootViewController: resolvedAddFlyrVC(with: user.ownerReference)
+            )
             tabBarController.presentViewController(addFlyrVC, animated: true, completion: nil)
         }
     }

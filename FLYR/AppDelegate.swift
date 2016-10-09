@@ -22,6 +22,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 }
-
-//let appCoordinator = AppCoordinator()
-typealias LaunchOptions = [NSObject : AnyObject]?

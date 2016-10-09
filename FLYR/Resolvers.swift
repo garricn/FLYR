@@ -10,34 +10,20 @@ import UIKit
 import CloudKit
 
 func resolvedTabBarController() -> UITabBarController {
-    let viewControllers = [
-        resolvedFeedVC(),
-        resolvedProfileVC()
-    ]
-
+    let feedVC = UINavigationController(rootViewController: resolvedFeedVC())
+    let profileVC = UINavigationController(rootViewController: resolvedProfileVC())
+    let viewControllers = [feedVC, profileVC]
     let tabBarController = UITabBarController()
-    tabBarController.setViewControllers(
-        viewControllers,
-        animated: true
-    )
+    tabBarController.setViewControllers(viewControllers, animated: true)
     return tabBarController
 }
 
 // MARK: - FEED
-func resolvedFeedVC() -> UINavigationController {
-    let feedVC = FlyrTableVC(
-        viewModel: resolvedFeedVM()
-    )
-
-    feedVC.tabBarItem = UITabBarItem(
-        title: "FEED",
-        image: UIImage(),
-        tag: 0
-    )
-
+func resolvedFeedVC() -> FlyrTableVC {
+    let feedVC = FlyrTableVC(viewModel: resolvedFeedVM())
+    feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
     feedVC.tabBarItem.accessibilityLabel = "FEED"
-
-    return UINavigationController(rootViewController: feedVC)
+    return feedVC
 }
 
 func resolvedFeedVM() -> FeedVM {
@@ -48,67 +34,31 @@ func resolvedFeedVM() -> FeedVM {
 }
 
 func resolvedFlyrFetcher() -> FlyrFetchable {
-    return FlyrFetcher(
-        database: resolvedPublicDatabase()
-    )
-}
-
-func resolvedFlyrQuery() -> CKQuery {
-    return CKQuery(
-        recordType: "Flyr",
-        predicate: NSPredicate(
-            format: "TRUEPREDICATE")
-    )
+    return FlyrFetcher(database: resolvedPublicDatabase())
 }
 
 // MARK: - PROFILE
-func resolvedProfileVC() -> UINavigationController {
-
-
-
-    let profileVC = FlyrTableVC(
-        viewModel: resolvedProfileVM()
-    )
-
-    profileVC.tabBarItem = UITabBarItem(
-        title: "PROFILE",
-        image: UIImage(),
-        tag: 1
-    )
-
-    return UINavigationController(rootViewController: profileVC)
+func resolvedProfileVC() -> FlyrTableVC {
+    let profileVC = FlyrTableVC(viewModel: resolvedProfileVM())
+    profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(), tag: 1)
+    profileVC.accessibilityLabel = "PROFILE"
+    return profileVC
 }
 
 func resolvedProfileVM() -> ProfileVM {
-    return ProfileVM(
-        flyrFetcher: resolvedFlyrFetcher()
-    )
+    return ProfileVM(flyrFetcher: resolvedFlyrFetcher())
 }
 
 // MARK: - ADD FLYR
-func resolvedAddFlyrVC(with ownerReference: CKReference) -> UINavigationController {
-    let addFlyrVC = AddFlyrVC(
-        viewModel: resolvedAddFlyrVM(),
-        ownerReference: ownerReference
-    )
-
-    addFlyrVC.tabBarItem = UITabBarItem(
-        title: "POST",
-        image: UIImage(),
-        tag: 1
-    )
-
+func resolvedAddFlyrVC(with ownerReference: CKReference) -> AddFlyrVC {
+    let addFlyrVC = AddFlyrVC(viewModel: resolvedAddFlyrVM(), ownerReference: ownerReference)
+    addFlyrVC.tabBarItem = UITabBarItem(title: "POST", image: UIImage(), tag: 1)
     addFlyrVC.tabBarItem.accessibilityLabel = "POST"
-
-    return UINavigationController(
-        rootViewController: addFlyrVC
-    )
+    return addFlyrVC
 }
 
 func resolvedAddFlyrVM() -> AddFlyrVM {
-    return AddFlyrVM(
-        recordSaver: resolvedRecordSaver()
-    )
+    return AddFlyrVM(recordSaver: resolvedRecordSaver())
 }
 
 func resolvedRecordSaver() -> RecordSaver {
