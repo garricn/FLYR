@@ -126,23 +126,19 @@ extension FlyrTableVC {
 
 extension FlyrTableVC {
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 1
+        return viewModel.numberOfSections()
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.output.array.count
+        return viewModel.numbersOfRows(inSection: section)
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let item = viewModel.output.array[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier(FlyrCell.description()) as! FlyrCell
-        cell._imageView.image = item.image
-        return cell
+        return viewModel.cellForRow(at: indexPath, en: tableView)
     }
 
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        let image = viewModel.output.array[indexPath.row].image
-        return rowHeight(from: image)
+        return viewModel.heightForRow(at: indexPath)
     }
 }
 
