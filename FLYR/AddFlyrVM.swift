@@ -88,7 +88,7 @@ struct AddFlyrVM: AddFlyrViewModeling {
                 let alert = makeAlert(from: error)
                 self.alertOutput.next(alert)
                 self.shouldEnableDoneButtonOutput.next(true)
-                self.shouldEnableDoneButtonOutput.next(false)
+                self.shouldEnableCancelButtonOutput.next(true)
             }
         }
     }
