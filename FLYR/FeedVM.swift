@@ -24,6 +24,7 @@ struct FeedVM: FlyrViewModeling {
         self.flyrFetcher
             .output
             .observe {
+                self.output.removeAll()
                 self.output.extend($0)
                 self.doneLoadingOutput.next()
         }
