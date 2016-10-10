@@ -10,7 +10,7 @@ import Bond
 import CoreLocation
 import MapKit
 
-protocol FlyrViewModeling: AlertOutputing, FlyrOutputing, FlyrInteractionHandling, FlyrTableViewDataSource {}
+protocol FlyrViewModeling: AlertOutputing, FlyrOutputing, FlyrInteractionHandling, TableViewDataSource {}
 
 protocol AlertOutputing {
     var alertOutput: EventProducer<UIAlertController> { get }
@@ -27,7 +27,7 @@ protocol FlyrInteractionHandling {
     func onLongPress(at indexPath: NSIndexPath, from vc: FlyrTableVC)
 }
 
-protocol FlyrTableViewDataSource {
+protocol TableViewDataSource {
     func numberOfSections() -> Int
     func numbersOfRows(inSection section: Int) -> Int
     func cellForRow(at indexPath: NSIndexPath, en tableView: UITableView) -> UITableViewCell

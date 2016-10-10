@@ -17,8 +17,7 @@
 		4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AB1D614F1900962E29 /* Flyr.swift */; };
 		4E1E23AE1D61784300962E29 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AD1D61784300962E29 /* Database.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
-		4E401A491DA8988800AA1C1F /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E401A481DA8988800AA1C1F /* LoadingView.swift */; };
-		4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E5EBE251D51BDB700E4768D /* BaseView.swift */; };
+		4E4947331DAB3E5E000CDBBD /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */; };
 		4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443D1DA5D69C009AE862 /* ProfileVM.swift */; };
 		4E9944401DA5D7CA009AE862 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443F1DA5D7CA009AE862 /* User.swift */; };
 		4E9944421DA5D893009AE862 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9944411DA5D893009AE862 /* AuthenticationService.swift */; };
@@ -81,8 +80,7 @@
 		4E1E23AB1D614F1900962E29 /* Flyr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flyr.swift; sourceTree = "<group>"; };
 		4E1E23AD1D61784300962E29 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
-		4E401A481DA8988800AA1C1F /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
-		4E5EBE251D51BDB700E4768D /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		4E99443D1DA5D69C009AE862 /* ProfileVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVM.swift; sourceTree = "<group>"; };
 		4E99443F1DA5D7CA009AE862 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4E9944411DA5D893009AE862 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
@@ -181,16 +179,15 @@
 				4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */,
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
-				4E5EBE251D51BDB700E4768D /* BaseView.swift */,
-				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
-				4E401A481DA8988800AA1C1F /* LoadingView.swift */,
-				4EBDE4851D9344760042A874 /* Private.swift */,
-				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
-				4E0C2D701D60DD08008BA952 /* FlyrCell.swift */,
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
-				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
-				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
+				4E0C2D701D60DD08008BA952 /* FlyrCell.swift */,
 				4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */,
+				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
+				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
+				4EBDE4851D9344760042A874 /* Private.swift */,
+				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
+				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
+				4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */,
 				4EDCC28A1D8F4E070010FEEA /* ADD FLYR */,
 				4E401A4A1DA8AE0F00AA1C1F /* MODEL OBJECTS */,
 				4EDCC28D1D8F50530010FEEA /* SERVICES */,
@@ -253,9 +250,9 @@
 		4EDCC28A1D8F4E070010FEEA /* ADD FLYR */ = {
 			isa = PBXGroup;
 			children = (
-				4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */,
-				4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */,
 				4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */,
+				4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */,
+				4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */,
 				4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */,
 			);
 			name = "ADD FLYR";
@@ -522,9 +519,7 @@
 				4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */,
 				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
-				4E401A491DA8988800AA1C1F /* LoadingView.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
-				4E5EBE261D51BDB700E4768D /* BaseView.swift in Sources */,
 				4EBDE4861D9344760042A874 /* Private.swift in Sources */,
 				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
 				4EF2E12C1DA98A4000DED55E /* FlyrTableVC.swift in Sources */,
@@ -536,6 +531,7 @@
 				4EA7BDD51DA1E162004D3723 /* DatePickerVC.swift in Sources */,
 				4EC9F49F1D90FD970097A2DC /* Resolvers.swift in Sources */,
 				4EDCC28F1D8F50B50010FEEA /* AddImageCell.swift in Sources */,
+				4E4947331DAB3E5E000CDBBD /* UIViewControllerExtensions.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
 				4E1E23AE1D61784300962E29 /* Database.swift in Sources */,
 				4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */,

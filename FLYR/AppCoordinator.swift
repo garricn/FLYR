@@ -70,12 +70,3 @@ class AppCoordinator: NSObject, AppCoordinatoring {
         return user?.ownerReference
     }
 }
-
-extension AppCoordinator: AddFlyrDelegate {
-    func controllerDidFinish() {
-        tabBarController.selectedIndex = 0
-    }
-
-    func controllerFailed(with error: ErrorType) {
-    }
-}
