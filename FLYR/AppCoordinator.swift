@@ -9,6 +9,7 @@
 import UIKit
 import CloudKit
 import Bond
+import GGNLocationPicker
 
 typealias LaunchOptions = [NSObject : AnyObject]?
 
@@ -49,13 +50,24 @@ class AppCoordinator: NSObject, AppCoordinatoring {
         return UIViewController()
     }
 
-    func addButtonTapped() {
-        if let user = user {
-            let addFlyrVC = UINavigationController(
-                rootViewController: resolvedAddFlyrVC(with: user.ownerReference)
-            )
-            tabBarController.presentViewController(addFlyrVC, animated: true, completion: nil)
+    func locationButtonTapped() {
+        let locationPicker = LocationPickerVC()
+        locationPicker.navigationItem.title = "Set Search Area"
+        locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
+        locationPicker.didPickLocation = {
+            let _location = location(from: $0)
+            self.save(preferredLocation: _location)
+            locationPicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
+
+        let vc = UINavigationController(rootViewController: locationPicker)
+        tabBarController.presentViewController(vc, animated: true, completion: nil)
+    }
+
+    func addButtonTapped() {
+        guard let user = user else { return }
+        let vc = UINavigationController(rootViewController: resolvedAddFlyrVC(with: user.ownerReference))
+        tabBarController.presentViewController(vc, animated: true, completion: nil)
     }
 
     func cancelButtonTapped() {
@@ -68,5 +80,19 @@ class AppCoordinator: NSObject, AppCoordinatoring {
 
     func ownerReference() -> CKReference? {
         return user?.ownerReference
+    }
+
+    func preferredLocation() -> CLLocation? {
+        guard
+            let _data = NSUserDefaults.standardUserDefaults().dataForKey("PreferredLocation"),
+            let location = NSKeyedUnarchiver.unarchiveObjectWithData(_data) as? CLLocation
+            else { return nil }
+        return location
+    }
+
+    private func save(preferredLocation location: CLLocation) {
+        let data = NSKeyedArchiver.archivedDataWithRootObject(location)
+        NSUserDefaults.standardUserDefaults().setValue(data, forKey: "PreferredLocation")
+        NSUserDefaults.standardUserDefaults().synchronize()
     }
 }

@@ -34,7 +34,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>UserID</key>
-	<string></string>
+	<key>PreferredLocation</key>
+	<data></data>
 </dict>
 </plist>

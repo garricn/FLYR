@@ -63,10 +63,7 @@ struct FeedVM: FlyrViewModeling {
                         message: "You can enable location services in Settings > Privacy."
                     )
                 case .AuthorizationDenied:
-                    alert = makeAlert(
-                        title: "Authorization Denied",
-                        message: "You denied location services authorization."
-                    )
+                    alert = makePreferredLocationAlert()
                 case .AuthorizationRestricted:
                     alert = makeAlert(
                         title: "Authorization Restricted",
@@ -100,6 +97,16 @@ struct FeedVM: FlyrViewModeling {
         )
         return CKQuery(recordType: "Flyr", predicate: predicate)
     }
+}
+
+func makePreferredLocationAlert() -> UIAlertController {
+    let alert = makeAlert(title: "Authorization Denied", message: "You denied location services authorization.")
+    let setPreferredLocationAction = UIAlertAction(
+        title: "Set Preferred Location",
+        style: .Default,
+        handler: { _ in AppCoordinator.sharedInstance.locationButtonTapped() })
+    alert.addAction(setPreferredLocationAction)
+    return alert
 }
 
 func makeAlert(from error: ErrorType?) -> UIAlertController {

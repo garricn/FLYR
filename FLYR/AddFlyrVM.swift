@@ -69,12 +69,12 @@ struct AddFlyrVM: AddFlyrViewModeling {
         shouldEnableCancelButtonOutput.next(false)
 
         let image = imageInput.value!
-        let location = toLocation(from: locationInput.value!)
+        let _location = location(from: locationInput.value!)
         let startDate = startDateInput.value!
         let reference = AppCoordinator.sharedInstance.ownerReference()!
         let flyr = Flyr(
             image: image,
-            location: location,
+            location: _location,
             startDate: startDate,
             ownerReference: reference
         )
@@ -265,7 +265,7 @@ func url(from image: UIImage) -> NSURL {
     return NSURL.fileURLWithPath(filePath)
 }
 
-func toLocation(from annotation: MKAnnotation) -> CLLocation {
+func location(from annotation: MKAnnotation) -> CLLocation {
     let coordinate = annotation.coordinate
     return CLLocation(
         latitude: coordinate.latitude,

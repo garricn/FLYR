@@ -33,6 +33,13 @@ extension FlyrTableVC {
     }
 
     func setupView() {
+        navigationItem.leftBarButtonItem = UIBarButtonItem(
+            title: "◉",
+            style: .Plain,
+            target: self,
+            action: #selector(locationButtonTapped)
+        )
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .Add,
             target: self,
@@ -104,6 +111,10 @@ extension FlyrTableVC {
 
 // MARK: - Interactivity
 extension FlyrTableVC {
+    func locationButtonTapped(sender: UIBarButtonItem) {
+        AppCoordinator.sharedInstance.locationButtonTapped()
+    }
+
     func addButtonTapped(sender: UIBarButtonItem) {
         AppCoordinator.sharedInstance.addButtonTapped()
     }
