@@ -8,7 +8,8 @@
 
 import MapKit
 
-struct LocationPickerVM {
+class LocationPickerVM {
+    let alertOutput = Observable<UIAlertController>()
     var shouldShowUserLocation: Bool
 
     private let locationService = LocationService()
@@ -25,6 +26,11 @@ struct LocationPickerVM {
 
         locationService.requestWhenInUse {
             completion(shouldShowUserLocation: $0)
+
+            if self.locationService.authorizationDenied {
+                let alert = makeAlert()
+                self.alertOutput.next(alert)
+            }
         }
     }
 
@@ -62,4 +68,24 @@ func toAnnotation(from item: MKMapItem) -> MKPointAnnotation {
         }
     }
     return annotation
+}
+
+func makeAlert() -> UIAlertController {
+    let ok = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+    let openSettings = UIAlertAction(
+        title: "Settings",
+        style: .Default,
+        handler: { _ in
+            guard let url = NSURL(string: UIApplicationOpenSettingsURLString) else { return }
+            UIApplication.sharedApplication().openURL(url)
+        }
+    )
+    let alert = UIAlertController(
+        title: "Location Services Authorization Denied",
+        message: "Enable location services for this app in settings.",
+        preferredStyle: .Alert
+    )
+    alert.addAction(ok)
+    alert.addAction(openSettings)
+    return alert
 }

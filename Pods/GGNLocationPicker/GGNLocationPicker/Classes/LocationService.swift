@@ -14,6 +14,10 @@ class LocationService: NSObject, CLLocationManagerDelegate {
             && CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse
     }
 
+    var authorizationDenied: Bool {
+        return CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied
+    }
+
     private var authorizationStatus: CLAuthorizationStatus {
         return CLLocationManager.authorizationStatus()
     }
@@ -26,6 +30,10 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     private var completion: ((enabledAndAuthorized: Bool) -> Void)?
 
     func requestWhenInUse(with completion: (bool: Bool) -> Void) {
+        guard !authorizationDenied else {
+            return completion(bool: false)
+        }
+
         self.completion = completion
         locationManger.delegate = self
         locationManger.requestWhenInUseAuthorization()
@@ -34,9 +42,12 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         guard CLLocationManager.locationServicesEnabled() else { return }
         switch status {
-        case .NotDetermined: locationManger.requestWhenInUseAuthorization()
-        case .Denied, .Restricted: break
-        case .AuthorizedAlways, .AuthorizedWhenInUse: completion?(enabledAndAuthorized: true)
+        case .NotDetermined:
+            locationManger.requestWhenInUseAuthorization()
+        case .Denied, .Restricted:
+            break
+        case .AuthorizedAlways, .AuthorizedWhenInUse:
+            completion?(enabledAndAuthorized: true)
         }
     }
 }

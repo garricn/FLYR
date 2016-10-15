@@ -5,7 +5,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'FLYR' do
-    pod 'Cartography'
+    pod 'Cartography', '0.6.0'
     pod 'Bond', '~> 4.0'
     pod 'GGNLocationPicker'
 end
