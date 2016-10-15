@@ -11,7 +11,12 @@ import CloudKit
 import MapKit
 import GGNLocationPicker
 
-protocol AddFlyrViewModeling: AlertOutputing, FlyrAdding, TableViewDataSource, AddFlyrTableViewDelegate {}
+protocol AddFlyrViewModeling:
+AlertOutputing,
+ViewControllerOutputing,
+FlyrAdding,
+TableViewDataSource,
+AddFlyrTableViewDelegate {}
 
 protocol FlyrAdding {
     var imageInput: Observable<UIImage?> { get }
@@ -21,7 +26,6 @@ protocol FlyrAdding {
     var shouldEnableCancelButtonOutput: EventProducer<Bool> { get }
     var reloadRowAtIndexPathOutput: EventProducer<NSIndexPath> { get }
     var recordSaver: RecordSaveable { get }
-    var viewControllerOutput: EventProducer<UIViewController> { get }
     func doneButtonTapped()
 }
 

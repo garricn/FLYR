@@ -1,5 +1,5 @@
 //
-//  AuthenticationService.swift
+//  Authenticator.swift
 //  FLYR
 //
 //  Created by Garric Nahapetian on 10/5/16.
@@ -9,23 +9,42 @@
 import CloudKit
 import Bond
 
-struct AuthenticationService {
-    let output = EventProducer<CKRecordID>()
-    let errorOutput = EventProducer<ErrorType?>()
-    let container: Container
+protocol Authenticating {
+    func authenticate(completion: (CKReference?, ErrorType?) -> Void)
+    func ownerReference() -> CKReference?
+}
 
-    init(container: Container) {
-        self.container = container
+class Authenticator: Authenticating {
+    private let container: Container
+    private var user: User?
+
+    init(defaultContainer: Container) {
+        self.container = defaultContainer
+
+        container.fetchUserRecordID { response in
+            guard case .Successful(let recordID as CKRecordID) = response else { return }
+            let reference = CKReference(recordID: recordID, action: .None)
+            self.user = User(ownerReference: reference)
+        }
+    }
+
+    func ownerReference() -> CKReference? {
+        return user?.ownerReference
+    }
+
+    func authenticate(completion: (CKReference?, ErrorType?) -> Void) {
+        guard user == nil else { return completion(user!.ownerReference, nil) }
 
         container.fetchUserRecordID { response in
             guard case .Successful(let recordID as CKRecordID) = response else {
                 if case .NotSuccessful(let error) = response {
-                    self.errorOutput.next(error)
+                    return completion(nil, error)
                 }
-                return
+                return completion(nil, nil)
             }
 
-            self.output.next(recordID)
+            let reference = CKReference(recordID: recordID, action: .None)
+            completion(reference, nil)
         }
     }
 }

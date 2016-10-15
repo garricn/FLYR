@@ -13,37 +13,47 @@ import GGNLocationPicker
 
 typealias LaunchOptions = [NSObject : AnyObject]?
 
-protocol AppCoordinatoring {
+protocol AppCoordinatoring: AlertOutputing, ViewControllerOutputing {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
 }
 
-class AppCoordinator: NSObject, AppCoordinatoring {
-    static let sharedInstance = AppCoordinator()
+protocol ViewControllerOutputing {
+    var viewControllerOutput: EventProducer<UIViewController> { get }
+}
 
-    private var tabBarController: UITabBarController!
-    private var user: User?
-    private let authenticationService = AuthenticationService(
-        container: CKContainer.defaultContainer()
+class AppCoordinator: NSObject, AppCoordinatoring {
+    static let sharedInstance = AppCoordinator(
+        authenticator: Authenticator(
+            defaultContainer: CKContainer.defaultContainer()
+        )
     )
 
-    override init() {
+    let viewControllerOutput = EventProducer<UIViewController>()
+    let alertOutput = EventProducer<UIAlertController>()
+
+    private var tabBarController: UITabBarController!
+    private let authenticator: Authenticating
+
+    init(authenticator: Authenticating) {
+        self.authenticator = authenticator
         super.init()
-        
-        authenticationService.output.observe { recordID in
-            let reference = CKReference(recordID: recordID, action: .None)
-            self.user = User(ownerReference: reference)
-        }.disposeIn(bnd_bag)
+
+        self.viewControllerOutput.deliverOn(.Main).observe { [unowned self] in
+            self.tabBarController.presentViewController($0, animated: true, completion: nil)
+            }.disposeIn(bnd_bag)
+
+        self.alertOutput.deliverOn(.Main).observe { [unowned self] in
+            self.tabBarController.presentViewController($0, animated: true, completion: nil)
+            }.disposeIn(bnd_bag)
     }
 
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
-
         if launchOptions == nil {
             tabBarController = resolvedTabBarController()
             return tabBarController
         } else {
             return launchOptions.map(toRootViewController)!
         }
-
     }
 
     private func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
@@ -65,9 +75,16 @@ class AppCoordinator: NSObject, AppCoordinatoring {
     }
 
     func addButtonTapped() {
-        guard let user = user else { return }
-        let vc = UINavigationController(rootViewController: resolvedAddFlyrVC(with: user.ownerReference))
-        tabBarController.presentViewController(vc, animated: true, completion: nil)
+        authenticator.authenticate { ownerReference, error in
+            if let reference = ownerReference {
+                let rootVC = resolvedAddFlyrVC(with: reference)
+                let vc = UINavigationController(rootViewController: rootVC)
+                self.viewControllerOutput.next(vc)
+            } else if let error = error {
+                let alert = makeAlert(from: error)
+                self.alertOutput.next(alert)
+            }
+        }
     }
 
     func cancelButtonTapped() {
@@ -79,7 +96,7 @@ class AppCoordinator: NSObject, AppCoordinatoring {
     }
 
     func ownerReference() -> CKReference? {
-        return user?.ownerReference
+        return authenticator.ownerReference()
     }
 
     func preferredLocation() -> CLLocation? {
