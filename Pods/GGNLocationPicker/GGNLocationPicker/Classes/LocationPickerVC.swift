@@ -16,6 +16,16 @@ public final class LocationPickerVC: UIViewController {
     private let viewModel = LocationPickerVM()
     private let mapView = MKMapView()
     private var userLocation: MKUserLocation { return mapView.userLocation }
+    private var annotationToShowOnLoad: MKAnnotation? = nil
+
+    public init(annotationToShowOnLoad: MKAnnotation? = nil) {
+        self.annotationToShowOnLoad = annotationToShowOnLoad
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 
     override public func loadView() {
         view = mapView
@@ -34,11 +44,71 @@ public final class LocationPickerVC: UIViewController {
         }
 
         setToolbarItems()
+
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        mapView.addGestureRecognizer(longPressGesture)
         mapView.showsUserLocation = viewModel.shouldShowUserLocation
         mapView.delegate = self
 
+        if let annotation = annotationToShowOnLoad {
+            mapView.addAnnotation(annotation)
+            mapView.showAnnotations([annotation], animated: true)
+            mapView.selectAnnotation(annotation, animated: true)
+        }
+
         viewModel.alertOutput.observe { [weak self] alert in
             self?.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+
+    func handleLongPress(sender: UILongPressGestureRecognizer) {
+        guard sender.state == .Began else { return }
+
+        mapView.removeAnnotations(mapView.annotations)
+
+        let pressPoint = sender.locationInView(mapView)
+        let coordinate = mapView.convertPoint(pressPoint, toCoordinateFromView: mapView)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinate
+
+        mapView.addAnnotation(annotation)
+        mapView.showAnnotations([annotation], animated: true)
+
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        let geocoder = CLGeocoder()
+        geocoder.reverseGeocodeLocation(location) { placemarks, error in
+            if let addressDictionary = placemarks?.first?.addressDictionary as? [String:AnyObject]
+                , addressLines = addressDictionary["FormattedAddressLines"] as? [String] {
+
+                switch addressLines.count {
+                case 0:
+                    annotation.title = placemarks?.first?.name
+                case 1:
+                    annotation.title = addressLines[0]
+                case 2:
+                    annotation.title = addressLines[0]
+                    annotation.subtitle = addressLines[1]
+                default:
+                    if addressLines[0] == addressLines[1] {
+                        annotation.title = addressLines[1]
+                        annotation.subtitle = addressLines[2]
+                    } else {
+                        annotation.title = addressLines[0]
+                        if addressLines[2].containsString("United States") {
+                            annotation.subtitle = "\(addressLines[1])"
+                        } else {
+                            annotation.subtitle = "\(addressLines[1]), \(addressLines[2])"
+                        }
+                    }
+                }
+
+            } else {
+                annotation.title = placemarks?.first?.name
+            }
+
+            dispatch_async(dispatch_get_main_queue()) {
+                self.mapView.selectAnnotation(annotation, animated: true)
+            }
         }
     }
 
@@ -103,10 +173,10 @@ extension LocationPickerVC: MKMapViewDelegate {
     }
 
     public func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        guard let annotation = view.annotation
-            where annotation.isKindOfClass(MKUserLocation) else { return }
-
-        guard let location = mapView.userLocation.location else { return }
+        guard
+            let annotation = view.annotation where annotation.isKindOfClass(MKUserLocation),
+            let location = mapView.userLocation.location
+            else { return }
 
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
