@@ -35,6 +35,18 @@
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>PreferredLocation</key>
-	<data></data>
+	<dict>
+		<key>title</key>
+		<string></string>
+		<key>subtitle</key>
+		<string></string>
+		<key>coordinate</key>
+		<dict>
+			<key>latitude</key>
+			<integer>0</integer>
+			<key>longitude</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
 </dict>
 </plist>

@@ -10,6 +10,7 @@ import UIKit
 import CloudKit
 import Bond
 import GGNLocationPicker
+import MapKit
 
 typealias LaunchOptions = [NSObject : AnyObject]?
 
@@ -61,12 +62,11 @@ class AppCoordinator: NSObject, AppCoordinating {
     }
 
     func locationButtonTapped() {
-        let locationPicker = LocationPickerVC()
+        let locationPicker = LocationPickerVC(annotationToShowOnLoad: preferredLocation())
         locationPicker.navigationItem.title = "Set Search Area"
         locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
         locationPicker.didPickLocation = {
-            let _location = location(from: $0)
-            self.save(preferredLocation: _location)
+            self.save(preferredLocation: $0)
             locationPicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
 
@@ -99,17 +99,44 @@ class AppCoordinator: NSObject, AppCoordinating {
         return authenticator.ownerReference()
     }
 
-    func preferredLocation() -> CLLocation? {
+    func preferredLocation() -> MKAnnotation? {
         guard
-            let _data = NSUserDefaults.standardUserDefaults().dataForKey("PreferredLocation"),
-            let location = NSKeyedUnarchiver.unarchiveObjectWithData(_data) as? CLLocation
+            let dictionary = NSUserDefaults.standardUserDefaults().dictionaryForKey("PreferredLocation"),
+            let title = dictionary["title"] as? String,
+            let subtitle = dictionary["subtitle"] as? String,
+            let coordinate = dictionary["coordinate"],
+            let latitude = coordinate["latitude"] as? Double,
+            let longitude = coordinate["longitude"] as? Double
             else { return nil }
-        return location
+
+        let coord = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        let annotation = MKPointAnnotation()
+        annotation.title = title
+        annotation.subtitle = subtitle
+        annotation.coordinate = coord
+        return annotation
     }
 
-    private func save(preferredLocation location: CLLocation) {
-        let data = NSKeyedArchiver.archivedDataWithRootObject(location)
-        NSUserDefaults.standardUserDefaults().setValue(data, forKey: "PreferredLocation")
+    private func save(preferredLocation annotation: MKAnnotation) {
+        let preferredLocation: [String: AnyObject] = [
+            "title": (annotation.title!)!,
+            "subtitle": (annotation.subtitle!)!,
+            "coordinate": [
+                "latitude": annotation.coordinate.latitude,
+                "longitude": annotation.coordinate.longitude
+            ]
+        ]
+
+        NSUserDefaults.standardUserDefaults().setObject(preferredLocation, forKey: "PreferredLocation")
         NSUserDefaults.standardUserDefaults().synchronize()
     }
+}
+
+
+func pointAnnotation(from annotation: MKAnnotation) -> MKPointAnnotation {
+    let pointAnnotation = MKPointAnnotation()
+    pointAnnotation.coordinate = annotation.coordinate
+    pointAnnotation.title = annotation.title!
+    pointAnnotation.subtitle = annotation.subtitle!
+    return pointAnnotation
 }

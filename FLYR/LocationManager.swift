@@ -25,8 +25,9 @@ class LocationManager: NSObject, LocationManageable {
                 self.requestLocationCompletion = completion
                 self.locationManger.delegate = self
                 self.locationManger.requestLocation()
-            } else if let preferredLocation = AppCoordinator.sharedInstance.preferredLocation() {
-                completion(response: .DidUpdateLocations([preferredLocation]))
+            } else if let annotation = AppCoordinator.sharedInstance.preferredLocation() {
+                let _location = location(from: annotation)
+                completion(response: .DidUpdateLocations([_location]))
             } else {
                 completion(response: response)
             }
