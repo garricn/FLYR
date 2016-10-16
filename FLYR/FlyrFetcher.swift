@@ -16,7 +16,6 @@ typealias Flyrs = [Flyr]
 protocol FlyrFetchable {
     var output: EventProducer<Flyrs> { get }
     var errorOutput: EventProducer<ErrorType?> { get }
-    var database: Database { get }
     func fetch(with query: CKQuery)
     func fetch(with operation: CKQueryOperation, and query: CKQuery)
 }
@@ -25,7 +24,7 @@ struct FlyrFetcher: FlyrFetchable {
     let output = EventProducer<Flyrs>()
     let errorOutput = EventProducer<ErrorType?>()
 
-    let database: Database
+    private let database: Database
 
     init(database: Database) {
         self.database = database

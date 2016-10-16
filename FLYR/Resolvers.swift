@@ -58,7 +58,17 @@ func resolvedAddFlyrVC(with ownerReference: CKReference) -> AddFlyrVC {
 }
 
 func resolvedAddFlyrVM() -> AddFlyrVM {
-    return AddFlyrVM(recordSaver: resolvedRecordSaver())
+    return AddFlyrVM(
+        recordSaver: resolvedRecordSaver()
+    )
+}
+
+func resolvedAppCoordinator() -> AppCoordinator {
+    return AppCoordinator(authenticator: resolvedAuthenticator())
+}
+
+func resolvedAuthenticator() -> Authenticating {
+    return Authenticator(defaultContainer: CKContainer.defaultContainer())
 }
 
 func resolvedRecordSaver() -> RecordSaver {

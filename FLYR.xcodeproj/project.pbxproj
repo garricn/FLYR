@@ -20,7 +20,7 @@
 		4E4947331DAB3E5E000CDBBD /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */; };
 		4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443D1DA5D69C009AE862 /* ProfileVM.swift */; };
 		4E9944401DA5D7CA009AE862 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443F1DA5D7CA009AE862 /* User.swift */; };
-		4E9944421DA5D893009AE862 /* AuthenticationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9944411DA5D893009AE862 /* AuthenticationService.swift */; };
+		4E9944421DA5D893009AE862 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9944411DA5D893009AE862 /* Authenticator.swift */; };
 		4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA439F11D8BAD3A005B0570 /* Globals.swift */; };
 		4EA7BDD51DA1E162004D3723 /* DatePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */; };
 		4EBDE4861D9344760042A874 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDE4851D9344760042A874 /* Private.swift */; };
@@ -83,7 +83,7 @@
 		4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		4E99443D1DA5D69C009AE862 /* ProfileVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVM.swift; sourceTree = "<group>"; };
 		4E99443F1DA5D7CA009AE862 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		4E9944411DA5D893009AE862 /* AuthenticationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationService.swift; sourceTree = "<group>"; };
+		4E9944411DA5D893009AE862 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		4EA439F11D8BAD3A005B0570 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerVC.swift; sourceTree = "<group>"; };
 		4EBDE4851D9344760042A874 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
@@ -266,7 +266,7 @@
 				4EC34E421D56824E001DF486 /* FlyrFetcher.swift */,
 				4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */,
 				4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */,
-				4E9944411DA5D893009AE862 /* AuthenticationService.swift */,
+				4E9944411DA5D893009AE862 /* Authenticator.swift */,
 			);
 			name = SERVICES;
 			sourceTree = "<group>";
@@ -538,7 +538,7 @@
 				4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */,
 				4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */,
 				4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */,
-				4E9944421DA5D893009AE862 /* AuthenticationService.swift in Sources */,
+				4E9944421DA5D893009AE862 /* Authenticator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
