@@ -13,7 +13,7 @@ import GGNLocationPicker
 
 typealias LaunchOptions = [NSObject : AnyObject]?
 
-protocol AppCoordinatoring: AlertOutputing, ViewControllerOutputing {
+protocol AppCoordinating: AlertOutputing, ViewControllerOutputing {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
 }
 
@@ -21,7 +21,7 @@ protocol ViewControllerOutputing {
     var viewControllerOutput: EventProducer<UIViewController> { get }
 }
 
-class AppCoordinator: NSObject, AppCoordinatoring {
+class AppCoordinator: NSObject, AppCoordinating {
     static let sharedInstance = AppCoordinator(
         authenticator: Authenticator(
             defaultContainer: CKContainer.defaultContainer()
