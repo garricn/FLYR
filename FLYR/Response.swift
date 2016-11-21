@@ -7,6 +7,6 @@
 //
 
 enum Response {
-    case Successful(with: Data)
-    case NotSuccessful(with: ErrorType?)
+    case Successful(with: Any)
+    case NotSuccessful(with: ErrorType)
 }

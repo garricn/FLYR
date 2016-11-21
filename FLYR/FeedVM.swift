@@ -10,20 +10,11 @@ import UIKit
 import Bond
 import CloudKit
 
-protocol AlertOutputing {
-    var alertOutput: EventProducer<UIAlertController> { get set }
-}
-
-protocol FeedVMProtocol: AlertOutputing {
-    var imageOutput: ObservableArray<UIImage> { get }
-    var flyrFetcher: FlyrFetchable { get }
-}
-
-struct FeedVM: FeedVMProtocol {
-    var imageOutput: ObservableArray<UIImage> = []
-    var alertOutput = EventProducer<UIAlertController>()
-
+struct FeedVM: FlyrViewModeling {
+    let alertOutput = EventProducer<UIAlertController>()
+    let output = ObservableArray<Flyr>()
     let flyrFetcher: FlyrFetchable
+    let doneLoadingOutput = EventProducer<Void>()
     let locationManager: LocationManageable
 
     init(flyrFetcher: FlyrFetchable, locationManager: LocationManageable) {
@@ -32,8 +23,11 @@ struct FeedVM: FeedVMProtocol {
 
         self.flyrFetcher
             .output
-            .map(toImages)
-            .observe { self.imageOutput.extend($0) }
+            .observe {
+                self.output.removeAll()
+                self.output.extend($0)
+                self.doneLoadingOutput.next()
+        }
 
         self.flyrFetcher.errorOutput.observe { error in
             let alert: UIAlertController
@@ -51,11 +45,10 @@ struct FeedVM: FeedVMProtocol {
             }
 
             self.alertOutput.next(alert)
-
         }
     }
 
-    func refreshFeed() {
+    func refresh() {
         self.locationManager.requestLocation { response in
             if case .DidUpdateLocations(let locations) = response {
                 let query = self.makeQuery(from: locations)
@@ -70,10 +63,7 @@ struct FeedVM: FeedVMProtocol {
                         message: "You can enable location services in Settings > Privacy."
                     )
                 case .AuthorizationDenied:
-                    alert = makeAlert(
-                        title: "Authorization Denied",
-                        message: "You denied location services authorization."
-                    )
+                    alert = makePreferredLocationAlert()
                 case .AuthorizationRestricted:
                     alert = makeAlert(
                         title: "Authorization Restricted",
@@ -105,8 +95,18 @@ struct FeedVM: FeedVMProtocol {
             location,
             radius
         )
-        return CKQuery(recordType: "Flyr", predicate: truePredicate)
+        return CKQuery(recordType: "Flyr", predicate: predicate)
     }
+}
+
+func makePreferredLocationAlert() -> UIAlertController {
+    let alert = makeAlert(title: "Authorization Denied", message: "You denied location services authorization.")
+    let setPreferredLocationAction = UIAlertAction(
+        title: "Set Preferred Location",
+        style: .Default,
+        handler: { _ in AppCoordinator.sharedInstance.locationButtonTapped() })
+    alert.addAction(setPreferredLocationAction)
+    return alert
 }
 
 func makeAlert(from error: ErrorType?) -> UIAlertController {
@@ -127,17 +127,3 @@ func makeAlert(title title: String?, message: String?) -> UIAlertController {
     alert.addAction(okAction)
     return alert
 }
-
-func toCKRecords(data: Data) -> CKRecords {
-    return data as! CKRecords
-}
-
-func toImages(flyrs: Flyrs) -> [UIImage] {
-    return flyrs.map(toImage)
-}
-
-func toImage(flyr: Flyr) -> UIImage {
-    return flyr.image
-}
-
-let truePredicate = NSPredicate(format: "TRUEPREDICATE")

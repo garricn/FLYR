@@ -87,9 +87,11 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Bond/Bond.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cartography/Cartography.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GGNLocationPicker/GGNLocationPicker.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/GGNObservable/GGNObservable.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/Bond/Bond.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Cartography/Cartography.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GGNLocationPicker/GGNLocationPicker.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/GGNObservable/GGNObservable.framework"
 fi

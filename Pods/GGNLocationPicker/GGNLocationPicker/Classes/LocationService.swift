@@ -1,17 +1,25 @@
 //
+//  GGNLocationPicker
+//
 //  LocationService.swift
-//  Pods
 //
 //  Created by Garric Nahapetian on 8/22/16.
 //
 //
 
 import CoreLocation
+import GGNObservable
 
 class LocationService: NSObject, CLLocationManagerDelegate {
+    let authorizedOutput = Observable<Bool>()
+
     var enabledAndAuthorized: Bool {
         return CLLocationManager.locationServicesEnabled()
             && CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse
+    }
+
+    var authorizationDenied: Bool {
+        return CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied
     }
 
     private var authorizationStatus: CLAuthorizationStatus {
@@ -23,10 +31,12 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     private let locationManger = CLLocationManager()
-    private var completion: ((enabledAndAuthorized: Bool) -> Void)?
 
-    func requestWhenInUse(with completion: (bool: Bool) -> Void) {
-        self.completion = completion
+    func requestWhenInUse() {
+        guard !authorizationDenied else {
+            return authorizedOutput.emit(false)
+        }
+
         locationManger.delegate = self
         locationManger.requestWhenInUseAuthorization()
     }
@@ -34,9 +44,12 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         guard CLLocationManager.locationServicesEnabled() else { return }
         switch status {
-        case .NotDetermined: locationManger.requestWhenInUseAuthorization()
-        case .Denied, .Restricted: break
-        case .AuthorizedAlways, .AuthorizedWhenInUse: completion?(enabledAndAuthorized: true)
+        case .NotDetermined:
+            locationManger.requestWhenInUseAuthorization()
+        case .Denied, .Restricted:
+            break
+        case .AuthorizedAlways, .AuthorizedWhenInUse:
+            authorizedOutput.emit(true)
         }
     }
 }

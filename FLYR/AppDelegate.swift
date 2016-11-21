@@ -16,11 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         let frame = screenBounds
         window = UIWindow(frame: frame)
-        window?.rootViewController = appCoordinator.rootViewController(from: launchOptions)
+        window?.backgroundColor = .whiteColor()
+        window?.rootViewController = AppCoordinator.sharedInstance.rootViewController(from: launchOptions)
         window?.makeKeyAndVisible()
         return true
     }
 }
-
-let appCoordinator = AppCoordinator()
-typealias LaunchOptions = [NSObject : AnyObject]?

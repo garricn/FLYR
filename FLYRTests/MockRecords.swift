@@ -9,7 +9,7 @@
 import CloudKit
 import UIKit
 
-var mockRecord: CKRecord {
+let mockRecord: CKRecord = {
     func url(from image: UIImage) -> NSURL {
         let dirPaths = NSSearchPathForDirectoriesInDomains(
             .DocumentDirectory,
@@ -26,5 +26,6 @@ var mockRecord: CKRecord {
     let fileURL = url(from: image)
     let imageAsset = CKAsset(fileURL: fileURL)
     record.setObject(imageAsset, forKey: "image")
+    record.setObject(CLLocation(), forKey: "location")
     return record
-}
+}()

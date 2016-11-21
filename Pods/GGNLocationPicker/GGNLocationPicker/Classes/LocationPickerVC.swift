@@ -1,6 +1,7 @@
 //
-//  LocationPickerViewController.swift
-//  Pods
+//  GGNLocationPicker
+//
+//  LocationPickerVC.swift
 //
 //  Created by Garric Nahapetian on 8/20/16.
 //
@@ -9,27 +10,78 @@
 import UIKit
 import MapKit
 
+/// The LocationPickerVC class is a sub-class of UIViewController. It is not meant to be sub-classed. Use an instance of this class to easily present or push a view controller for searching and picking a location.
 public final class LocationPickerVC: UIViewController {
+    // MARK: - Properties
+    /**
+     The delegate of the LocationPickerVC object.
+    */
     public weak var pickerDelegate: LocationPickerDelegate?
-    public var didPickLocation: ((with: MKAnnotation) -> Void)?
+
+    /**
+     An optional closure that takes an object conforming to MKAnnotation and returns void. This closure is called when the user taps the + button of the callout accessory of an MKAnnotationView.
+     
+     - parameter: An object conforming to MKAnnotation
+     
+     - Returns: Void
+    */
+    public var didPick: ((MKAnnotation) -> Void)?
 
     private let viewModel = LocationPickerVM()
     private let mapView = MKMapView()
     private var userLocation: MKUserLocation { return mapView.userLocation }
+    private var annotationToShowOnLoad: MKAnnotation? = nil
 
+    // MARK: - Initialization
+    /**
+     Initializes a LocationPickerVC with an annotation to show on present or push. The default is nil.
+     
+     - parameter annotation: An object conforming to MKAnnotation
+    */
+    public init(with annotation: MKAnnotation? = nil) {
+        self.annotationToShowOnLoad = annotation
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    /// :nodoc:
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    /// :nodoc:
     override public func loadView() {
         view = mapView
     }
 
-    public override func viewDidLoad() {
+    /// :nodoc:
+    override public func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.toolbarHidden = false
-        setToolbarItems()
+
+        if presentingViewController != nil {
+            navigationItem.rightBarButtonItem = UIBarButtonItem(
+                barButtonSystemItem: .Cancel,
+                target: self,
+                action: #selector(cancelButtonTapped)
+            )
+        }
+
+        setupToolbarItems()
+        setupObservers()
+
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handle))
+        mapView.addGestureRecognizer(longPressGesture)
         mapView.showsUserLocation = viewModel.shouldShowUserLocation
         mapView.delegate = self
+
+        if let annotation = annotationToShowOnLoad {
+            mapView.addAnnotation(annotation)
+            mapView.showAnnotations([annotation], animated: true)
+            mapView.selectAnnotation(annotation, animated: true)
+        }
     }
 
-    private func setToolbarItems() {
+    private func setupToolbarItems() {
         let userLocationButton = UIBarButtonItem(
             title: "◉",
             style: .Plain,
@@ -60,109 +112,94 @@ public final class LocationPickerVC: UIViewController {
             animated: false
         )
     }
+
+    private func setupObservers() {
+        viewModel.output.onNext { [weak self] annotation in
+            self?.didPick?(annotation)
+            self?.pickerDelegate?.didPick(annotation)
+        }
+
+        viewModel.searchResultsOutput.onNext { [weak self] annotations in
+            guard let _self = self else { return }
+            dispatch_async(dispatch_get_main_queue()) {
+                _self.mapView.removeAnnotations(_self.mapView.annotations)
+                _self.mapView.addAnnotations(annotations)
+                _self.mapView.showAnnotations(annotations, animated: false)
+                _self.mapView.selectAnnotation(annotations.last!, animated: true)
+            }
+        }
+
+        viewModel.longPressOutput.onNext { [weak self] annotation in
+            guard let _self = self else { return }
+            dispatch_async(dispatch_get_main_queue()) {
+                _self.mapView.removeAnnotations(_self.mapView.annotations)
+                _self.mapView.addAnnotation(annotation)
+                _self.mapView.showAnnotations([annotation], animated: true)
+                _self.mapView.selectAnnotation(annotation, animated: true)
+            }
+        }
+
+        viewModel.showUserLocationOutput.onNext { [weak self] _ in
+            self?.mapView.setUserTrackingMode(.Follow, animated: true)
+        }
+
+        viewModel.alertOutput.onNext { [weak self] alert in
+            self?.presentViewController(alert, animated: true, completion: nil)
+        }
+
+        viewModel.viewControllerOutput.onNext { [weak self] viewController in
+            self?.presentViewController(viewController, animated: true, completion: nil)
+        }
+    }
 }
 
+// MARK: - Map View delegate
 extension LocationPickerVC: MKMapViewDelegate {
+    /// :nodoc:
     public func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-        guard !annotation.isKindOfClass(MKUserLocation.self) else {
-            mapView.userLocation.subtitle = ""
-            return nil
-        }
-
-        let reuseIdentifier = "PinView"
-        let pinView: MKPinAnnotationView
-
-        if let annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier) as? MKPinAnnotationView {
-            pinView = annotationView
-            pinView.annotation = annotation
-        } else {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-            pinView.animatesDrop = false
-            pinView.canShowCallout = true
-            pinView.rightCalloutAccessoryView = UIButton(type: .ContactAdd)
-        }
-
-        return pinView
+        return viewModel.annotationView(fore: annotation, of: mapView)
     }
 
+    /// :nodoc:
     public func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
-        guard let annotation = view.annotation
-            where annotation.isKindOfClass(MKUserLocation) else { return }
-
-        guard let location = mapView.userLocation.location else { return }
-
-        let geocoder = CLGeocoder()
-        geocoder.reverseGeocodeLocation(location) { placemarks, error in
-            guard let placemark = placemarks?.first else {
-                print("Error: \(error)")
-                return
-            }
-
-            if let addressDictionary = placemark.addressDictionary as? [String: AnyObject]
-                , formattedAddressLines = addressDictionary["FormattedAddressLines"] as? [String] {
-
-                if formattedAddressLines[0] == formattedAddressLines[1] {
-                    mapView.userLocation.subtitle = "\(formattedAddressLines[0]), \(formattedAddressLines[1])"
-                } else {
-                    mapView.userLocation.title = "\(formattedAddressLines[0]) (Current Location)"
-                    mapView.userLocation.subtitle = "\(formattedAddressLines[1]), \(formattedAddressLines[2])"
-                }
-            } else if let name = placemark.name {
-                mapView.userLocation.title = "\(name) (Current Location)"
-            }
-        }
+        viewModel.didSelect(view, of: mapView)
     }
 
+    /// :nodoc:
     public func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
-        views.forEach { view in
-            if let annotation = view.annotation
-                where annotation.isKindOfClass(MKUserLocation) {
-                view.rightCalloutAccessoryView = UIButton(type: .ContactAdd)
-            }
-        }
+        viewModel.didAdd(views, to: mapView)
     }
 
+    /// :nodoc:
     public func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        guard let annotation = view.annotation where control == view.rightCalloutAccessoryView else { return }
-
-        didPickLocation?(with: annotation)
-        pickerDelegate?.didPickLocation(with: annotation)
+        viewModel.didTap(control, of: view, of: mapView)
     }
 }
 
+// MARK: - Search bar
 extension LocationPickerVC: UISearchBarDelegate {
     @objc private func searchButtonTapped() {
-        presentSearchController()
+        viewModel.searchButtonTapped(from: self)
     }
 
-    private func presentSearchController() {
-        let searchController = UISearchController(searchResultsController: nil)
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search for Place or Address"
-        presentViewController(searchController, animated: true, completion: nil)
-    }
-
+    /// :nodoc:
     public func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        defer {
-            dismissViewControllerAnimated(true, completion: nil)
-        }
-
-        guard let text = searchBar.text else { return }
-
-        viewModel.searchRequested(with: text, and: userLocation) { annotations in
-            self.mapView.removeAnnotations(self.mapView.annotations)
-            self.mapView.addAnnotations(annotations)
-            self.mapView.showAnnotations(annotations, animated: false)
-            self.mapView.selectAnnotation(annotations.last!, animated: true)
-        }
+        viewModel.didTapSearchButton(of: searchBar, of: mapView)
+        dismissViewControllerAnimated(true, completion: nil)
     }
 }
 
+// MARK: - Interactivity
 extension LocationPickerVC {
     @objc private func userLocationButtonTapped() {
-        viewModel.userLocationRequested { shouldShowUserLocation in
-            guard shouldShowUserLocation else { return }
-            self.mapView.setUserTrackingMode(.Follow, animated: true)
-        }
+        viewModel.userLocationButtonTapped()
+    }
+
+    @objc private func handle(longPress: UILongPressGestureRecognizer) {
+        viewModel.handle(longPress, on: mapView)
+    }
+
+    @objc private func cancelButtonTapped(sender: UIBarButtonItem) {
+        parentViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
 }

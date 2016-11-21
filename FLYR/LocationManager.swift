@@ -11,7 +11,6 @@ import CoreLocation
 protocol LocationManageable {
     var enabledAndAuthorized: Bool { get }
     func requestLocation(completion: (response: LocationManagerResponse) -> Void)
-
 }
 
 class LocationManager: NSObject, LocationManageable {
@@ -26,6 +25,9 @@ class LocationManager: NSObject, LocationManageable {
                 self.requestLocationCompletion = completion
                 self.locationManger.delegate = self
                 self.locationManger.requestLocation()
+            } else if let annotation = AppCoordinator.sharedInstance.preferredLocation() {
+                let _location = location(from: annotation)
+                completion(response: .DidUpdateLocations([_location]))
             } else {
                 completion(response: response)
             }
@@ -53,7 +55,6 @@ class LocationManager: NSObject, LocationManageable {
         locationManger.delegate = self
         locationManger.requestWhenInUseAuthorization()
     }
-
 }
 
 extension LocationManager: CLLocationManagerDelegate {
@@ -84,7 +85,6 @@ extension LocationManager: CLLocationManagerDelegate {
     }
 }
 
-extension CLLocation: Datum {}
 typealias Locations = [CLLocation]
 
 enum LocationManagerResponse {
@@ -96,4 +96,3 @@ enum LocationManagerResponse {
     case DidFail(with: NSError)
     case DidUpdateLocations(Locations)
 }
-

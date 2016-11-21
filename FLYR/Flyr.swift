@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import CloudKit
 
 protocol FlyrProtocol {
     var image: UIImage { get }
@@ -16,6 +17,6 @@ protocol FlyrProtocol {
 struct Flyr: FlyrProtocol {
     let image: UIImage
     let location: CLLocation
+    let startDate: NSDate
+    let ownerReference: CKReference
 }
-
-//protocol Record {}
