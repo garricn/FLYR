@@ -1,14 +1,18 @@
 //
+//  GGNLocationPicker
+//
 //  LocationService.swift
-//  Pods
 //
 //  Created by Garric Nahapetian on 8/22/16.
 //
 //
 
 import CoreLocation
+import GGNObservable
 
 class LocationService: NSObject, CLLocationManagerDelegate {
+    let authorizedOutput = Observable<Bool>()
+
     var enabledAndAuthorized: Bool {
         return CLLocationManager.locationServicesEnabled()
             && CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse
@@ -27,14 +31,12 @@ class LocationService: NSObject, CLLocationManagerDelegate {
     }
 
     private let locationManger = CLLocationManager()
-    private var completion: ((enabledAndAuthorized: Bool) -> Void)?
 
-    func requestWhenInUse(with completion: (bool: Bool) -> Void) {
+    func requestWhenInUse() {
         guard !authorizationDenied else {
-            return completion(bool: false)
+            return authorizedOutput.emit(false)
         }
 
-        self.completion = completion
         locationManger.delegate = self
         locationManger.requestWhenInUseAuthorization()
     }
@@ -47,7 +49,7 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         case .Denied, .Restricted:
             break
         case .AuthorizedAlways, .AuthorizedWhenInUse:
-            completion?(enabledAndAuthorized: true)
+            authorizedOutput.emit(true)
         }
     }
 }

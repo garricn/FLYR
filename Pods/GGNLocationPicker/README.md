@@ -5,6 +5,10 @@
 [![License](https://img.shields.io/cocoapods/l/GGNLocationPicker.svg?style=flat)](http://cocoapods.org/pods/GGNLocationPicker)
 [![Platform](https://img.shields.io/cocoapods/p/GGNLocationPicker.svg?style=flat)](http://cocoapods.org/pods/GGNLocationPicker)
 
+## Documentation
+
+View the API reference by following [this link](https://garricn.github.io/GGNLocationPicker/Classes/LocationPickerVC.html)
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
