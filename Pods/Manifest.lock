@@ -1,24 +1,27 @@
 PODS:
   - Bond (4.3.1)
-  - Cartography (0.6.0)
-  - GGNLocationPicker (0.1.2)
-  - Nimble (3.2.0)
-  - Quick (0.8.0)
+  - Cartography (0.7.0)
+  - GGNLocationPicker (1.0.0):
+    - GGNObservable (~> 1.0)
+  - GGNObservable (1.0.0)
+  - Nimble (4.1.0)
+  - Quick (0.9.3)
 
 DEPENDENCIES:
-  - Bond (~> 4.0)
-  - Cartography (= 0.6.0)
-  - GGNLocationPicker
-  - Nimble (= 3.2.0)
-  - Quick (= 0.8.0)
+  - Bond (= 4.3.1)
+  - Cartography (= 0.7.0)
+  - GGNLocationPicker (= 1.0.0)
+  - Nimble (= 4.1.0)
+  - Quick (= 0.9.3)
 
 SPEC CHECKSUMS:
   Bond: 55903fc67f09e8e49791a657163cabba1d6fb29d
-  Cartography: 70af183a248547694a8cfaa6b989cb7e04589985
-  GGNLocationPicker: 2a915db659c9cd62b3de76dbb96a547f1f2bd146
-  Nimble: 703854335d181df169bbca9c97117b5cf8c47c1d
-  Quick: 563d0f6ec5f72e394645adb377708639b7dd38ab
+  Cartography: dd6044b6fe352252f68b648df5bff47841e591cc
+  GGNLocationPicker: 81a649566a6abc571fcd77d59e86f3978be76118
+  GGNObservable: 927371355e2fc880e134de9c015c4b244d95e015
+  Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
+  Quick: 13a2a2b19a5d8e3ed4fd0c36ee46597fd77ebf71
 
-PODFILE CHECKSUM: fd5e12a7996253e305f007714ff98dba6b2aee94
+PODFILE CHECKSUM: 8060e505e78583bd1c9c48c94683f2079d035550
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.1.1

@@ -17,13 +17,13 @@
 		4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AB1D614F1900962E29 /* Flyr.swift */; };
 		4E1E23AE1D61784300962E29 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AD1D61784300962E29 /* Database.swift */; };
 		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
+		4E36B2551DE29F230063B027 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E36B2541DE29F230063B027 /* Private.swift */; };
 		4E4947331DAB3E5E000CDBBD /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */; };
 		4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443D1DA5D69C009AE862 /* ProfileVM.swift */; };
 		4E9944401DA5D7CA009AE862 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443F1DA5D7CA009AE862 /* User.swift */; };
 		4E9944421DA5D893009AE862 /* Authenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E9944411DA5D893009AE862 /* Authenticator.swift */; };
 		4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA439F11D8BAD3A005B0570 /* Globals.swift */; };
 		4EA7BDD51DA1E162004D3723 /* DatePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */; };
-		4EBDE4861D9344760042A874 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EBDE4851D9344760042A874 /* Private.swift */; };
 		4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* FlyrFetcher.swift */; };
 		4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */; };
 		4EC9F49F1D90FD970097A2DC /* Resolvers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC9F49E1D90FD970097A2DC /* Resolvers.swift */; };
@@ -80,13 +80,13 @@
 		4E1E23AB1D614F1900962E29 /* Flyr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flyr.swift; sourceTree = "<group>"; };
 		4E1E23AD1D61784300962E29 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
 		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
+		4E36B2541DE29F230063B027 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		4E99443D1DA5D69C009AE862 /* ProfileVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVM.swift; sourceTree = "<group>"; };
 		4E99443F1DA5D7CA009AE862 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		4E9944411DA5D893009AE862 /* Authenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Authenticator.swift; sourceTree = "<group>"; };
 		4EA439F11D8BAD3A005B0570 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerVC.swift; sourceTree = "<group>"; };
-		4EBDE4851D9344760042A874 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		4EC34E421D56824E001DF486 /* FlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcher.swift; sourceTree = "<group>"; };
 		4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcherSpec.swift; sourceTree = "<group>"; };
 		4EC9F49E1D90FD970097A2DC /* Resolvers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resolvers.swift; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 				4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */,
 				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
 				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
-				4EBDE4851D9344760042A874 /* Private.swift */,
+				4E36B2541DE29F230063B027 /* Private.swift */,
 				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
 				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
 				4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */,
@@ -350,12 +350,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0810;
 				ORGANIZATIONNAME = "Garric Nahapetian";
 				TargetAttributes = {
 					4E1D73E21D50521E00648603 = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = Y642MFHN82;
+						LastSwiftMigration = 0810;
 						SystemCapabilities = {
 							com.apple.iCloud = {
 								enabled = 1;
@@ -364,10 +365,12 @@
 					};
 					4E1D73F61D50521F00648603 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0810;
 						TestTargetID = 4E1D73E21D50521E00648603;
 					};
 					4E1D74011D50521F00648603 = {
 						CreatedOnToolsVersion = 7.3.1;
+						LastSwiftMigration = 0810;
 						TestTargetID = 4E1D73E21D50521E00648603;
 					};
 				};
@@ -431,7 +434,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		2425595CE557D30BF22ED5C8 /* [CP] Copy Pods Resources */ = {
@@ -491,7 +494,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		A2B374B47A2827C850357768 /* [CP] Copy Pods Resources */ = {
@@ -520,7 +523,6 @@
 				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
-				4EBDE4861D9344760042A874 /* Private.swift in Sources */,
 				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
 				4EF2E12C1DA98A4000DED55E /* FlyrTableVC.swift in Sources */,
 				4EF2E12A1DA9895A00DED55E /* FlyrViewModeling.swift in Sources */,
@@ -538,6 +540,7 @@
 				4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */,
 				4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */,
 				4E1D73E71D50521F00648603 /* AppDelegate.swift in Sources */,
+				4E36B2551DE29F230063B027 /* Private.swift in Sources */,
 				4E9944421DA5D893009AE862 /* Authenticator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -605,8 +608,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -650,8 +655,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -670,6 +677,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -678,6 +686,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 6B93CB88FC9651FAEE46CCFF /* Pods-FLYR.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FLYR/FLYR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -685,6 +694,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -692,6 +702,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 073F0E132DD49E8AD7729C33 /* Pods-FLYR.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = FLYR/FLYR.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -699,6 +710,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYR;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};
@@ -706,11 +718,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 636C0562BDEA0E3D6A473149 /* Pods-FLYRTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = FLYRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FLYR.app/FLYR";
 			};
 			name = Debug;
@@ -719,11 +733,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22B38C085B34210483957ECC /* Pods-FLYRTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = FLYRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FLYR.app/FLYR";
 			};
 			name = Release;
@@ -737,6 +753,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = FLYR;
 			};
 			name = Debug;
@@ -749,6 +766,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 				TEST_TARGET_NAME = FLYR;
 			};
 			name = Release;

@@ -52,10 +52,10 @@ extension DatePickerVC: UITableViewDataSource {
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.addSubview(datePicker)
-        datePicker.topAnchor.constraintEqualToAnchor(datePicker.superview?.topAnchor).active = true
-        datePicker.bottomAnchor.constraintEqualToAnchor(datePicker.superview?.bottomAnchor).active = true
-        datePicker.leadingAnchor.constraintEqualToAnchor(datePicker.superview?.leadingAnchor).active = true
-        datePicker.trailingAnchor.constraintEqualToAnchor(datePicker.superview?.trailingAnchor).active = true
+        datePicker.topAnchor.constraintEqualToAnchor(datePicker.superview!.topAnchor).active = true
+        datePicker.bottomAnchor.constraintEqualToAnchor(datePicker.superview!.bottomAnchor).active = true
+        datePicker.leadingAnchor.constraintEqualToAnchor(datePicker.superview!.leadingAnchor).active = true
+        datePicker.trailingAnchor.constraintEqualToAnchor(datePicker.superview!.trailingAnchor).active = true
         return cell
     }
 }

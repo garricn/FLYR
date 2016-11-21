@@ -180,7 +180,7 @@ extension AddFlyrViewModeling {
         let locationPicker = LocationPickerVC()
         locationPicker.navigationItem.title = "Add Location"
         locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
-        locationPicker.didPickLocation = {
+        locationPicker.didPick = {
             self.locationInput.next($0)
             locationPicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
