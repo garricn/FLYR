@@ -21,26 +21,26 @@ AddFlyrTableViewDelegate {}
 protocol FlyrAdding {
     var imageInput: Observable<UIImage?> { get }
     var locationInput: Observable<MKAnnotation?> { get }
-    var startDateInput: Observable<NSDate?> { get }
+    var startDateInput: Observable<Date?> { get }
     var shouldEnableDoneButtonOutput: Observable<Bool> { get }
     var shouldEnableCancelButtonOutput: Observable<Bool> { get }
-    var reloadRowAtIndexPathOutput: Observable<NSIndexPath> { get }
+    var reloadRowAtIndexPathOutput: Observable<IndexPath> { get }
     var recordSaver: RecordSaveable { get }
     func doneButtonTapped()
 }
 
-struct AddFlyrVM: AddFlyrViewModeling {
+class AddFlyrVM: AddFlyrViewModeling {
     let alertOutput = Observable<UIAlertController>()
     let imageInput = Observable<UIImage?>()
     let locationInput = Observable<MKAnnotation?>()
-    let startDateInput = Observable<NSDate?>()
+    let startDateInput = Observable<Date?>()
     let shouldEnableDoneButtonOutput = Observable<Bool>()
     let shouldEnableCancelButtonOutput = Observable<Bool>()
-    let reloadRowAtIndexPathOutput = Observable<NSIndexPath>()
+    let reloadRowAtIndexPathOutput = Observable<IndexPath>()
     let recordSaver: RecordSaveable
     let viewControllerOutput = Observable<UIViewController>()
 
-    private var shouldEnableDoneButton: Bool {
+    fileprivate var shouldEnableDoneButton: Bool {
         return imageInput.lastEvent != nil
         && locationInput.lastEvent != nil
         && startDateInput.lastEvent != nil
@@ -50,19 +50,19 @@ struct AddFlyrVM: AddFlyrViewModeling {
         self.recordSaver = recordSaver
 
         imageInput.onNext { _ in
-            let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+            let indexPath = IndexPath(row: 0, section: 0)
             self.reloadRowAtIndexPathOutput.emit(indexPath)
             self.shouldEnableDoneButtonOutput.emit(self.shouldEnableDoneButton)
         }
 
         locationInput.onNext { _ in
-            let indexPath = NSIndexPath(forRow: 0, inSection: 1)
+            let indexPath = IndexPath(row: 0, section: 1)
             self.reloadRowAtIndexPathOutput.emit(indexPath)
             self.shouldEnableDoneButtonOutput.emit(self.shouldEnableDoneButton)
         }
 
         startDateInput.onNext { _ in
-            let indexPath = NSIndexPath(forRow: 0, inSection: 2)
+            let indexPath = IndexPath(row: 0, section: 2)
             self.reloadRowAtIndexPathOutput.emit(indexPath)
             self.shouldEnableDoneButtonOutput.emit(self.shouldEnableDoneButton)
         }
@@ -86,9 +86,9 @@ struct AddFlyrVM: AddFlyrViewModeling {
         let record = toFlyrRecord(from: flyr)
         recordSaver.save(record) { response in
             switch response {
-            case .Successful:
+            case .successful:
                 AppCoordinator.sharedInstance.didFinishAddingFlyr()
-            case .NotSuccessful(let error):
+            case .notSuccessful(let error):
                 let alert = makeAlert(from: error)
                 self.alertOutput.emit(alert)
                 self.shouldEnableDoneButtonOutput.emit(true)
@@ -108,7 +108,7 @@ extension AddFlyrViewModeling {
         return 1
     }
 
-    func cellForRow(at indexPath: NSIndexPath, en tableView: UITableView) -> UITableViewCell {
+    func cellForRow(at indexPath: IndexPath, en tableView: UITableView) -> UITableViewCell {
         let cell = UITableViewCell()
         let text: String
 
@@ -117,7 +117,7 @@ extension AddFlyrViewModeling {
             if let image = imageInput.lastEvent {
                 let cell = AddImageCell()
                 cell.flyrImageView.image = image
-                cell.accessoryType = .None
+                cell.accessoryType = .none
                 cell.textLabel?.text = ""
                 return cell
             } else {
@@ -125,7 +125,7 @@ extension AddFlyrViewModeling {
             }
         case 1:
             if let annotation = locationInput.lastEvent {
-                let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: nil)
+                let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
                 cell.textLabel?.text = annotation!.title!
                 cell.detailTextLabel?.text = annotation!.subtitle!
                 return cell
@@ -144,11 +144,11 @@ extension AddFlyrViewModeling {
         }
 
         cell.textLabel?.text = text
-        cell.accessoryType = .DisclosureIndicator
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
 
-    func heightForRow(at indexPath: NSIndexPath) -> CGFloat {
+    func heightForRow(at indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
             if let image = imageInput.lastEvent {
                 return rowHeight(from: image!)
@@ -157,9 +157,9 @@ extension AddFlyrViewModeling {
         return UITableViewAutomaticDimension
     }
 
-    func didSelectRow(at indexPath: NSIndexPath, of tableView: UITableView, en vc: AddFlyrVC) {
+    func didSelectRow(at indexPath: IndexPath, of tableView: UITableView, en vc: AddFlyrVC) {
         defer {
-            tableView.deselectRowAtIndexPath(indexPath, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
 
         switch indexPath.section {
@@ -183,33 +183,33 @@ extension AddFlyrViewModeling {
         locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
         locationPicker.didPick = {
             self.locationInput.emit($0)
-            locationPicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            locationPicker.presentingViewController?.dismiss(animated: true, completion: nil)
         }
         return locationPicker
 
     }
 
     func makeImagePicker(fore vc: AddFlyrVC) -> UIViewController {
-        guard UIImagePickerController.isSourceTypeAvailable(.Camera) else {
+        guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             let picker = UIImagePickerController()
             picker.delegate = vc
             return picker
         }
 
-        let cancel = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
-        let camera = UIAlertAction(title: "Camera", style: .Default) { [unowned vc] _ in
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let camera = UIAlertAction(title: "Camera", style: .default) { [unowned vc] _ in
             let picker = UIImagePickerController()
-            picker.sourceType = .Camera
+            picker.sourceType = .camera
             picker.delegate = vc
-            vc.presentViewController(picker, animated: true, completion: nil)
+            vc.present(picker, animated: true, completion: nil)
         }
-        let photoLibrary = UIAlertAction(title: "Photo Library", style: .Default) { [unowned vc] _ in
+        let photoLibrary = UIAlertAction(title: "Photo Library", style: .default) { [unowned vc] _ in
             let picker = UIImagePickerController()
-            picker.sourceType = .PhotoLibrary
+            picker.sourceType = .photoLibrary
             picker.delegate = vc
-            vc.presentViewController(picker, animated: true, completion: nil)
+            vc.present(picker, animated: true, completion: nil)
         }
-        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(cancel)
         alert.addAction(camera)
         alert.addAction(photoLibrary)
@@ -221,19 +221,19 @@ extension AddFlyrViewModeling {
         datePicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: datePicker)
         datePicker.didPick = {
             self.startDateInput.emit($0)
-            datePicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            datePicker.presentingViewController?.dismiss(animated: true, completion: nil)
         }
         return datePicker
     }
 }
 
 protocol AddFlyrTableViewDelegate {
-    func didSelectRow(at indexPath: NSIndexPath, of tableView: UITableView, en vc: AddFlyrVC)
+    func didSelectRow(at indexPath: IndexPath, of tableView: UITableView, en vc: AddFlyrVC)
 }
 
 func makeCancelButton(fore vc: UIViewController) -> UIBarButtonItem {
     let button = UIBarButtonItem(
-        barButtonSystemItem: .Cancel,
+        barButtonSystemItem: .cancel,
         target: vc,
         action: #selector(vc.presentedViewControllerDidCancel)
     )
@@ -251,7 +251,7 @@ func toFlyrRecord(from flyr: Flyr) -> CKRecord {
     flyrRecord.setObject(location, forKey: "location")
 
     let startDate = flyr.startDate
-    flyrRecord.setObject(startDate, forKey: "startDate")
+    flyrRecord.setObject(startDate as CKRecordValue?, forKey: "startDate")
 
     let ownerReference = flyr.ownerReference
     flyrRecord.setObject(ownerReference, forKey: "ownerReference")
@@ -259,15 +259,15 @@ func toFlyrRecord(from flyr: Flyr) -> CKRecord {
     return flyrRecord
 }
 
-func url(from image: UIImage) -> NSURL {
-    let dirPaths = NSSearchPathForDirectoriesInDomains(
-        .DocumentDirectory,
-        .UserDomainMask, true
+func url(from image: UIImage) -> URL {
+    let directoryPaths = NSSearchPathForDirectoriesInDomains(
+        .documentDirectory,
+        .userDomainMask, true
     )
-    let docsDir: AnyObject = dirPaths[0]
-    let filePath = docsDir.stringByAppendingPathComponent("currentImage.png")
-    UIImageJPEGRepresentation(image, 0.75)!.writeToFile(filePath, atomically: true)
-    return NSURL.fileURLWithPath(filePath)
+    let documentsDirectoryPath = directoryPaths[0]
+    let filePath = documentsDirectoryPath.appending("currentImage.png")
+    try? UIImageJPEGRepresentation(image, 0.75)!.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
+    return URL(fileURLWithPath: filePath)
 }
 
 func location(from annotation: MKAnnotation) -> CLLocation {

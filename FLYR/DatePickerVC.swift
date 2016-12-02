@@ -9,14 +9,14 @@
 import UIKit
 
 class DatePickerVC: UIViewController {
-    var didPick: ((date: NSDate) -> Void)?
+    var didPick: ((_ date: Date) -> Void)?
 
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
-    private let datePicker: UIDatePicker = {
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
+    fileprivate let datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
-        picker.date = NSDate()
-        picker.datePickerMode = .DateAndTime
+        picker.date = Date()
+        picker.datePickerMode = .dateAndTime
         picker.minuteInterval = 5
         return picker
     }()
@@ -27,7 +27,7 @@ class DatePickerVC: UIViewController {
         tableView.delegate = self
 
         let doneButton = UIBarButtonItem(
-            barButtonSystemItem: .Done,
+            barButtonSystemItem: .done,
             target: self,
             action: #selector(doneButtonTapped)
         )
@@ -36,32 +36,32 @@ class DatePickerVC: UIViewController {
     }
 
     func doneButtonTapped() {
-        didPick?(date: datePicker.date)
+        didPick?(datePicker.date)
     }
 }
 
 extension DatePickerVC: UITableViewDataSource {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         cell.addSubview(datePicker)
-        datePicker.topAnchor.constraintEqualToAnchor(datePicker.superview!.topAnchor).active = true
-        datePicker.bottomAnchor.constraintEqualToAnchor(datePicker.superview!.bottomAnchor).active = true
-        datePicker.leadingAnchor.constraintEqualToAnchor(datePicker.superview!.leadingAnchor).active = true
-        datePicker.trailingAnchor.constraintEqualToAnchor(datePicker.superview!.trailingAnchor).active = true
+        datePicker.topAnchor.constraint(equalTo: datePicker.superview!.topAnchor).isActive = true
+        datePicker.bottomAnchor.constraint(equalTo: datePicker.superview!.bottomAnchor).isActive = true
+        datePicker.leadingAnchor.constraint(equalTo: datePicker.superview!.leadingAnchor).isActive = true
+        datePicker.trailingAnchor.constraint(equalTo: datePicker.superview!.trailingAnchor).isActive = true
         return cell
     }
 }
 
 extension DatePickerVC: UITableViewDelegate {
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 180
     }
 }

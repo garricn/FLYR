@@ -19,8 +19,8 @@ class LocationPickerVM {
     let viewControllerOutput = Observable<UIViewController>()
     var shouldShowUserLocation: Bool
 
-    private let locationService = LocationService()
-    private let searchService = SearchService()
+    fileprivate let locationService = LocationService()
+    fileprivate let searchService = SearchService()
 
     init() {
         shouldShowUserLocation = locationService.enabledAndAuthorized
@@ -45,7 +45,7 @@ class LocationPickerVM {
     }
 
     func annotationView(fore annotation: MKAnnotation, of mapView: MKMapView) -> MKAnnotationView? {
-        guard !annotation.isKindOfClass(MKUserLocation.self) else {
+        guard !annotation.isKind(of: MKUserLocation.self) else {
             mapView.userLocation.subtitle = ""
             return nil
         }
@@ -53,22 +53,22 @@ class LocationPickerVM {
         let reuseIdentifier = "PinView"
         let pinView: MKPinAnnotationView
 
-        if let annotationView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseIdentifier) as? MKPinAnnotationView {
+        if let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier) as? MKPinAnnotationView {
             pinView = annotationView
             pinView.annotation = annotation
         } else {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
             pinView.animatesDrop = false
             pinView.canShowCallout = true
-            pinView.rightCalloutAccessoryView = UIButton(type: .ContactAdd)
+            pinView.rightCalloutAccessoryView = UIButton(type: .contactAdd)
         }
 
         return pinView
     }
 
-    func didSelect(annotationView: MKAnnotationView, of mapView: MKMapView) {
+    func didSelect(_ annotationView: MKAnnotationView, of mapView: MKMapView) {
         guard
-            let annotation = annotationView.annotation where annotation.isKindOfClass(MKUserLocation),
+            let annotation = annotationView.annotation, annotation.isKind(of: MKUserLocation.self),
             let location = mapView.userLocation.location
             else { return }
 
@@ -80,7 +80,7 @@ class LocationPickerVM {
             }
 
             if let addressDictionary = placemark.addressDictionary as? [String: AnyObject]
-                , formattedAddressLines = addressDictionary["FormattedAddressLines"] as? [String] {
+                , let formattedAddressLines = addressDictionary["FormattedAddressLines"] as? [String] {
 
                 if formattedAddressLines[0] == formattedAddressLines[1] {
                     mapView.userLocation.subtitle = "\(formattedAddressLines[0]), \(formattedAddressLines[1])"
@@ -94,19 +94,17 @@ class LocationPickerVM {
         }
     }
 
-    func didAdd(annotationViews: [MKAnnotationView], to mapView: MKMapView) {
+    func didAdd(_ annotationViews: [MKAnnotationView], to mapView: MKMapView) {
         annotationViews.forEach { annotationView in
-            if let annotation = annotationView.annotation
-                where annotation.isKindOfClass(MKUserLocation) {
-                annotationView.rightCalloutAccessoryView = UIButton(type: .ContactAdd)
+            if let annotation = annotationView.annotation, annotation.isKind(of: MKUserLocation.self) {
+                annotationView.rightCalloutAccessoryView = UIButton(type: .contactAdd)
             }
         }
     }
 
-    func didTap(control: UIControl, of annotationView: MKAnnotationView, of mapView: MKMapView) {
+    func didTap(_ control: UIControl, of annotationView: MKAnnotationView, of mapView: MKMapView) {
         guard
-            let annotation = annotationView.annotation
-            where control == annotationView.rightCalloutAccessoryView
+            let annotation = annotationView.annotation, control == annotationView.rightCalloutAccessoryView
             else { return }
         output.emit(annotation)
     }
@@ -120,11 +118,11 @@ class LocationPickerVM {
         }
     }
 
-    func handle(longPressGesture: UILongPressGestureRecognizer, on mapView: MKMapView) {
-        guard longPressGesture.state == .Began else { return }
+    func handle(_ longPressGesture: UILongPressGestureRecognizer, on mapView: MKMapView) {
+        guard longPressGesture.state == .began else { return }
 
-        let pressPoint = longPressGesture.locationInView(mapView)
-        let coordinate = mapView.convertPoint(pressPoint, toCoordinateFromView: mapView)
+        let pressPoint = longPressGesture.location(in: mapView)
+        let coordinate = mapView.convert(pressPoint, toCoordinateFrom: mapView)
         let annotation = MKPointAnnotation()
         annotation.coordinate = coordinate
 
@@ -132,7 +130,7 @@ class LocationPickerVM {
         let geocoder = CLGeocoder()
         geocoder.reverseGeocodeLocation(location) { placemarks, error in
             if let addressDictionary = placemarks?.first?.addressDictionary as? [String: AnyObject]
-                , addressLines = addressDictionary["FormattedAddressLines"] as? [String] {
+                , let addressLines = addressDictionary["FormattedAddressLines"] as? [String] {
 
                 switch addressLines.count {
                 case 0:
@@ -148,7 +146,7 @@ class LocationPickerVM {
                         annotation.subtitle = addressLines[2]
                     } else {
                         annotation.title = addressLines[0]
-                        if addressLines[2].containsString("United States") {
+                        if addressLines[2].contains("United States") {
                             annotation.subtitle = "\(addressLines[1])"
                         } else {
                             annotation.subtitle = "\(addressLines[1]), \(addressLines[2])"
@@ -178,8 +176,7 @@ func toAnnotation(from item: MKMapItem) -> MKPointAnnotation {
     annotation.title = placemark.name
 
     if let addressDictionary = placemark.addressDictionary as? [String:AnyObject],
-        addressLines = addressDictionary["FormattedAddressLines"] as? [String]
-        where addressLines.count > 0 {
+        let addressLines = addressDictionary["FormattedAddressLines"] as? [String], addressLines.count > 0 {
 
         switch addressLines.count {
         case 2:
@@ -187,7 +184,7 @@ func toAnnotation(from item: MKMapItem) -> MKPointAnnotation {
         case 3:
             if placemark.name! != addressLines[0] {
                 annotation.subtitle = addressLines[0]
-            } else if addressLines[2].containsString("United States") {
+            } else if addressLines[2].contains("United States") {
                 annotation.subtitle = "\(addressLines[1])"
             } else {
                 annotation.subtitle = "\(addressLines[1]), \(addressLines[2])"
@@ -199,19 +196,19 @@ func toAnnotation(from item: MKMapItem) -> MKPointAnnotation {
 }
 
 func makeAlert() -> UIAlertController {
-    let ok = UIAlertAction(title: "Ok", style: .Default, handler: nil)
+    let ok = UIAlertAction(title: "Ok", style: .default, handler: nil)
     let openSettings = UIAlertAction(
         title: "Settings",
-        style: .Default,
+        style: .default,
         handler: { _ in
-            guard let url = NSURL(string: UIApplicationOpenSettingsURLString) else { return }
-            UIApplication.sharedApplication().openURL(url)
+            guard let url = URL(string: UIApplicationOpenSettingsURLString) else { return }
+            UIApplication.shared.openURL(url)
         }
     )
     let alert = UIAlertController(
         title: "Location Services Authorization Denied",
         message: "Enable location services for this app in settings.",
-        preferredStyle: .Alert
+        preferredStyle: .alert
     )
     alert.addAction(ok)
     alert.addAction(openSettings)

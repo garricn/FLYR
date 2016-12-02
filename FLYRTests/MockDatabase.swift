@@ -11,7 +11,7 @@ import CloudKit
 @testable import FLYR
 
 struct MockDatabase: Database {
-    func perform(query: CKQuery, completion: (with: Response) -> Void) {
+    func perform(_ query: CKQuery, completion: (_ with: Response) -> Void) {
         let response: Response
 
 
@@ -33,7 +33,7 @@ struct MockDatabase: Database {
         completion(with: response)
     }
 
-    func save(record: CKRecord, completion: (with: Response) -> Void) {
+    func save(_ record: CKRecord, completion: (_ with: Response) -> Void) {
 
     }
 }

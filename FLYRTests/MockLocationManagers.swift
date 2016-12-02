@@ -12,14 +12,14 @@ import CoreLocation
 
 struct MockLocationManager: LocationManageable {
     var enabledAndAuthorized: Bool = true
-    func requestLocation(completion: (response: LocationManagerResponse) -> Void) {
+    func requestLocation(_ completion: (_ response: LocationManagerResponse) -> Void) {
         completion(response: .DidUpdateLocations([CLLocation()]))
     }
 }
 
 struct MockInValidLocationManager: LocationManageable {
     var enabledAndAuthorized: Bool = false
-    func requestLocation(completion: (response: LocationManagerResponse) -> Void) {
+    func requestLocation(_ completion: (_ response: LocationManagerResponse) -> Void) {
         let response = LocationManagerResponse.ServicesNotEnabled
         completion(response: response)
     }

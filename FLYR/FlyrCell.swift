@@ -16,7 +16,7 @@ class FlyrCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        imageView?.contentMode = .ScaleAspectFit
+        imageView?.contentMode = .scaleAspectFit
         addSubview(_imageView)
 
         constrain(_imageView) { imageView in

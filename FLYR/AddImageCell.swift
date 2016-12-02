@@ -14,14 +14,14 @@ class AddImageCell: UITableViewCell {
 
     init() {
         super.init(
-            style: .Default,
+            style: .default,
             reuseIdentifier: AddImageCell.description()
         )
 
-        accessoryType = .DisclosureIndicator
+        accessoryType = .disclosureIndicator
         addSubview(flyrImageView)
 
-        flyrImageView.contentMode = .ScaleAspectFit
+        flyrImageView.contentMode = .scaleAspectFit
 
         constrain(flyrImageView) { imageView in
             imageView.top == imageView.superview!.top + 8

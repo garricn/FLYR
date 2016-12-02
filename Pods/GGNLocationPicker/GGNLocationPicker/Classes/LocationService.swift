@@ -15,22 +15,22 @@ class LocationService: NSObject, CLLocationManagerDelegate {
 
     var enabledAndAuthorized: Bool {
         return CLLocationManager.locationServicesEnabled()
-            && CLLocationManager.authorizationStatus() == .AuthorizedWhenInUse
+            && CLLocationManager.authorizationStatus() == .authorizedWhenInUse
     }
 
     var authorizationDenied: Bool {
-        return CLLocationManager.authorizationStatus() == CLAuthorizationStatus.Denied
+        return CLLocationManager.authorizationStatus() == CLAuthorizationStatus.denied
     }
 
-    private var authorizationStatus: CLAuthorizationStatus {
+    fileprivate var authorizationStatus: CLAuthorizationStatus {
         return CLLocationManager.authorizationStatus()
     }
 
-    private var servicesEnabled: Bool {
+    fileprivate var servicesEnabled: Bool {
         return CLLocationManager.locationServicesEnabled()
     }
 
-    private let locationManger = CLLocationManager()
+    fileprivate let locationManger = CLLocationManager()
 
     func requestWhenInUse() {
         guard !authorizationDenied else {
@@ -41,14 +41,14 @@ class LocationService: NSObject, CLLocationManagerDelegate {
         locationManger.requestWhenInUseAuthorization()
     }
 
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         guard CLLocationManager.locationServicesEnabled() else { return }
         switch status {
-        case .NotDetermined:
+        case .notDetermined:
             locationManger.requestWhenInUseAuthorization()
-        case .Denied, .Restricted:
+        case .denied, .restricted:
             break
-        case .AuthorizedAlways, .AuthorizedWhenInUse:
+        case .authorizedAlways, .authorizedWhenInUse:
             authorizedOutput.emit(true)
         }
     }

@@ -17,5 +17,5 @@ public protocol LocationPickerDelegate: class {
      
      - parameter annotation: An object conforming to MKAnnotation which represents the location the user selected.
     */
-    func didPick(annotation: MKAnnotation)
+    func didPick(_ annotation: MKAnnotation)
 }

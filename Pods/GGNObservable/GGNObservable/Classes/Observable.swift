@@ -9,7 +9,7 @@
 import Foundation
 
 /// The `GGNObservable` class can be used for simple reactive style programming. This class has a generic type constraint.
-public class Observable<T> {
+open class Observable<T> {
     // MARK: - Initialization
     /**
      Initializes an instance of an `Obersvable` that's constrained to generic type `T`.
@@ -28,7 +28,6 @@ public class Observable<T> {
     */
     public typealias Closure = ((T) -> Void)
 
-
     /// Read Only. Returns optional generic type `T` representing the last event that was emitted.
     public var lastEvent: T? { return _lastEvent }
 
@@ -40,7 +39,7 @@ public class Observable<T> {
 
      - Example: `viewModel.alertOutput.onNext { [weak self] alert in self?.presentViewController(alert, animated: true, completion: nil) }`
     */
-    public func onNext(perform closure: Closure) {
+    open func onNext(perform closure: @escaping Closure) {
         self.closures.append(closure)
     }
 
@@ -51,13 +50,13 @@ public class Observable<T> {
 
      - Example: `alertOutput.emit(alert)`
     */
-    public func emit(event: T) {
-        _lastEvent = event
+    open func emit(_ event: T) {
         closures.forEach { emit in
             emit(event)
         }
     }
 
-    private var closures: [Closure] = []
-    private var _lastEvent: T?
+    fileprivate var closures: [Closure] = []
+    fileprivate var _lastEvent: T?
+
 }

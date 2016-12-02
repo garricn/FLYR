@@ -24,49 +24,49 @@ protocol FlyrOutputing {
 
 protocol FlyrInteractionHandling {
     func refresh()
-    func onLongPress(at indexPath: NSIndexPath, from vc: FlyrTableVC)
+    func onLongPress(at indexPath: IndexPath, from vc: FlyrTableVC)
 }
 
 protocol TableViewDataSource {
     func numberOfSections() -> Int
     func numbersOfRows(inSection section: Int) -> Int
-    func cellForRow(at indexPath: NSIndexPath, en tableView: UITableView) -> UITableViewCell
-    func heightForRow(at indexPath: NSIndexPath) -> CGFloat
+    func cellForRow(at indexPath: IndexPath, en tableView: UITableView) -> UITableViewCell
+    func heightForRow(at indexPath: IndexPath) -> CGFloat
 }
 
 // MARK: - Interactivity
 extension FlyrViewModeling {
-    func onLongPress(at indexPath: NSIndexPath, from vc: FlyrTableVC) {
+    func onLongPress(at indexPath: IndexPath, from vc: FlyrTableVC) {
         let item = output.lastEvent?[indexPath.row]
         let actionSheet = makeActionSheet(on: item!, fore: vc)
         alertOutput.emit(actionSheet)
     }
 
-    private func makeActionSheet(on item: Flyr, fore vc: UIViewController) -> UIAlertController {
+    fileprivate func makeActionSheet(on item: Flyr, fore vc: UIViewController) -> UIAlertController {
         let save = UIAlertAction(
             title: "Save",
-            style: .Default
+            style: .default
         ) { _ in
             UIImageWriteToSavedPhotosAlbum(item.image, nil, nil, nil)
         }
 
         let share = UIAlertAction(
             title: "Share",
-            style: .Default
+            style: .default
         ) { _ in
             let shareSheet = UIActivityViewController(
                 activityItems: [item.image],
                 applicationActivities: nil
             )
-            vc.presentViewController(shareSheet, animated: true, completion: nil)
+            vc.present(shareSheet, animated: true, completion: nil)
         }
 
-        let directions = UIAlertAction(title: "Directions", style: .Default) { _ in
+        let directions = UIAlertAction(title: "Directions", style: .default) { _ in
             let geocoder = CLGeocoder()
             geocoder.reverseGeocodeLocation(item.location) { placemarks, error in
                 if let placemark = placemarks?.first {
                     let mapItem = MKMapItem(placemark: MKPlacemark(placemark: placemark))
-                    mapItem.openInMapsWithLaunchOptions(nil)
+                    mapItem.openInMaps(launchOptions: nil)
                 } else {
                     print("Error reverse geocoding: \(error)")
                 }
@@ -75,11 +75,11 @@ extension FlyrViewModeling {
 
         let cancel = UIAlertAction(
             title: "Cancel",
-            style: .Cancel,
+            style: .cancel,
             handler: nil
         )
 
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.addAction(save)
         alertController.addAction(share)
         alertController.addAction(directions)
@@ -99,14 +99,14 @@ extension FlyrViewModeling {
         return output.lastEvent?.count ?? 0
     }
 
-    func cellForRow(at indexPath: NSIndexPath, en tableView: UITableView) -> UITableViewCell {
+    func cellForRow(at indexPath: IndexPath, en tableView: UITableView) -> UITableViewCell {
         let item = output.lastEvent?[indexPath.row]
-        let cell = tableView.dequeueReusableCellWithIdentifier(FlyrCell.description()) as! FlyrCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FlyrCell.description()) as! FlyrCell
         cell._imageView.image = item?.image
         return cell
     }
 
-    func heightForRow(at indexPath: NSIndexPath) -> CGFloat {
+    func heightForRow(at indexPath: IndexPath) -> CGFloat {
         let image = output.lastEvent?[indexPath.row].image
         return rowHeight(from: image!)
     }

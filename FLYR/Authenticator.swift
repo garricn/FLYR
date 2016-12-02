@@ -10,20 +10,20 @@ import CloudKit
 import GGNObservable
 
 protocol Authenticating {
-    func authenticate(completion: (CKReference?, ErrorType?) -> Void)
+    func authenticate(completion: @escaping (CKReference?, Error?) -> Void)
     func ownerReference() -> CKReference?
 }
 
 class Authenticator: Authenticating {
-    private let container: Container
-    private var user: User?
+    fileprivate let container: Container
+    fileprivate var user: User?
 
     init(defaultContainer: Container) {
         self.container = defaultContainer
 
         container.fetchUserRecordID { response in
-            guard case .Successful(let recordID as CKRecordID) = response else { return }
-            let reference = CKReference(recordID: recordID, action: .None)
+            guard case .successful(let recordID as CKRecordID) = response else { return }
+            let reference = CKReference(recordID: recordID, action: .none)
             self.user = User(ownerReference: reference)
         }
     }
@@ -32,46 +32,46 @@ class Authenticator: Authenticating {
         return user?.ownerReference
     }
 
-    func authenticate(completion: (CKReference?, ErrorType?) -> Void) {
+    func authenticate(completion: @escaping (CKReference?, Error?) -> Void) {
         guard user == nil else { return completion(user!.ownerReference, nil) }
 
         container.fetchUserRecordID { response in
-            guard case .Successful(let recordID as CKRecordID) = response else {
-                if case .NotSuccessful(let error) = response {
+            guard case .successful(let recordID as CKRecordID) = response else {
+                if case .notSuccessful(let error) = response {
                     return completion(nil, error)
                 }
                 return completion(nil, nil)
             }
 
-            let reference = CKReference(recordID: recordID, action: .None)
+            let reference = CKReference(recordID: recordID, action: .none)
             completion(reference, nil)
         }
     }
 }
 
 protocol Container {
-    func fetchUserRecordID(completion: (with: Response) -> Void)
+    func fetchUserRecordID(completion: @escaping (Response) -> Void)
 }
 
 extension CKContainer: Container {
-    func fetchUserRecordID(completion: (with: Response) -> Void) {
-        fetchUserRecordIDWithCompletionHandler { recordID, error in
+    func fetchUserRecordID(completion: @escaping (Response) -> Void) {
+        self.fetchUserRecordID { recordID, error in
             let response: Response
 
             if let recordID = recordID {
-                response = .Successful(with: recordID)
+                response = .successful(recordID)
             } else {
-                let _error: ErrorType
+                let _error: Error
 
                 if let error = error {
                     _error = error
                 } else {
-                    _error = Error(message: "Unknown container error.")
+                    _error = GGNError(message: "Unknown container error.")
                 }
 
-                response = .NotSuccessful(with: _error)
+                response = .notSuccessful(_error)
             }
-            completion(with: response)
+            completion(response)
         }
     }
 }

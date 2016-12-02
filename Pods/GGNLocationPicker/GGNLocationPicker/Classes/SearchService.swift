@@ -9,18 +9,17 @@
 import MapKit
 
 struct SearchService {
-    func search(with text: String, and location: MKUserLocation, with completion: (MKLocalSearchResponse) -> Void) {
+    func search(with text: String, and location: MKUserLocation, with completion: @escaping (MKLocalSearchResponse) -> Void) {
         let request = MKLocalSearchRequest()
         request.naturalLanguageQuery = text
         request.region = region(from: location)
         let search = MKLocalSearch(request: request)
-        search.startWithCompletionHandler { respone, error in
+        search.start { respone, error in
             guard
-                let response = respone
-                where response.mapItems.count > 0
+                let response = respone, response.mapItems.count > 0
                 else { return }
 
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 completion(response)
             }
         }

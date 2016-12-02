@@ -10,6 +10,6 @@ import UIKit
 
 extension UIViewController {
     func presentedViewControllerDidCancel() {
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
 }

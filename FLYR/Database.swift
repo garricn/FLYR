@@ -9,44 +9,44 @@
 import CloudKit
 
 protocol Database {
-    func perform(query: CKQuery, completion: (with: Response) -> Void)
-    func save(record: CKRecord, completion: (with: Response) -> Void)
-    func add(operation: CKQueryOperation)
+    func perform(_ query: CKQuery, completion: @escaping (Response) -> Void)
+    func save(_ record: CKRecord, completion: @escaping (Response) -> Void)
+    func add(_ operation: CKQueryOperation)
 }
 
 extension CKDatabase: Database {
-    func perform(query: CKQuery, completion: (with: Response) -> Void) {
-        performQuery(query, inZoneWithID: nil) { records, error in
+    func perform(_ query: CKQuery, completion: @escaping (Response) -> Void) {
+        self.perform(query, inZoneWith: nil) { records, error in
             let response: Response
 
-            if let records = records where records.count > 0 {
-                response = .Successful(with: records)
+            if let records = records, records.count > 0 {
+                response = .successful(records)
             } else {
-                let _error: ErrorType
+                let _error: Error
                 if let error = error {
                     _error = error
                 } else if records?.count == 0 {
-                    _error = Error(message: "No records found.")
+                    _error = GGNError(message: "No records found.")
                 } else {
-                    _error = Error(message: "Unknown database error.")
+                    _error = GGNError(message: "Unknown database error.")
                 }
-                response = .NotSuccessful(with: _error)
+                response = .notSuccessful(_error)
             }
-            completion(with: response)
+            completion(response)
         }
     }
 
-    func save(record: CKRecord, completion: (with: Response) -> Void) {
-        saveRecord(record) { record, error in
+    func save(_ record: CKRecord, completion: @escaping (Response) -> Void) {
+        self.save(record, completionHandler: { record, error in
             if error != nil {
-                completion(with: .NotSuccessful(with: error!))
+                completion(.notSuccessful(error!))
             } else {
-                completion(with: .Successful(with: [record!]))
+                completion(.successful([record!]))
             }
-        }
+        }) 
     }
 
-    func add(operation: CKQueryOperation) {
-        addOperation(operation)
+    func add(_ operation: CKQueryOperation) {
+        self.add(operation)
     }
 }

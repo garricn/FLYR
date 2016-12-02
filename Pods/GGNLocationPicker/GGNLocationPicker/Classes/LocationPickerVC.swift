@@ -27,10 +27,10 @@ public final class LocationPickerVC: UIViewController {
     */
     public var didPick: ((MKAnnotation) -> Void)?
 
-    private let viewModel = LocationPickerVM()
-    private let mapView = MKMapView()
-    private var userLocation: MKUserLocation { return mapView.userLocation }
-    private var annotationToShowOnLoad: MKAnnotation? = nil
+    fileprivate let viewModel = LocationPickerVM()
+    fileprivate let mapView = MKMapView()
+    fileprivate var userLocation: MKUserLocation { return mapView.userLocation }
+    fileprivate var annotationToShowOnLoad: MKAnnotation? = nil
 
     // MARK: - Initialization
     /**
@@ -56,11 +56,11 @@ public final class LocationPickerVC: UIViewController {
     /// :nodoc:
     override public func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.toolbarHidden = false
+        navigationController?.isToolbarHidden = false
 
         if presentingViewController != nil {
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                barButtonSystemItem: .Cancel,
+                barButtonSystemItem: .cancel,
                 target: self,
                 action: #selector(cancelButtonTapped)
             )
@@ -81,22 +81,22 @@ public final class LocationPickerVC: UIViewController {
         }
     }
 
-    private func setupToolbarItems() {
+    fileprivate func setupToolbarItems() {
         let userLocationButton = UIBarButtonItem(
             title: "◉",
-            style: .Plain,
+            style: .plain,
             target: self,
             action: #selector(userLocationButtonTapped)
         )
 
         let flexSpace = UIBarButtonItem(
-            barButtonSystemItem: .FlexibleSpace,
+            barButtonSystemItem: .flexibleSpace,
             target: nil,
             action: nil
         )
 
         let searchButton = UIBarButtonItem(
-            barButtonSystemItem: .Search,
+            barButtonSystemItem: .search,
             target: self,
             action: #selector(searchButtonTapped)
         )
@@ -113,7 +113,7 @@ public final class LocationPickerVC: UIViewController {
         )
     }
 
-    private func setupObservers() {
+    fileprivate func setupObservers() {
         viewModel.output.onNext { [weak self] annotation in
             self?.didPick?(annotation)
             self?.pickerDelegate?.didPick(annotation)
@@ -121,7 +121,7 @@ public final class LocationPickerVC: UIViewController {
 
         viewModel.searchResultsOutput.onNext { [weak self] annotations in
             guard let _self = self else { return }
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 _self.mapView.removeAnnotations(_self.mapView.annotations)
                 _self.mapView.addAnnotations(annotations)
                 _self.mapView.showAnnotations(annotations, animated: false)
@@ -131,7 +131,7 @@ public final class LocationPickerVC: UIViewController {
 
         viewModel.longPressOutput.onNext { [weak self] annotation in
             guard let _self = self else { return }
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 _self.mapView.removeAnnotations(_self.mapView.annotations)
                 _self.mapView.addAnnotation(annotation)
                 _self.mapView.showAnnotations([annotation], animated: true)
@@ -140,15 +140,15 @@ public final class LocationPickerVC: UIViewController {
         }
 
         viewModel.showUserLocationOutput.onNext { [weak self] _ in
-            self?.mapView.setUserTrackingMode(.Follow, animated: true)
+            self?.mapView.setUserTrackingMode(.follow, animated: true)
         }
 
         viewModel.alertOutput.onNext { [weak self] alert in
-            self?.presentViewController(alert, animated: true, completion: nil)
+            self?.present(alert, animated: true, completion: nil)
         }
 
         viewModel.viewControllerOutput.onNext { [weak self] viewController in
-            self?.presentViewController(viewController, animated: true, completion: nil)
+            self?.present(viewController, animated: true, completion: nil)
         }
     }
 }
@@ -156,50 +156,50 @@ public final class LocationPickerVC: UIViewController {
 // MARK: - Map View delegate
 extension LocationPickerVC: MKMapViewDelegate {
     /// :nodoc:
-    public func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+    public func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         return viewModel.annotationView(fore: annotation, of: mapView)
     }
 
     /// :nodoc:
-    public func mapView(mapView: MKMapView, didSelectAnnotationView view: MKAnnotationView) {
+    public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         viewModel.didSelect(view, of: mapView)
     }
 
     /// :nodoc:
-    public func mapView(mapView: MKMapView, didAddAnnotationViews views: [MKAnnotationView]) {
+    public func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
         viewModel.didAdd(views, to: mapView)
     }
 
     /// :nodoc:
-    public func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+    public func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         viewModel.didTap(control, of: view, of: mapView)
     }
 }
 
 // MARK: - Search bar
 extension LocationPickerVC: UISearchBarDelegate {
-    @objc private func searchButtonTapped() {
+    @objc fileprivate func searchButtonTapped() {
         viewModel.searchButtonTapped(from: self)
     }
 
     /// :nodoc:
-    public func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    public func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         viewModel.didTapSearchButton(of: searchBar, of: mapView)
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
 // MARK: - Interactivity
 extension LocationPickerVC {
-    @objc private func userLocationButtonTapped() {
+    @objc fileprivate func userLocationButtonTapped() {
         viewModel.userLocationButtonTapped()
     }
 
-    @objc private func handle(longPress: UILongPressGestureRecognizer) {
+    @objc fileprivate func handle(_ longPress: UILongPressGestureRecognizer) {
         viewModel.handle(longPress, on: mapView)
     }
 
-    @objc private func cancelButtonTapped(sender: UIBarButtonItem) {
-        parentViewController?.dismissViewControllerAnimated(true, completion: nil)
+    @objc fileprivate func cancelButtonTapped(_ sender: UIBarButtonItem) {
+        parent?.dismiss(animated: true, completion: nil)
     }
 }

@@ -12,7 +12,7 @@ import GGNObservable
 import GGNLocationPicker
 import MapKit
 
-typealias LaunchOptions = [NSObject : AnyObject]?
+typealias LaunchOptions = [UIApplicationLaunchOptionsKey: Any]?
 
 protocol AppCoordinating: AlertOutputing, ViewControllerOutputing {
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
@@ -25,26 +25,26 @@ protocol ViewControllerOutputing {
 class AppCoordinator: NSObject, AppCoordinating {
     static let sharedInstance = AppCoordinator(
         authenticator: Authenticator(
-            defaultContainer: CKContainer.defaultContainer()
+            defaultContainer: CKContainer.default()
         )
     )
 
     let viewControllerOutput = Observable<UIViewController>()
     let alertOutput = Observable<UIAlertController>()
 
-    private var tabBarController: UITabBarController!
-    private let authenticator: Authenticating
+    fileprivate var tabBarController: UITabBarController!
+    fileprivate let authenticator: Authenticating
 
     init(authenticator: Authenticating) {
         self.authenticator = authenticator
         super.init()
 
         self.viewControllerOutput.onNext { [unowned self] in
-            self.tabBarController.presentViewController($0, animated: true, completion: nil)
+            self.tabBarController.present($0, animated: true, completion: nil)
         }
 
         self.alertOutput.onNext { [unowned self] in
-            self.tabBarController.presentViewController($0, animated: true, completion: nil)
+            self.tabBarController.present($0, animated: true, completion: nil)
         }
     }
 
@@ -57,7 +57,7 @@ class AppCoordinator: NSObject, AppCoordinating {
         }
     }
 
-    private func toRootViewController(launchOptions: LaunchOptions) -> UIViewController {
+    fileprivate func toRootViewController(_ launchOptions: LaunchOptions) -> UIViewController {
         return UIViewController()
     }
 
@@ -67,11 +67,11 @@ class AppCoordinator: NSObject, AppCoordinating {
         locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
         locationPicker.didPick = {
             self.save(preferredLocation: $0)
-            locationPicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+            locationPicker.presentingViewController?.dismiss(animated: true, completion: nil)
         }
 
         let vc = UINavigationController(rootViewController: locationPicker)
-        tabBarController.presentViewController(vc, animated: true, completion: nil)
+        tabBarController.present(vc, animated: true, completion: nil)
     }
 
     func addButtonTapped() {
@@ -88,11 +88,11 @@ class AppCoordinator: NSObject, AppCoordinating {
     }
 
     func cancelButtonTapped() {
-        tabBarController.dismissViewControllerAnimated(true, completion: nil)
+        tabBarController.dismiss(animated: true, completion: nil)
     }
 
     func didFinishAddingFlyr() {
-        tabBarController.dismissViewControllerAnimated(true, completion: nil)
+        tabBarController.dismiss(animated: true, completion: nil)
     }
 
     func ownerReference() -> CKReference? {
@@ -101,10 +101,10 @@ class AppCoordinator: NSObject, AppCoordinating {
 
     func preferredLocation() -> MKAnnotation? {
         guard
-            let dictionary = NSUserDefaults.standardUserDefaults().dictionaryForKey("PreferredLocation"),
+            let dictionary = UserDefaults.standard.dictionary(forKey: "PreferredLocation"),
             let title = dictionary["title"] as? String,
             let subtitle = dictionary["subtitle"] as? String,
-            let coordinate = dictionary["coordinate"],
+            let coordinate = dictionary["coordinate"] as? [String: Any],
             let latitude = coordinate["latitude"] as? Double,
             let longitude = coordinate["longitude"] as? Double
             else { return nil }
@@ -117,8 +117,8 @@ class AppCoordinator: NSObject, AppCoordinating {
         return annotation
     }
 
-    private func save(preferredLocation annotation: MKAnnotation) {
-        let preferredLocation: [String: AnyObject] = [
+    fileprivate func save(preferredLocation annotation: MKAnnotation) {
+        let preferredLocation: [String: Any] = [
             "title": (annotation.title!)!,
             "subtitle": (annotation.subtitle!)!,
             "coordinate": [
@@ -127,8 +127,8 @@ class AppCoordinator: NSObject, AppCoordinating {
             ]
         ]
 
-        NSUserDefaults.standardUserDefaults().setObject(preferredLocation, forKey: "PreferredLocation")
-        NSUserDefaults.standardUserDefaults().synchronize()
+        UserDefaults.standard.set(preferredLocation, forKey: "PreferredLocation")
+        UserDefaults.standard.synchronize()
     }
 }
 

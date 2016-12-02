@@ -9,7 +9,7 @@
 import CloudKit
 import GGNObservable
 
-struct ProfileVM: FlyrViewModeling {
+class ProfileVM: FlyrViewModeling {
     let output = Observable<Flyrs>()
     let flyrFetcher: FlyrFetchable
     let alertOutput = Observable<UIAlertController>()
@@ -26,7 +26,7 @@ struct ProfileVM: FlyrViewModeling {
 
         self.flyrFetcher.errorOutput.onNext { error in
             let alert = makeAlert(
-                title: "Error fetching Profile Flyrs",
+                "Error fetching Profile Flyrs",
                 message: "Error: \(error)"
             )
             self.alertOutput.emit(alert)
