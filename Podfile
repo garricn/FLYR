@@ -6,14 +6,13 @@ use_frameworks!
 
 target 'FLYR' do
     pod 'Cartography', '0.7.0'
-    pod 'Bond', '4.3.1'
     pod 'GGNLocationPicker', '1.0.0'
+    pod 'GGNObservable', '~> 1.0'
 end
 
 def testing_pods
     pod 'Quick', '0.9.3'
     pod 'Nimble', '4.1.0'
-    pod 'Bond', '4.3.1'
 end
 
 target 'FLYRTests' do

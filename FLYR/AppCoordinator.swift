@@ -8,7 +8,7 @@
 
 import UIKit
 import CloudKit
-import Bond
+import GGNObservable
 import GGNLocationPicker
 import MapKit
 
@@ -19,7 +19,7 @@ protocol AppCoordinating: AlertOutputing, ViewControllerOutputing {
 }
 
 protocol ViewControllerOutputing {
-    var viewControllerOutput: EventProducer<UIViewController> { get }
+    var viewControllerOutput: Observable<UIViewController> { get }
 }
 
 class AppCoordinator: NSObject, AppCoordinating {
@@ -29,8 +29,8 @@ class AppCoordinator: NSObject, AppCoordinating {
         )
     )
 
-    let viewControllerOutput = EventProducer<UIViewController>()
-    let alertOutput = EventProducer<UIAlertController>()
+    let viewControllerOutput = Observable<UIViewController>()
+    let alertOutput = Observable<UIAlertController>()
 
     private var tabBarController: UITabBarController!
     private let authenticator: Authenticating
@@ -39,13 +39,13 @@ class AppCoordinator: NSObject, AppCoordinating {
         self.authenticator = authenticator
         super.init()
 
-        self.viewControllerOutput.deliverOn(.Main).observe { [unowned self] in
+        self.viewControllerOutput.onNext { [unowned self] in
             self.tabBarController.presentViewController($0, animated: true, completion: nil)
-            }.disposeIn(bnd_bag)
+        }
 
-        self.alertOutput.deliverOn(.Main).observe { [unowned self] in
+        self.alertOutput.onNext { [unowned self] in
             self.tabBarController.presentViewController($0, animated: true, completion: nil)
-            }.disposeIn(bnd_bag)
+        }
     }
 
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
@@ -79,10 +79,10 @@ class AppCoordinator: NSObject, AppCoordinating {
             if let reference = ownerReference {
                 let rootVC = resolvedAddFlyrVC(with: reference)
                 let vc = UINavigationController(rootViewController: rootVC)
-                self.viewControllerOutput.next(vc)
+                self.viewControllerOutput.emit(vc)
             } else if let error = error {
                 let alert = makeAlert(from: error)
-                self.alertOutput.next(alert)
+                self.alertOutput.emit(alert)
             }
         }
     }

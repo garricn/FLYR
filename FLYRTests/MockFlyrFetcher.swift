@@ -8,13 +8,13 @@
 
 import CloudKit
 import CoreLocation
-import Bond
+import GGNObservable
 
 @testable import FLYR
 
 struct MockFlyrFetcher: FlyrFetchable {
-    let output = EventProducer<Flyrs>()
-    let errorOutput = EventProducer<ErrorType?>()
+    let output = Observable<Flyrs>()
+    let errorOutput = Observable<ErrorType?>()
 
     let database: Database
 
@@ -23,7 +23,7 @@ struct MockFlyrFetcher: FlyrFetchable {
     }
 
     func fetch(with query: CKQuery) {
-        output.next([mockFlyr])
+        output.emit([mockFlyr])
     }
 }
 

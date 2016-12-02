@@ -7,29 +7,29 @@
 //
 
 import CloudKit
-import Bond
+import GGNObservable
 
 struct ProfileVM: FlyrViewModeling {
-    let output = ObservableArray<Flyr>()
+    let output = Observable<Flyrs>()
     let flyrFetcher: FlyrFetchable
-    let alertOutput = EventProducer<UIAlertController>()
-    let doneLoadingOutput = EventProducer<Void>()
+    let alertOutput = Observable<UIAlertController>()
+    let doneLoadingOutput = Observable<Void>()
 
     init(flyrFetcher: FlyrFetchable) {
         self.flyrFetcher = flyrFetcher
 
-        self.flyrFetcher.output.observe {
-            self.output.removeAll()
-            self.output.extend($0)
-            self.doneLoadingOutput.next()
+        self.flyrFetcher.output.onNext {
+//            self.output.removeAll()
+            self.output.emit($0)
+            self.doneLoadingOutput.emit()
         }
 
-        self.flyrFetcher.errorOutput.observe { error in
+        self.flyrFetcher.errorOutput.onNext { error in
             let alert = makeAlert(
                 title: "Error fetching Profile Flyrs",
                 message: "Error: \(error)"
             )
-            self.alertOutput.next(alert)
+            self.alertOutput.emit(alert)
         }
     }
 
@@ -39,9 +39,6 @@ struct ProfileVM: FlyrViewModeling {
         let predicate = NSPredicate(format: "ownerReference == %@", ownerReference)
         let query = CKQuery(recordType: "Flyr", predicate: predicate)
         let operation = CKQueryOperation(query: query)
-        flyrFetcher.fetch(
-            with: operation,
-            and: query
-        )
+        flyrFetcher.fetch(with: operation, and: query)
     }
 }

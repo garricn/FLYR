@@ -27,14 +27,17 @@ public class Observable<T> {
      - Returns: `Void`
     */
     public typealias Closure = ((T) -> Void)
-    private var closures: [Closure] = []
+
+
+    /// Read Only. Returns optional generic type `T` representing the last event that was emitted.
+    public var lastEvent: T? { return _lastEvent }
 
     // MARK: - Methods
     /**
      Call this method on an instance of `Observable` to respond to events emitted from it. This method captures the passed in closure, stores it, and performs it when `emit(event:)` is called on the same instance of `Observable`. One `Observable` can have multiple observers.
-     
+
      - parameter closure: The closure to perform on `emit(event:)`.
-     
+
      - Example: `viewModel.alertOutput.onNext { [weak self] alert in self?.presentViewController(alert, animated: true, completion: nil) }`
     */
     public func onNext(perform closure: Closure) {
@@ -43,14 +46,18 @@ public class Observable<T> {
 
     /**
      Call this method on an instance of `Observable` to emit an instance of the generic type `T`. This method performs any and all closures that are captured by calls to `onNext(perform:)`.
-    
+
      - parameter event: An instance of the generic type `T`.
-     
+
      - Example: `alertOutput.emit(alert)`
     */
     public func emit(event: T) {
+        _lastEvent = event
         closures.forEach { emit in
             emit(event)
         }
     }
+
+    private var closures: [Closure] = []
+    private var _lastEvent: T?
 }

@@ -7,29 +7,27 @@
 //
 
 import UIKit
-import Bond
+import GGNObservable
 import CloudKit
 
 struct FeedVM: FlyrViewModeling {
-    let alertOutput = EventProducer<UIAlertController>()
-    let output = ObservableArray<Flyr>()
+    let alertOutput = Observable<UIAlertController>()
+    let output = Observable<Flyrs>()
     let flyrFetcher: FlyrFetchable
-    let doneLoadingOutput = EventProducer<Void>()
+    let doneLoadingOutput = Observable<Void>()
     let locationManager: LocationManageable
 
     init(flyrFetcher: FlyrFetchable, locationManager: LocationManageable) {
         self.flyrFetcher = flyrFetcher
         self.locationManager = locationManager
 
-        self.flyrFetcher
-            .output
-            .observe {
-                self.output.removeAll()
-                self.output.extend($0)
-                self.doneLoadingOutput.next()
+        self.flyrFetcher.output.onNext {
+//                self.output.removeAll()
+                self.output.emit($0)
+                self.doneLoadingOutput.emit()
         }
 
-        self.flyrFetcher.errorOutput.observe { error in
+        self.flyrFetcher.errorOutput.onNext { error in
             let alert: UIAlertController
 
             if let error = error {
@@ -44,7 +42,7 @@ struct FeedVM: FlyrViewModeling {
                 )
             }
 
-            self.alertOutput.next(alert)
+            self.alertOutput.emit(alert)
         }
     }
 
@@ -81,7 +79,7 @@ struct FeedVM: FlyrViewModeling {
                     )
                 }
 
-                self.alertOutput.next(alert)
+                self.alertOutput.emit(alert)
             }
         }
     }

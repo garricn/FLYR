@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import Bond
+import GGNObservable
 import CloudKit
 
 @testable import FLYR
@@ -25,40 +25,40 @@ class FlyrFetcherSpec: QuickSpec {
         describe("#fetch(with:)") {
             context("Given a valid query") {
                 beforeEach {
-                    errorInput.value = nil
-                    flyrInput.value = nil
+                    errorInput.lastEvent = nil
+                    flyrInput.lastEvent = nil
                     subject.fetch(with: validQuery)
                 }
 
                 it("performs the query on its database and outputs the reponse") {
-                    expect(flyrInput.value).toNot(beNil())
-                    expect(errorInput.value).to(beNil())
+                    expect(flyrInput.lastEvent).toNot(beNil())
+                    expect(errorInput.lastEvent).to(beNil())
                 }
             }
 
             context("Given a valid query where the response contains no records") {
                 beforeEach {
-                    errorInput.value = nil
-                    flyrInput.value = nil
+                    errorInput.lastEvent = nil
+                    flyrInput.lastEvent = nil
                     subject.fetch(with: noRecordsQuery)
                 }
 
                 it("outputs an error") {
-                    expect(errorInput.value).toNot(beNil())
-                    expect(flyrInput.value).to(beNil())
+                    expect(errorInput.lastEvent).toNot(beNil())
+                    expect(flyrInput.lastEvent).to(beNil())
                 }
             }
 
             context("Given an invalid query") {
                 beforeEach {
-                    errorInput.value = nil
-                    flyrInput.value = nil
+                    errorInput.lastEvent = nil
+                    flyrInput.lastEvent = nil
                     subject.fetch(with: invalidQuery)
                 }
 
                 it("outputs an error") {
-                    expect(errorInput.value).toNot(beNil())
-                    expect(flyrInput.value).to(beNil())
+                    expect(errorInput.lastEvent).toNot(beNil())
+                    expect(flyrInput.lastEvent).to(beNil())
                 }
             }
         }

@@ -8,21 +8,21 @@
 
 import CloudKit
 import UIKit
-import Bond
+import GGNObservable
 
 typealias CKRecords = [CKRecord]
 typealias Flyrs = [Flyr]
 
 protocol FlyrFetchable {
-    var output: EventProducer<Flyrs> { get }
-    var errorOutput: EventProducer<ErrorType?> { get }
+    var output: Observable<Flyrs> { get }
+    var errorOutput: Observable<ErrorType?> { get }
     func fetch(with query: CKQuery)
     func fetch(with operation: CKQueryOperation, and query: CKQuery)
 }
 
 struct FlyrFetcher: FlyrFetchable {
-    let output = EventProducer<Flyrs>()
-    let errorOutput = EventProducer<ErrorType?>()
+    let output = Observable<Flyrs>()
+    let errorOutput = Observable<ErrorType?>()
 
     private let database: Database
 
@@ -38,12 +38,12 @@ struct FlyrFetcher: FlyrFetchable {
     func fetch(with query: CKQuery) {
         database.perform(query) { response in
             guard case .Successful(let records as CKRecords) = response else {
-                if case .NotSuccessful(let error) = response { self.errorOutput.next(error) }
+                if case .NotSuccessful(let error) = response { self.errorOutput.emit(error) }
                 return
             }
 
             let flyrs = records.map(toFlyr)
-            self.output.next(flyrs)
+            self.output.emit(flyrs)
         }
     }
 }
