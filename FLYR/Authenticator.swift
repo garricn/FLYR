@@ -7,7 +7,7 @@
 //
 
 import CloudKit
-import Bond
+import GGNObservable
 
 protocol Authenticating {
     func authenticate(completion: (CKReference?, ErrorType?) -> Void)

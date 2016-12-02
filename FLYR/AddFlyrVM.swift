@@ -6,7 +6,7 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-import Bond
+import GGNObservable
 import CloudKit
 import MapKit
 import GGNLocationPicker
@@ -22,64 +22,64 @@ protocol FlyrAdding {
     var imageInput: Observable<UIImage?> { get }
     var locationInput: Observable<MKAnnotation?> { get }
     var startDateInput: Observable<NSDate?> { get }
-    var shouldEnableDoneButtonOutput: EventProducer<Bool> { get }
-    var shouldEnableCancelButtonOutput: EventProducer<Bool> { get }
-    var reloadRowAtIndexPathOutput: EventProducer<NSIndexPath> { get }
+    var shouldEnableDoneButtonOutput: Observable<Bool> { get }
+    var shouldEnableCancelButtonOutput: Observable<Bool> { get }
+    var reloadRowAtIndexPathOutput: Observable<NSIndexPath> { get }
     var recordSaver: RecordSaveable { get }
     func doneButtonTapped()
 }
 
 struct AddFlyrVM: AddFlyrViewModeling {
-    let alertOutput = EventProducer<UIAlertController>()
-    let imageInput = Observable<UIImage?>(nil)
-    let locationInput = Observable<MKAnnotation?>(nil)
-    let startDateInput = Observable<NSDate?>(nil)
-    let shouldEnableDoneButtonOutput = EventProducer<Bool>()
-    let shouldEnableCancelButtonOutput = EventProducer<Bool>()
-    let reloadRowAtIndexPathOutput = EventProducer<NSIndexPath>()
+    let alertOutput = Observable<UIAlertController>()
+    let imageInput = Observable<UIImage?>()
+    let locationInput = Observable<MKAnnotation?>()
+    let startDateInput = Observable<NSDate?>()
+    let shouldEnableDoneButtonOutput = Observable<Bool>()
+    let shouldEnableCancelButtonOutput = Observable<Bool>()
+    let reloadRowAtIndexPathOutput = Observable<NSIndexPath>()
     let recordSaver: RecordSaveable
-    let viewControllerOutput = EventProducer<UIViewController>()
+    let viewControllerOutput = Observable<UIViewController>()
 
     private var shouldEnableDoneButton: Bool {
-        return imageInput.value != nil
-        && locationInput.value != nil
-        && startDateInput.value != nil
+        return imageInput.lastEvent != nil
+        && locationInput.lastEvent != nil
+        && startDateInput.lastEvent != nil
     }
 
     init(recordSaver: RecordSaveable) {
         self.recordSaver = recordSaver
 
-        imageInput.observe { _ in
+        imageInput.onNext { _ in
             let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-            self.reloadRowAtIndexPathOutput.next(indexPath)
-            self.shouldEnableDoneButtonOutput.next(self.shouldEnableDoneButton)
+            self.reloadRowAtIndexPathOutput.emit(indexPath)
+            self.shouldEnableDoneButtonOutput.emit(self.shouldEnableDoneButton)
         }
 
-        locationInput.observe { _ in
+        locationInput.onNext { _ in
             let indexPath = NSIndexPath(forRow: 0, inSection: 1)
-            self.reloadRowAtIndexPathOutput.next(indexPath)
-            self.shouldEnableDoneButtonOutput.next(self.shouldEnableDoneButton)
+            self.reloadRowAtIndexPathOutput.emit(indexPath)
+            self.shouldEnableDoneButtonOutput.emit(self.shouldEnableDoneButton)
         }
 
-        startDateInput.observe { _ in
+        startDateInput.onNext { _ in
             let indexPath = NSIndexPath(forRow: 0, inSection: 2)
-            self.reloadRowAtIndexPathOutput.next(indexPath)
-            self.shouldEnableDoneButtonOutput.next(self.shouldEnableDoneButton)
+            self.reloadRowAtIndexPathOutput.emit(indexPath)
+            self.shouldEnableDoneButtonOutput.emit(self.shouldEnableDoneButton)
         }
     }
 
     func doneButtonTapped() {
-        shouldEnableDoneButtonOutput.next(false)
-        shouldEnableCancelButtonOutput.next(false)
+        shouldEnableDoneButtonOutput.emit(false)
+        shouldEnableCancelButtonOutput.emit(false)
 
-        let image = imageInput.value!
-        let _location = location(from: locationInput.value!)
-        let startDate = startDateInput.value!
+        let image = imageInput.lastEvent!
+        let _location = location(from: locationInput.lastEvent!!)
+        let startDate = startDateInput.lastEvent!
         let reference = AppCoordinator.sharedInstance.ownerReference()!
         let flyr = Flyr(
-            image: image,
+            image: image!,
             location: _location,
-            startDate: startDate,
+            startDate: startDate!,
             ownerReference: reference
         )
 
@@ -90,9 +90,9 @@ struct AddFlyrVM: AddFlyrViewModeling {
                 AppCoordinator.sharedInstance.didFinishAddingFlyr()
             case .NotSuccessful(let error):
                 let alert = makeAlert(from: error)
-                self.alertOutput.next(alert)
-                self.shouldEnableDoneButtonOutput.next(true)
-                self.shouldEnableCancelButtonOutput.next(true)
+                self.alertOutput.emit(alert)
+                self.shouldEnableDoneButtonOutput.emit(true)
+                self.shouldEnableCancelButtonOutput.emit(true)
             }
         }
     }
@@ -114,7 +114,7 @@ extension AddFlyrViewModeling {
 
         switch indexPath.section {
         case 0:
-            if let image = imageInput.value {
+            if let image = imageInput.lastEvent {
                 let cell = AddImageCell()
                 cell.flyrImageView.image = image
                 cell.accessoryType = .None
@@ -124,17 +124,17 @@ extension AddFlyrViewModeling {
                 text = "Add Image"
             }
         case 1:
-            if let annotation = locationInput.value {
+            if let annotation = locationInput.lastEvent {
                 let cell = UITableViewCell(style: .Subtitle, reuseIdentifier: nil)
-                cell.textLabel?.text = annotation.title!
-                cell.detailTextLabel?.text = annotation.subtitle!
+                cell.textLabel?.text = annotation!.title!
+                cell.detailTextLabel?.text = annotation!.subtitle!
                 return cell
             } else {
                 text = "Add Location"
             }
         case 2:
-            if let date = startDateInput.value {
-                cell.textLabel?.text = date.description
+            if let date = startDateInput.lastEvent {
+                cell.textLabel?.text = date!.description
                 return cell
             } else {
                 text = "Add Start Date & Time"
@@ -149,11 +149,12 @@ extension AddFlyrViewModeling {
     }
 
     func heightForRow(at indexPath: NSIndexPath) -> CGFloat {
-        if let image = imageInput.value where indexPath.section == 0 {
-            return rowHeight(from: image)
-        } else {
-            return UITableViewAutomaticDimension
+        if indexPath.section == 0 {
+            if let image = imageInput.lastEvent {
+                return rowHeight(from: image!)
+            }
         }
+        return UITableViewAutomaticDimension
     }
 
     func didSelectRow(at indexPath: NSIndexPath, of tableView: UITableView, en vc: AddFlyrVC) {
@@ -164,14 +165,14 @@ extension AddFlyrViewModeling {
         switch indexPath.section {
         case 0:
             let imagePicker = makeImagePicker(fore: vc)
-            viewControllerOutput.next(imagePicker)
+            viewControllerOutput.emit(imagePicker)
         case 1:
             let nav = UINavigationController(rootViewController: makeLocationPicker())
-            viewControllerOutput.next(nav)
+            viewControllerOutput.emit(nav)
         case 2:
             let root = makeDatePicker(fore: vc)
             let nav = UINavigationController(rootViewController: root)
-            viewControllerOutput.next(nav)
+            viewControllerOutput.emit(nav)
         default: break
         }
     }
@@ -181,7 +182,7 @@ extension AddFlyrViewModeling {
         locationPicker.navigationItem.title = "Add Location"
         locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
         locationPicker.didPick = {
-            self.locationInput.next($0)
+            self.locationInput.emit($0)
             locationPicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
         return locationPicker
@@ -219,7 +220,7 @@ extension AddFlyrViewModeling {
         let datePicker = DatePickerVC()
         datePicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: datePicker)
         datePicker.didPick = {
-            self.startDateInput.next($0)
+            self.startDateInput.emit($0)
             datePicker.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
         }
         return datePicker

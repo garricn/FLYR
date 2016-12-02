@@ -8,7 +8,7 @@
 
 import Quick
 import Nimble
-import Bond
+import GGNObservable
 import CloudKit
 
 @testable import FLYR
@@ -38,7 +38,7 @@ class FeedVMSpec: QuickSpec {
                 }
                 it("emits an array of images") {
                     expect(imageInput).toNot(beEmpty())
-                    expect(alertInput.value).to(beNil())
+                    expect(alertInput.lastEvent).to(beNil())
                 }
             }
 
@@ -54,7 +54,7 @@ class FeedVMSpec: QuickSpec {
                 }
 
                 it("emits an alert") {
-                    expect(alertInput.value).toNot(beNil())
+                    expect(alertInput.lastEvent).toNot(beNil())
                     expect(imageInput).to(beEmpty())
                 }
             }

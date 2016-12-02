@@ -8,7 +8,7 @@
 
 import UIKit
 import MapKit
-import Bond
+import GGNObservable
 import GGNLocationPicker
 import CloudKit
 
@@ -70,27 +70,25 @@ class AddFlyrVC: UIViewController {
     }
 
     func setupObservers() {
-        viewModel
-            .shouldEnableDoneButtonOutput
-            .deliverOn(.Main)
-            .bindTo(navigationItem.leftBarButtonItem!.bnd_enabled)
+        viewModel.shouldEnableDoneButtonOutput.onNext { [weak self] bool in
+            self?.navigationItem.leftBarButtonItem?.enabled = bool
+        }
 
-        viewModel
-            .shouldEnableCancelButtonOutput
-            .deliverOn(.Main)
-            .bindTo(navigationItem.rightBarButtonItem!.bnd_enabled)
+        viewModel.shouldEnableCancelButtonOutput.onNext { [weak self] bool in
+            self?.navigationItem.rightBarButtonItem?.enabled = bool
+        }
 
-        viewModel.alertOutput.deliverOn(.Main).observe { [weak self] in
+        viewModel.alertOutput.onNext { [weak self] in
             self?.presentViewController($0, animated: true, completion: nil)
-        }.disposeIn(bnd_bag)
+        }
 
-        viewModel.reloadRowAtIndexPathOutput.deliverOn(.Main).observe { [weak self] in
+        viewModel.reloadRowAtIndexPathOutput.onNext { [weak self] in
             self?.tableView.reloadRowsAtIndexPaths([$0], withRowAnimation: .Automatic)
-        }.disposeIn(bnd_bag)
+        }
 
-        viewModel.viewControllerOutput.deliverOn(.Main).observe { [weak self] in
+        viewModel.viewControllerOutput.onNext { [weak self] in
             self?.presentViewController($0, animated: true, completion: nil)
-        }.disposeIn(bnd_bag)
+        }
     }
 
     func doneButtonTapped() {
@@ -133,7 +131,7 @@ extension AddFlyrVC: UINavigationControllerDelegate, UIImagePickerControllerDele
 
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        viewModel.imageInput.next(image)
+        viewModel.imageInput.emit(image)
         dismissViewControllerAnimated(true, completion: nil)
     }
 }

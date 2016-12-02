@@ -6,20 +6,20 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-import Bond
+import GGNObservable
 import CoreLocation
 import MapKit
 
 protocol FlyrViewModeling: AlertOutputing, FlyrOutputing, FlyrInteractionHandling, TableViewDataSource {}
 
 protocol AlertOutputing {
-    var alertOutput: EventProducer<UIAlertController> { get }
+    var alertOutput: Observable<UIAlertController> { get }
 }
 
 protocol FlyrOutputing {
-    var output: ObservableArray<Flyr> { get }
+    var output: Observable<Flyrs> { get }
     var flyrFetcher: FlyrFetchable { get }
-    var doneLoadingOutput: EventProducer<Void> { get }
+    var doneLoadingOutput: Observable<Void> { get }
 }
 
 protocol FlyrInteractionHandling {
@@ -37,9 +37,9 @@ protocol TableViewDataSource {
 // MARK: - Interactivity
 extension FlyrViewModeling {
     func onLongPress(at indexPath: NSIndexPath, from vc: FlyrTableVC) {
-        let item = output.array[indexPath.row]
-        let actionSheet = makeActionSheet(on: item, fore: vc)
-        alertOutput.next(actionSheet)
+        let item = output.lastEvent?[indexPath.row]
+        let actionSheet = makeActionSheet(on: item!, fore: vc)
+        alertOutput.emit(actionSheet)
     }
 
     private func makeActionSheet(on item: Flyr, fore vc: UIViewController) -> UIAlertController {
@@ -96,18 +96,18 @@ extension FlyrViewModeling {
     }
 
     func numbersOfRows(inSection section: Int) -> Int {
-        return output.array.count
+        return output.lastEvent?.count ?? 0
     }
 
     func cellForRow(at indexPath: NSIndexPath, en tableView: UITableView) -> UITableViewCell {
-        let item = output.array[indexPath.row]
+        let item = output.lastEvent?[indexPath.row]
         let cell = tableView.dequeueReusableCellWithIdentifier(FlyrCell.description()) as! FlyrCell
-        cell._imageView.image = item.image
+        cell._imageView.image = item?.image
         return cell
     }
 
     func heightForRow(at indexPath: NSIndexPath) -> CGFloat {
-        let image = output.array[indexPath.row].image
-        return rowHeight(from: image)
+        let image = output.lastEvent?[indexPath.row].image
+        return rowHeight(from: image!)
     }
 }

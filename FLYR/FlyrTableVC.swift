@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import Bond
+import GGNObservable
 
 class FlyrTableVC: UITableViewController {
     var viewModel: FlyrViewModeling
@@ -67,27 +67,17 @@ extension FlyrTableVC {
     }
 
     func setupObservers() {
-        viewModel
-            .alertOutput
-            .deliverOn(.Main)
-            .observe { alertController in
-                self.presentViewController(
-                    alertController,
-                    animated: true,
-                    completion: {
-                        if alertController.preferredStyle == .Alert {
-                            self.resetUI(forState: .ErrorLoading)
-                        }
-                    }
-                )
-            }.disposeIn(bnd_bag)
+        viewModel.alertOutput.onNext { alertController in
+            self.presentViewController(alertController, animated: true) {
+                if alertController.preferredStyle == .Alert {
+                    self.resetUI(forState: .ErrorLoading)
+                }
+            }
+        }
 
-        viewModel
-            .doneLoadingOutput
-            .deliverOn(.Main)
-            .observe {
-                self.resetUI(forState: .DoneLoading)
-            }.disposeIn(bnd_bag)
+        viewModel.doneLoadingOutput.onNext {
+            self.resetUI(forState: .DoneLoading)
+        }
     }
 
     func resetUI(forState state: LoadingState) {
@@ -100,10 +90,9 @@ extension FlyrTableVC {
             tableView.reloadData()
             refreshControl?.endRefreshing()
             if tableView.alpha == 0.0 {
-                UIView.animateWithDuration(
-                    0.3,
-                    animations: { self.tableView.alpha = 1.0 }
-                )
+                UIView.animateWithDuration(0.3) {
+                    self.tableView.alpha = 1.0
+                }
             }
         }
     }
@@ -126,10 +115,9 @@ extension FlyrTableVC {
     func onLongPress(sender: UILongPressGestureRecognizer) {
         let pressPoint = sender.locationInView(tableView)
 
-        guard
-            let indexPath = tableView.indexPathForRowAtPoint(pressPoint)
-            where sender.state == .Began
-            else { return }
+        guard let indexPath = tableView.indexPathForRowAtPoint(pressPoint) where sender.state == .Began else {
+            return
+        }
 
         viewModel.onLongPress(at: indexPath, from: self)
     }
