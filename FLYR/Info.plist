@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Tap &apos;Allow&apos;</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -24,6 +22,26 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Use your camera to post a new Flyr</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Tap 'Allow'</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Use your photo library to post a new Flyr</string>
+	<key>PreferredLocation</key>
+	<dict>
+		<key>coordinate</key>
+		<dict>
+			<key>latitude</key>
+			<integer>0</integer>
+			<key>longitude</key>
+			<integer>0</integer>
+		</dict>
+		<key>subtitle</key>
+		<string></string>
+		<key>title</key>
+		<string></string>
+	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -34,19 +52,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>PreferredLocation</key>
-	<dict>
-		<key>title</key>
-		<string></string>
-		<key>subtitle</key>
-		<string></string>
-		<key>coordinate</key>
-		<dict>
-			<key>latitude</key>
-			<integer>0</integer>
-			<key>longitude</key>
-			<integer>0</integer>
-		</dict>
-	</dict>
 </dict>
 </plist>
