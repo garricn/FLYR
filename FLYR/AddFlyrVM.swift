@@ -260,14 +260,12 @@ func toFlyrRecord(from flyr: Flyr) -> CKRecord {
 }
 
 func url(from image: UIImage) -> URL {
-    let directoryPaths = NSSearchPathForDirectoriesInDomains(
-        .documentDirectory,
-        .userDomainMask, true
-    )
+    let directoryPaths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     let documentsDirectoryPath = directoryPaths[0]
-    let filePath = documentsDirectoryPath.appending("currentImage.png")
-    try? UIImageJPEGRepresentation(image, 0.75)!.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
-    return URL(fileURLWithPath: filePath)
+    let baseURL = URL(fileURLWithPath: documentsDirectoryPath)
+    let fileURL = URL(string: "currentImage.png", relativeTo: baseURL)!
+    try? UIImageJPEGRepresentation(image, 0.75)!.write(to: fileURL, options: [.atomic])
+    return fileURL
 }
 
 func location(from annotation: MKAnnotation) -> CLLocation {
