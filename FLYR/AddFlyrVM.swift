@@ -108,7 +108,7 @@ extension AddFlyrViewModeling {
         return 1
     }
 
-    func cellForRow(at indexPath: IndexPath, en tableView: UITableView) -> UITableViewCell {
+    func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
         let cell = UITableViewCell()
         let text: String
 
@@ -157,20 +157,20 @@ extension AddFlyrViewModeling {
         return UITableViewAutomaticDimension
     }
 
-    func didSelectRow(at indexPath: IndexPath, of tableView: UITableView, en vc: AddFlyrVC) {
+    func didSelectRow(at indexPath: IndexPath, of tableView: UITableView, in vc: AddFlyrVC) {
         defer {
             tableView.deselectRow(at: indexPath, animated: true)
         }
 
         switch indexPath.section {
         case 0:
-            let imagePicker = makeImagePicker(fore: vc)
+            let imagePicker = makeImagePicker(for: vc)
             viewControllerOutput.emit(imagePicker)
         case 1:
             let nav = UINavigationController(rootViewController: makeLocationPicker())
             viewControllerOutput.emit(nav)
         case 2:
-            let root = makeDatePicker(fore: vc)
+            let root = makeDatePicker(for: vc)
             let nav = UINavigationController(rootViewController: root)
             viewControllerOutput.emit(nav)
         default: break
@@ -180,7 +180,7 @@ extension AddFlyrViewModeling {
     func makeLocationPicker() -> LocationPickerVC {
         let locationPicker = LocationPickerVC()
         locationPicker.navigationItem.title = "Add Location"
-        locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
+        locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(for: locationPicker)
         locationPicker.didPick = {
             self.locationInput.emit($0)
             locationPicker.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -189,7 +189,7 @@ extension AddFlyrViewModeling {
 
     }
 
-    func makeImagePicker(fore vc: AddFlyrVC) -> UIViewController {
+    func makeImagePicker(for vc: AddFlyrVC) -> UIViewController {
         guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
             let picker = UIImagePickerController()
             picker.delegate = vc
@@ -216,9 +216,9 @@ extension AddFlyrViewModeling {
         return alert
     }
 
-    func makeDatePicker(fore vc: AddFlyrVC) -> DatePickerVC {
+    func makeDatePicker(for vc: AddFlyrVC) -> DatePickerVC {
         let datePicker = DatePickerVC()
-        datePicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: datePicker)
+        datePicker.navigationItem.rightBarButtonItem = makeCancelButton(for: datePicker)
         datePicker.didPick = {
             self.startDateInput.emit($0)
             datePicker.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -228,10 +228,10 @@ extension AddFlyrViewModeling {
 }
 
 protocol AddFlyrTableViewDelegate {
-    func didSelectRow(at indexPath: IndexPath, of tableView: UITableView, en vc: AddFlyrVC)
+    func didSelectRow(at indexPath: IndexPath, of tableView: UITableView, in vc: AddFlyrVC)
 }
 
-func makeCancelButton(fore vc: UIViewController) -> UIBarButtonItem {
+func makeCancelButton(for vc: UIViewController) -> UIBarButtonItem {
     let button = UIBarButtonItem(
         barButtonSystemItem: .cancel,
         target: vc,

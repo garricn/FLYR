@@ -30,7 +30,7 @@ protocol FlyrInteractionHandling {
 protocol TableViewDataSource {
     func numberOfSections() -> Int
     func numbersOfRows(inSection section: Int) -> Int
-    func cellForRow(at indexPath: IndexPath, en tableView: UITableView) -> UITableViewCell
+    func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell
     func heightForRow(at indexPath: IndexPath) -> CGFloat
 }
 
@@ -38,11 +38,11 @@ protocol TableViewDataSource {
 extension FlyrViewModeling {
     func onLongPress(at indexPath: IndexPath, from vc: FlyrTableVC) {
         let item = output.lastEvent?[indexPath.row]
-        let actionSheet = makeActionSheet(on: item!, fore: vc)
+        let actionSheet = makeActionSheet(on: item!, for: vc)
         alertOutput.emit(actionSheet)
     }
 
-    fileprivate func makeActionSheet(on item: Flyr, fore vc: UIViewController) -> UIAlertController {
+    fileprivate func makeActionSheet(on item: Flyr, for vc: UIViewController) -> UIAlertController {
         let save = UIAlertAction(
             title: "Save",
             style: .default
@@ -99,7 +99,7 @@ extension FlyrViewModeling {
         return output.lastEvent?.count ?? 0
     }
 
-    func cellForRow(at indexPath: IndexPath, en tableView: UITableView) -> UITableViewCell {
+    func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
         let item = output.lastEvent?[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: FlyrCell.description()) as! FlyrCell
         cell._imageView.image = item?.image

@@ -57,7 +57,7 @@ class AddFlyrVC: UIViewController {
 
     func setupNavigationItems() {
         navigationItem.title = "Add Flyr"
-        navigationItem.rightBarButtonItem = makeCancelButton(fore: self)
+        navigationItem.rightBarButtonItem = makeCancelButton(for: self)
         navigationItem.leftBarButtonItem = {
             let item = UIBarButtonItem(
                 barButtonSystemItem: .done,
@@ -110,7 +110,7 @@ extension AddFlyrVC: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return viewModel.cellForRow(at: indexPath, en: tableView)
+        return viewModel.cellForRow(at: indexPath, in: tableView)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -120,7 +120,7 @@ extension AddFlyrVC: UITableViewDataSource {
 
 extension AddFlyrVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.didSelectRow(at: indexPath, of: tableView, en: self)
+        viewModel.didSelectRow(at: indexPath, of: tableView, in: self)
     }
 }
 

@@ -51,6 +51,7 @@ open class Observable<T> {
      - Example: `alertOutput.emit(alert)`
     */
     open func emit(_ event: T) {
+        _lastEvent = event
         closures.forEach { emit in
             emit(event)
         }

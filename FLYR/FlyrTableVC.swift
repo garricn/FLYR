@@ -67,17 +67,19 @@ extension FlyrTableVC {
     }
 
     func setupObservers() {
-        viewModel.alertOutput.onNext { alertController in
-            self.present(alertController, animated: true) {
-                if alertController.preferredStyle == .alert {
-                    self.resetUI(forState: .errorLoading)
+        DispatchQueue.main.async {
+            self.viewModel.alertOutput.onNext { [weak self] alert in
+                self?.present(alert, animated: true) {
+                    if alert.preferredStyle == .alert {
+                        self?.resetUI(forState: .errorLoading)
+                    }
                 }
             }
         }
 
         DispatchQueue.main.async {
-            self.viewModel.doneLoadingOutput.onNext {
-                self.resetUI(forState: .doneLoading)
+            self.viewModel.doneLoadingOutput.onNext { [weak self] in
+                self?.resetUI(forState: .doneLoading)
             }
         }
     }
@@ -92,9 +94,9 @@ extension FlyrTableVC {
             tableView.reloadData()
             refreshControl?.endRefreshing()
             if tableView.alpha == 0.0 {
-                UIView.animate(withDuration: 0.3, animations: {
+                UIView.animate(withDuration: 0.3) {
                     self.tableView.alpha = 1.0
-                }) 
+                }
             }
         }
     }
@@ -135,7 +137,7 @@ extension FlyrTableVC {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return viewModel.cellForRow(at: indexPath, en: tableView)
+        return viewModel.cellForRow(at: indexPath, in: tableView)
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

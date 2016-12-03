@@ -11,37 +11,24 @@ import GGNObservable
 import CloudKit
 
 class FeedVM: FlyrViewModeling {
-    let alertOutput = Observable<UIAlertController>()
     let output = Observable<Flyrs>()
-    let flyrFetcher: FlyrFetchable
+    let alertOutput = Observable<UIAlertController>()
     let doneLoadingOutput = Observable<Void>()
+    let flyrFetcher: FlyrFetchable
     let locationManager: LocationManageable
 
     init(flyrFetcher: FlyrFetchable, locationManager: LocationManageable) {
         self.flyrFetcher = flyrFetcher
         self.locationManager = locationManager
 
-        self.flyrFetcher.output.onNext {
-//                self.output.removeAll()
-                self.output.emit($0)
-                self.doneLoadingOutput.emit()
+        self.flyrFetcher.output.onNext { [weak self] flyrs in
+                self?.output.emit(flyrs)
+                self?.doneLoadingOutput.emit()
         }
 
         self.flyrFetcher.errorOutput.onNext { error in
-            let alert: UIAlertController
-
-            if let error = error {
-                alert = makeAlert(
-                    "Error Fetching Flyrs",
-                    message: "Error: \(error)"
-                )
-            } else {
-                alert = makeAlert(
-                    "Error Fetching Flyrs",
-                    message: "Unknown Error"
-                )
-            }
-
+            let _error = error?.localizedDescription ?? "Unknown Error"
+            let alert = makeAlert(title: "Error Fetching Flyrs", message: "Error: \(_error)")
             self.alertOutput.emit(alert)
         }
     }
@@ -57,24 +44,24 @@ class FeedVM: FlyrViewModeling {
                 switch response {
                 case .servicesNotEnabled:
                     alert = makeAlert(
-                        "Location Services Disabled",
+                        title: "Location Services Disabled",
                         message: "You can enable location services in Settings > Privacy."
                     )
                 case .authorizationDenied:
                     alert = makePreferredLocationAlert()
                 case .authorizationRestricted:
                     alert = makeAlert(
-                        "Authorization Restricted",
+                        title: "Authorization Restricted",
                         message: "Location services are restricted on this device."
                     )
                 case .didFail(let error):
                     alert = makeAlert(
-                        "Location Services Error",
+                        title: "Location Services Error",
                         message: "Error: \(error)."
                     )
                 default:
                     alert = makeAlert(
-                        "Location Services Error",
+                        title: "Location Services Error",
                         message: "There was an error."
                     )
                 }
@@ -98,7 +85,10 @@ class FeedVM: FlyrViewModeling {
 }
 
 func makePreferredLocationAlert() -> UIAlertController {
-    let alert = makeAlert("Authorization Denied", message: "You denied location services authorization.")
+    let alert = makeAlert(
+        title: "Authorization Denied",
+        message: "You denied location services authorization."
+    )
     let setPreferredLocationAction = UIAlertAction(
         title: "Set Preferred Location",
         style: .default,
@@ -108,10 +98,10 @@ func makePreferredLocationAlert() -> UIAlertController {
 }
 
 func makeAlert(from error: Error?) -> UIAlertController {
-    return makeAlert("Error", message: "\(error)")
+    return makeAlert(title: "Error", message: "\(error)")
 }
 
-func makeAlert(_ title: String?, message: String?) -> UIAlertController {
+func makeAlert(title: String?, message: String?) -> UIAlertController {
     let okAction = UIAlertAction(
         title: "OK",
         style: .default,

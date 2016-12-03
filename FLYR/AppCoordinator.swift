@@ -64,7 +64,7 @@ class AppCoordinator: NSObject, AppCoordinating {
     func locationButtonTapped() {
         let locationPicker = LocationPickerVC(with: preferredLocation())
         locationPicker.navigationItem.title = "Set Search Area"
-        locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(fore: locationPicker)
+        locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(for: locationPicker)
         locationPicker.didPick = {
             self.save(preferredLocation: $0)
             locationPicker.presentingViewController?.dismiss(animated: true, completion: nil)
