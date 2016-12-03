@@ -31,7 +31,7 @@ class FlyrFetcher: FlyrFetchable {
     }
 
     func fetch(with operation: CKQueryOperation, and query: CKQuery) {
-        database.add(operation)
+        database.add_(operation)
         fetch(with: query)
     }
 

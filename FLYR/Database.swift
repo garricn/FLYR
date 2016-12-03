@@ -11,7 +11,7 @@ import CloudKit
 protocol Database {
     func perform(_ query: CKQuery, completion: @escaping (Response) -> Void)
     func save(_ record: CKRecord, completion: @escaping (Response) -> Void)
-    func add(_ operation: CKQueryOperation)
+    func add_(_ operation: CKQueryOperation)
 }
 
 extension CKDatabase: Database {
@@ -46,7 +46,7 @@ extension CKDatabase: Database {
         }) 
     }
 
-    func add(_ operation: CKQueryOperation) {
+    func add_(_ operation: CKQueryOperation) {
         self.add(operation)
     }
 }
