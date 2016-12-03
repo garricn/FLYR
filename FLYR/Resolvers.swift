@@ -68,7 +68,7 @@ func resolvedAppCoordinator() -> AppCoordinator {
 }
 
 func resolvedAuthenticator() -> Authenticating {
-    return Authenticator(defaultContainer: CKContainer.defaultContainer())
+    return Authenticator(defaultContainer: CKContainer.default())
 }
 
 func resolvedRecordSaver() -> RecordSaver {

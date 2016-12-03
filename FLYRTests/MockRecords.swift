@@ -10,15 +10,15 @@ import CloudKit
 import UIKit
 
 let mockRecord: CKRecord = {
-    func url(from image: UIImage) -> NSURL {
+    func url(from image: UIImage) -> URL {
         let dirPaths = NSSearchPathForDirectoriesInDomains(
-            .DocumentDirectory,
-            .UserDomainMask, true
+            .documentDirectory,
+            .userDomainMask, true
         )
-        let docsDir: AnyObject = dirPaths[0]
-        let filePath = docsDir.stringByAppendingPathComponent("currentImage.png")
-        UIImageJPEGRepresentation(image, 0.75)!.writeToFile(filePath, atomically: true)
-        return NSURL.fileURLWithPath(filePath)
+        let docsDir: AnyObject = dirPaths[0] as AnyObject
+        let filePath = docsDir.appendingPathComponent("currentImage.png")
+        try? UIImageJPEGRepresentation(image, 0.75)!.write(to: URL(fileURLWithPath: filePath), options: [.atomic])
+        return URL(fileURLWithPath: filePath)
     }
 
     let record = CKRecord(recordType: "Flyr")

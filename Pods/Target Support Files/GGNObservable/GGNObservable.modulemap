@@ -1,6 +1,0 @@
-framework module GGNObservable {
-  umbrella header "GGNObservable-umbrella.h"
-
-  export *
-  module * { export * }
-}

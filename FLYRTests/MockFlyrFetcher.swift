@@ -14,7 +14,7 @@ import GGNObservable
 
 struct MockFlyrFetcher: FlyrFetchable {
     let output = Observable<Flyrs>()
-    let errorOutput = Observable<ErrorType?>()
+    let errorOutput = Observable<Error?>()
 
     let database: Database
 

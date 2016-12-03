@@ -17,6 +17,6 @@ protocol FlyrProtocol {
 struct Flyr: FlyrProtocol {
     let image: UIImage
     let location: CLLocation
-    let startDate: NSDate
+    let startDate: Date
     let ownerReference: CKReference
 }

@@ -10,13 +10,17 @@ import CloudKit
 
 protocol RecordSaveable {
     var database: Database { get }
-    func save(record: CKRecord, with complettion: (Response) -> Void)
+    func save(_ record: CKRecord, _ complettion: @escaping (Response) -> Void)
 }
 
-struct RecordSaver: RecordSaveable {
+class RecordSaver: RecordSaveable {
     let database: Database
 
-    func save(record: CKRecord, with completion: (Response) -> Void) {
+    public init(database: Database) {
+        self.database = database
+    }
+
+    func save(_ record: CKRecord, _ completion: @escaping (Response) -> Void) {
         database.save(record) { response in
             completion(response)
         }

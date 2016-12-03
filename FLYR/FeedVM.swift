@@ -10,64 +10,51 @@ import UIKit
 import GGNObservable
 import CloudKit
 
-struct FeedVM: FlyrViewModeling {
-    let alertOutput = Observable<UIAlertController>()
+class FeedVM: FlyrViewModeling {
     let output = Observable<Flyrs>()
-    let flyrFetcher: FlyrFetchable
+    let alertOutput = Observable<UIAlertController>()
     let doneLoadingOutput = Observable<Void>()
+    let flyrFetcher: FlyrFetchable
     let locationManager: LocationManageable
 
     init(flyrFetcher: FlyrFetchable, locationManager: LocationManageable) {
         self.flyrFetcher = flyrFetcher
         self.locationManager = locationManager
 
-        self.flyrFetcher.output.onNext {
-//                self.output.removeAll()
-                self.output.emit($0)
-                self.doneLoadingOutput.emit()
+        self.flyrFetcher.output.onNext { [weak self] flyrs in
+                self?.output.emit(flyrs)
+                self?.doneLoadingOutput.emit()
         }
 
         self.flyrFetcher.errorOutput.onNext { error in
-            let alert: UIAlertController
-
-            if let error = error {
-                alert = makeAlert(
-                    title: "Error Fetching Flyrs",
-                    message: "Error: \(error)"
-                )
-            } else {
-                alert = makeAlert(
-                    title: "Error Fetching Flyrs",
-                    message: "Unknown Error"
-                )
-            }
-
+            let _error = error?.localizedDescription ?? "Unknown Error"
+            let alert = makeAlert(title: "Error Fetching Flyrs", message: "Error: \(_error)")
             self.alertOutput.emit(alert)
         }
     }
 
     func refresh() {
         self.locationManager.requestLocation { response in
-            if case .DidUpdateLocations(let locations) = response {
+            if case .didUpdateLocations(let locations) = response {
                 let query = self.makeQuery(from: locations)
                 self.flyrFetcher.fetch(with: query)
             } else {
                 let alert: UIAlertController
 
                 switch response {
-                case .ServicesNotEnabled:
+                case .servicesNotEnabled:
                     alert = makeAlert(
                         title: "Location Services Disabled",
                         message: "You can enable location services in Settings > Privacy."
                     )
-                case .AuthorizationDenied:
+                case .authorizationDenied:
                     alert = makePreferredLocationAlert()
-                case .AuthorizationRestricted:
+                case .authorizationRestricted:
                     alert = makeAlert(
                         title: "Authorization Restricted",
                         message: "Location services are restricted on this device."
                     )
-                case .DidFail(let error):
+                case .didFail(let error):
                     alert = makeAlert(
                         title: "Location Services Error",
                         message: "Error: \(error)."
@@ -84,7 +71,7 @@ struct FeedVM: FlyrViewModeling {
         }
     }
 
-    private func makeQuery(from locations: [CLLocation]) -> CKQuery {
+    fileprivate func makeQuery(from locations: [CLLocation]) -> CKQuery {
         let location = locations.last!
         let radius: CGFloat = 100000000.0
         let format = "(distanceToLocation:fromLocation:(location, %@) < %f)"
@@ -98,29 +85,32 @@ struct FeedVM: FlyrViewModeling {
 }
 
 func makePreferredLocationAlert() -> UIAlertController {
-    let alert = makeAlert(title: "Authorization Denied", message: "You denied location services authorization.")
+    let alert = makeAlert(
+        title: "Authorization Denied",
+        message: "You denied location services authorization."
+    )
     let setPreferredLocationAction = UIAlertAction(
         title: "Set Preferred Location",
-        style: .Default,
+        style: .default,
         handler: { _ in AppCoordinator.sharedInstance.locationButtonTapped() })
     alert.addAction(setPreferredLocationAction)
     return alert
 }
 
-func makeAlert(from error: ErrorType?) -> UIAlertController {
+func makeAlert(from error: Error?) -> UIAlertController {
     return makeAlert(title: "Error", message: "\(error)")
 }
 
-func makeAlert(title title: String?, message: String?) -> UIAlertController {
+func makeAlert(title: String?, message: String?) -> UIAlertController {
     let okAction = UIAlertAction(
         title: "OK",
-        style: .Default,
+        style: .default,
         handler: nil
     )
     let alert = UIAlertController(
         title: title,
         message: message,
-        preferredStyle: .Alert
+        preferredStyle: .alert
     )
     alert.addAction(okAction)
     return alert

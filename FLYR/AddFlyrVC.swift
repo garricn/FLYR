@@ -13,9 +13,9 @@ import GGNLocationPicker
 import CloudKit
 
 class AddFlyrVC: UIViewController {
-    private let viewModel: AddFlyrViewModeling
-    private let ownerReference: CKReference
-    private let tableView = UITableView(frame: CGRect.zero, style: .Grouped)
+    fileprivate let viewModel: AddFlyrViewModeling
+    fileprivate let ownerReference: CKReference
+    fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
     init(viewModel: AddFlyrViewModeling, ownerReference: CKReference) {
         self.viewModel = viewModel
@@ -27,7 +27,7 @@ class AddFlyrVC: UIViewController {
         self.viewModel = resolvedAddFlyrVM()
         self.ownerReference = CKReference(
             recordID: CKRecordID(recordName: ""),
-            action: .None
+            action: .none
         )
         super.init(coder: aDecoder)
     }
@@ -44,9 +44,9 @@ class AddFlyrVC: UIViewController {
         setupObservers()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.toolbarHidden = true
+        navigationController?.isToolbarHidden = true
     }
 
     func setupTableView() {
@@ -57,37 +57,37 @@ class AddFlyrVC: UIViewController {
 
     func setupNavigationItems() {
         navigationItem.title = "Add Flyr"
-        navigationItem.rightBarButtonItem = makeCancelButton(fore: self)
+        navigationItem.rightBarButtonItem = makeCancelButton(for: self)
         navigationItem.leftBarButtonItem = {
             let item = UIBarButtonItem(
-                barButtonSystemItem: .Done,
+                barButtonSystemItem: .done,
                 target: self,
                 action: #selector(doneButtonTapped)
             )
-            item.enabled = false
+            item.isEnabled = false
             return item
         }()
     }
 
     func setupObservers() {
         viewModel.shouldEnableDoneButtonOutput.onNext { [weak self] bool in
-            self?.navigationItem.leftBarButtonItem?.enabled = bool
+            self?.navigationItem.leftBarButtonItem?.isEnabled = bool
         }
 
         viewModel.shouldEnableCancelButtonOutput.onNext { [weak self] bool in
-            self?.navigationItem.rightBarButtonItem?.enabled = bool
+            self?.navigationItem.rightBarButtonItem?.isEnabled = bool
         }
 
         viewModel.alertOutput.onNext { [weak self] in
-            self?.presentViewController($0, animated: true, completion: nil)
+            self?.present($0, animated: true, completion: nil)
         }
 
         viewModel.reloadRowAtIndexPathOutput.onNext { [weak self] in
-            self?.tableView.reloadRowsAtIndexPaths([$0], withRowAnimation: .Automatic)
+            self?.tableView.reloadRows(at: [$0], with: .automatic)
         }
 
         viewModel.viewControllerOutput.onNext { [weak self] in
-            self?.presentViewController($0, animated: true, completion: nil)
+            self?.present($0, animated: true, completion: nil)
         }
     }
 
@@ -96,42 +96,42 @@ class AddFlyrVC: UIViewController {
     }
 
     func pickerDidCancel() {
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
 
 extension AddFlyrVC: UITableViewDataSource {
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections()
     }
 
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numbersOfRows(inSection: section)
     }
 
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return viewModel.cellForRow(at: indexPath, en: tableView)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return viewModel.cellForRow(at: indexPath, in: tableView)
     }
 
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return viewModel.heightForRow(at: indexPath)
     }
 }
 
 extension AddFlyrVC: UITableViewDelegate {
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        viewModel.didSelectRow(at: indexPath, of: tableView, en: self)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.didSelectRow(at: indexPath, of: tableView, in: self)
     }
 }
 
 extension AddFlyrVC: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
     }
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         viewModel.imageInput.emit(image)
-        dismissViewControllerAnimated(true, completion: nil)
+        dismiss(animated: true, completion: nil)
     }
 }
