@@ -9,3 +9,4 @@ build/
 *.xcworkspace
 xcuserdata
 Private.swift
+Pods/

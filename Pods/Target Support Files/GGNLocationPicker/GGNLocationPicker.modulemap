@@ -1,6 +1,0 @@
-framework module GGNLocationPicker {
-  umbrella header "GGNLocationPicker-umbrella.h"
-
-  export *
-  module * { export * }
-}

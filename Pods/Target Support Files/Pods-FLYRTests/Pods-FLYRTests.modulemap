@@ -1,6 +1,0 @@
-framework module Pods_FLYRTests {
-  umbrella header "Pods-FLYRTests-umbrella.h"
-
-  export *
-  module * { export * }
-}
