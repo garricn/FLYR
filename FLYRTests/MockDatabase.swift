@@ -10,32 +10,32 @@ import CloudKit
 
 @testable import FLYR
 
-struct MockDatabase: Database {
-    func perform(_ query: CKQuery, completion: (_ with: Response) -> Void) {
+class MockDatabase: Database {
+    func perform(_ query: CKQuery, completion: @escaping (Response) -> Void) {
         let response: Response
-
 
         switch query.recordType {
         case "Flyr":
             let mockRecords = [mockRecord]
-            response = .Successful(with: mockRecords)
+            response = .successful(mockRecords)
         case "NoRecords":
-            let error = Error(message: "No records found.")
-            response = .NotSuccessful(with: error)
+            let error = GGNError(message: "No records found.")
+            response = .notSuccessful(error)
         case "Invalid":
-            let error = Error(message: "Invalid Query")
-            response = .NotSuccessful(with: error)
+            let error = GGNError(message: "Invalid Query")
+            response = .notSuccessful(error)
         default:
-            let error = Error(message: "Unknown Error")
-            response = .NotSuccessful(with: error)
+            let error = GGNError(message: "Unknown Error")
+            response = .notSuccessful(error)
         }
 
-        completion(with: response)
+        completion(response)
     }
 
-    func save(_ record: CKRecord, completion: (_ with: Response) -> Void) {
+    func save(_ record: CKRecord, completion: @escaping (Response) -> Void) {}
 
-    }
+    func add_(_ operation: CKQueryOperation) {}
+
 }
 
 let predicate = NSPredicate(value: true)

@@ -25,11 +25,15 @@ struct MockFlyrFetcher: FlyrFetchable {
     func fetch(with query: CKQuery) {
         output.emit([mockFlyr])
     }
+
+    func fetch(with operation: CKQueryOperation, and query: CKQuery) {}
 }
 
 let mockFlyr = Flyr(
     image: mockImage,
-    location: CLLocation()
+    location: CLLocation(),
+    startDate: Date(),
+    ownerReference: mockCKReference
 )
 
-let mockImage = UIImage(named: "photo")!
+let mockImage = UIImage(named: "testPhoto")!
