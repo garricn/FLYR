@@ -21,24 +21,26 @@ class FeedVMSpec: QuickSpec {
             locationManager: MockLocationManager()
         )
 
-        var imageInput: [UIImage] = []
-        var alertInput = Observable<UIAlertController?>(nil)
+        var flyrInput: Flyrs?
+        var alertInput: UIAlertController?
 
         describe("Given a flyr fetcher and a location manager") {
             beforeEach {
-                imageInput = []
-                alertInput = Observable<UIAlertController?>(nil)
+                flyrInput = nil
+                alertInput = nil
             }
 
             context("and if the location manager returns a location") {
                 beforeEach {
-                    subject.alertOutput.bindTo(alertInput)
-                    subject.refreshFeed()
-                    imageInput += subject.imageOutput.array
+                    subject.alertOutput.onNext { alert in
+                        alertInput = alert
+                    }
+                    subject.refresh()
+                    flyrInput = subject.output.lastEvent
                 }
                 it("emits an array of images") {
-                    expect(imageInput).toNot(beEmpty())
-                    expect(alertInput.lastEvent).to(beNil())
+                    expect(flyrInput).toNot(beNil())
+                    expect(alertInput).to(beNil())
                 }
             }
 
@@ -48,14 +50,16 @@ class FeedVMSpec: QuickSpec {
                         flyrFetcher: mockFlyrFetcher,
                         locationManager: MockInValidLocationManager()
                     )
-                    subject.alertOutput.bindTo(alertInput)
-                    subject.refreshFeed()
-                    imageInput += subject.imageOutput.array
+                    subject.alertOutput.onNext { alert in
+                        alertInput = alert
+                    }
+                    subject.refresh()
+                    flyrInput = subject.output.lastEvent
                 }
 
                 it("emits an alert") {
-                    expect(alertInput.lastEvent).toNot(beNil())
-                    expect(imageInput).to(beEmpty())
+                    expect(flyrInput).to(beNil())
+                    expect(alertInput).toNot(beNil())
                 }
             }
         }

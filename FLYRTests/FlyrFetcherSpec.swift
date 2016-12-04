@@ -16,49 +16,54 @@ import CloudKit
 class FlyrFetcherSpec: QuickSpec {
     override func spec() {
         let subject = FlyrFetcher(database: MockDatabase())
-        let flyrInput: Observable<Flyrs?> = Observable(nil)
-        let errorInput: Observable<ErrorType?> = Observable(nil)
+        var flyrInput: Flyrs = []
+        var errorInput: Error?
 
-        subject.output.bindTo(flyrInput)
-        subject.errorOutput.bindTo(errorInput)
+        subject.output.onNext { flyrs in
+            flyrInput = flyrs
+        }
+
+        subject.errorOutput.onNext { error in
+            errorInput = error
+        }
 
         describe("#fetch(with:)") {
             context("Given a valid query") {
                 beforeEach {
-                    errorInput.lastEvent = nil
-                    flyrInput.lastEvent = nil
+                    flyrInput = []
+                    errorInput = nil
                     subject.fetch(with: validQuery)
                 }
 
                 it("performs the query on its database and outputs the reponse") {
-                    expect(flyrInput.lastEvent).toNot(beNil())
-                    expect(errorInput.lastEvent).to(beNil())
+                    expect(flyrInput).toNot(beEmpty())
+                    expect(errorInput).to(beNil())
                 }
             }
 
             context("Given a valid query where the response contains no records") {
                 beforeEach {
-                    errorInput.lastEvent = nil
-                    flyrInput.lastEvent = nil
+                    flyrInput = []
+                    errorInput = nil
                     subject.fetch(with: noRecordsQuery)
                 }
 
                 it("outputs an error") {
-                    expect(errorInput.lastEvent).toNot(beNil())
-                    expect(flyrInput.lastEvent).to(beNil())
+                    expect(flyrInput).to(beEmpty())
+                    expect(errorInput).toNot(beNil())
                 }
             }
 
             context("Given an invalid query") {
                 beforeEach {
-                    errorInput.lastEvent = nil
-                    flyrInput.lastEvent = nil
+                    flyrInput = []
+                    errorInput = nil
                     subject.fetch(with: invalidQuery)
                 }
 
                 it("outputs an error") {
-                    expect(errorInput.lastEvent).toNot(beNil())
-                    expect(flyrInput.lastEvent).to(beNil())
+                    expect(flyrInput).to(beEmpty())
+                    expect(errorInput).toNot(beNil())
                 }
             }
         }

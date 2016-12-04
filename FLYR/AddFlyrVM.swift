@@ -250,8 +250,8 @@ func toFlyrRecord(from flyr: Flyr) -> CKRecord {
     let location = flyr.location
     flyrRecord.setObject(location, forKey: "location")
 
-    let startDate = flyr.startDate
-    flyrRecord.setObject(startDate as CKRecordValue?, forKey: "startDate")
+    let startDate: CKRecordValue = (flyr.startDate as CKRecordValue)
+    flyrRecord.setObject(startDate, forKey: "startDate")
 
     let ownerReference = flyr.ownerReference
     flyrRecord.setObject(ownerReference, forKey: "ownerReference")

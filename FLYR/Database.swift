@@ -37,13 +37,13 @@ extension CKDatabase: Database {
     }
 
     func save(_ record: CKRecord, completion: @escaping (Response) -> Void) {
-        self.save(record, completionHandler: { record, error in
+        self.save(record) { record, error in
             if error != nil {
                 completion(.notSuccessful(error!))
             } else {
                 completion(.successful([record!]))
             }
-        }) 
+        }
     }
 
     func add_(_ operation: CKQueryOperation) {
