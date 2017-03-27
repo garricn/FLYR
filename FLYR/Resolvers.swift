@@ -9,6 +9,18 @@
 import UIKit
 import CloudKit
 
+enum Resolved {}
+
+extension Resolved {
+    static func appCoordinator() -> AppCoordinator {
+        return AppCoordinator()
+    }
+    
+    static func authenticator() -> Authenticating {
+        return Authenticator(defaultContainer: CKContainer.default())
+    }
+}
+
 func resolvedTabBarController() -> UITabBarController {
     let feedVC = UINavigationController(rootViewController: resolvedFeedVC())
     let profileVC = UINavigationController(rootViewController: resolvedProfileVC())
@@ -27,10 +39,7 @@ func resolvedFeedVC() -> FlyrTableVC {
 }
 
 func resolvedFeedVM() -> FeedVM {
-    return FeedVM(
-        flyrFetcher: resolvedFlyrFetcher(),
-        locationManager: LocationManager()
-    )
+    return FeedVM()
 }
 
 func resolvedFlyrFetcher() -> FlyrFetchable {
@@ -63,13 +72,7 @@ func resolvedAddFlyrVM() -> AddFlyrVM {
     )
 }
 
-func resolvedAppCoordinator() -> AppCoordinator {
-    return AppCoordinator(authenticator: resolvedAuthenticator())
-}
 
-func resolvedAuthenticator() -> Authenticating {
-    return Authenticator(defaultContainer: CKContainer.default())
-}
 
 func resolvedRecordSaver() -> RecordSaver {
     return RecordSaver(database: resolvedPublicDatabase())

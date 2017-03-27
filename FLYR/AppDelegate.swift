@@ -12,13 +12,17 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    
+    let appCoordinator = AppCoordinator()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: LaunchOptions) -> Bool {
         let frame = screenBounds
         window = UIWindow(frame: frame)
         window?.backgroundColor = .white
-        window?.rootViewController = AppCoordinator.sharedInstance.rootViewController(from: launchOptions)
+        window?.rootViewController = appCoordinator.rootViewController(from: launchOptions)
         window?.makeKeyAndVisible()
         return true
     }
 }
+
+typealias LaunchOptions = [UIApplicationLaunchOptionsKey: Any]?

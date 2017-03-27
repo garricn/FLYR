@@ -11,6 +11,11 @@ import CloudKit
 import MapKit
 import GGNLocationPicker
 
+protocol ViewControllerOutputing {
+    var viewControllerOutput: Observable<UIViewController> { get }
+}
+
+
 protocol AddFlyrViewModeling:
 AlertOutputing,
 ViewControllerOutputing,
@@ -72,29 +77,29 @@ class AddFlyrVM: AddFlyrViewModeling {
         shouldEnableDoneButtonOutput.emit(false)
         shouldEnableCancelButtonOutput.emit(false)
 
-        let image = imageInput.lastEvent!
-        let _location = location(from: locationInput.lastEvent!!)
-        let startDate = startDateInput.lastEvent!
-        let reference = AppCoordinator.sharedInstance.ownerReference()!
-        let flyr = Flyr(
-            image: image!,
-            location: _location,
-            startDate: startDate!,
-            ownerReference: reference
-        )
-
-        let record = toFlyrRecord(from: flyr)
-        recordSaver.save(record) { response in
-            switch response {
-            case .successful:
-                AppCoordinator.sharedInstance.didFinishAddingFlyr()
-            case .notSuccessful(let error):
-                let alert = makeAlert(from: error)
-                self.alertOutput.emit(alert)
-                self.shouldEnableDoneButtonOutput.emit(true)
-                self.shouldEnableCancelButtonOutput.emit(true)
-            }
-        }
+//        let image = imageInput.lastEvent!
+//        let _location = location(from: locationInput.lastEvent!!)
+//        let startDate = startDateInput.lastEvent!
+//        let reference = AppCoordinator.sharedInstance.ownerReference()!
+//        let flyr = Flyr(
+//            image: image!,
+//            location: _location,
+//            startDate: startDate!,
+//            ownerReference: reference
+//        )
+//
+//        let record = toFlyrRecord(from: flyr)
+//        recordSaver.save(record) { response in
+//            switch response {
+//            case .successful:
+//                AppCoordinator.sharedInstance.didFinishAddingFlyr()
+//            case .notSuccessful(let error):
+//                let alert = makeAlert(from: error)
+//                self.alertOutput.emit(alert)
+//                self.shouldEnableDoneButtonOutput.emit(true)
+//                self.shouldEnableCancelButtonOutput.emit(true)
+//            }
+//        }
     }
 }
 

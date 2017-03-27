@@ -30,10 +30,10 @@ class ProfileVM: FlyrViewModeling {
     }
 
     func refresh() {
-        guard let ownerReference = AppCoordinator.sharedInstance.ownerReference() else { return }
-        let predicate = NSPredicate(format: "ownerReference == %@", ownerReference)
-        let query = CKQuery(recordType: "Flyr", predicate: predicate)
-        let operation = CKQueryOperation(query: query)
-        flyrFetcher.fetch(with: operation, and: query)
+//        guard let ownerReference = AppCoordinator.sharedInstance.ownerReference() else { return }
+//        let predicate = NSPredicate(format: "ownerReference == %@", ownerReference)
+//        let query = CKQuery(recordType: "Flyr", predicate: predicate)
+//        let operation = CKQueryOperation(query: query)
+//        flyrFetcher.fetch(with: operation, and: query)
     }
 }

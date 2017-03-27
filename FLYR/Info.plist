@@ -52,5 +52,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>hasOnboarded</key>
+	<false/>
 </dict>
 </plist>

@@ -7,31 +7,34 @@
 //
 
 import CoreLocation
+import GGNObservable
 
 protocol LocationManageable {
+    var output: Observable<LocationResponse> { get }
     var enabledAndAuthorized: Bool { get }
-    func requestLocation(completion: @escaping (LocationManagerResponse) -> Void)
+    func requestWhenInUseAuthorization(completion: @escaping (AuthorizationResponse) -> Void)
+    func requestLocation(completion: @escaping (LocationResponse) -> Void)
+}
+
+enum LocationResponse {
+    case didFail(Error)
+    case didFailAuthorization(AuthorizationResponse)
+    case didUpdateLocations([CLLocation])
+}
+
+enum AuthorizationResponse {
+    case servicesNotEnabled
+    case authorizationRestricted
+    case authorizationDenied
+    case authorizationGranted
 }
 
 class LocationManager: NSObject, LocationManageable {
+    let output = Observable<LocationResponse>()
+    
     var enabledAndAuthorized: Bool {
         return CLLocationManager.locationServicesEnabled()
             && CLLocationManager.authorizationStatus() == .authorizedWhenInUse
-    }
-
-    func requestLocation(completion: @escaping (LocationManagerResponse) -> Void) {
-        requestWhenInUseAuthorization { response in
-            if case .enabledAndAuthorized = response {
-                self.requestLocationCompletion = completion
-                self.locationManger.delegate = self
-                self.locationManger.requestLocation()
-            } else if let annotation = AppCoordinator.sharedInstance.preferredLocation() {
-                let _location = location(from: annotation)
-                completion(.didUpdateLocations([_location]))
-            } else {
-                completion(response)
-            }
-        }
     }
 
     fileprivate var authorizationStatus: CLAuthorizationStatus {
@@ -43,17 +46,34 @@ class LocationManager: NSObject, LocationManageable {
     }
 
     fileprivate let locationManger = CLLocationManager()
-    fileprivate var requestWhenInUseAuthorizationCompletion: ((LocationManagerResponse) -> Void)?
-    fileprivate var requestLocationCompletion: ((LocationManagerResponse) -> Void)?
+    fileprivate var requestWhenInUseAuthorizationCompletion: ((AuthorizationResponse) -> Void)?
+    fileprivate var requestLocationCompletion: ((LocationResponse) -> Void)?
 
-    fileprivate func requestWhenInUseAuthorization(completion: @escaping (LocationManagerResponse) -> Void) {
+    func requestWhenInUseAuthorization(completion: @escaping (AuthorizationResponse) -> Void) {
         guard !enabledAndAuthorized else {
-            return completion(.enabledAndAuthorized)
+            return completion(.authorizationGranted)
         }
 
         self.requestWhenInUseAuthorizationCompletion = completion
         locationManger.delegate = self
         locationManger.requestWhenInUseAuthorization()
+    }
+    
+    func requestLocation(completion: @escaping (LocationResponse) -> Void) {
+        requestWhenInUseAuthorization { response in
+            switch response {
+            case .authorizationGranted:
+                self.requestLocationCompletion = completion
+                self.locationManger.delegate = self
+                self.locationManger.requestLocation()
+            case .authorizationDenied:
+                completion(.didFailAuthorization(.authorizationDenied))
+            case .authorizationRestricted:
+                completion(.didFailAuthorization(.authorizationRestricted))
+            case .servicesNotEnabled:
+                completion(.didFailAuthorization(.servicesNotEnabled))
+            }
+        }
     }
 }
 
@@ -72,7 +92,7 @@ extension LocationManager: CLLocationManagerDelegate {
         case .restricted:
             requestWhenInUseAuthorizationCompletion?(.authorizationRestricted)
         case .authorizedAlways, .authorizedWhenInUse:
-            requestWhenInUseAuthorizationCompletion?(.enabledAndAuthorized)
+            requestWhenInUseAuthorizationCompletion?(.authorizationGranted)
         }
     }
 
@@ -83,16 +103,4 @@ extension LocationManager: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         requestLocationCompletion?(.didFail(error))
     }
-}
-
-typealias Locations = [CLLocation]
-
-enum LocationManagerResponse {
-    case servicesNotEnabled
-    case authorizationRestricted
-    case authorizationDenied
-    case authorizationGranted
-    case enabledAndAuthorized
-    case didFail(Error)
-    case didUpdateLocations(Locations)
 }

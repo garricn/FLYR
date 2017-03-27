@@ -1,4 +1,4 @@
-//
+
 //  FlyrTableVC.swift
 //  FLYR
 //
@@ -105,11 +105,11 @@ extension FlyrTableVC {
 // MARK: - Interactivity
 extension FlyrTableVC {
     func locationButtonTapped(_ sender: UIBarButtonItem) {
-        AppCoordinator.sharedInstance.locationButtonTapped()
+//        AppCoordinator.sharedInstance.locationButtonTapped()
     }
 
     func addButtonTapped(_ sender: UIBarButtonItem) {
-        AppCoordinator.sharedInstance.addButtonTapped()
+//        AppCoordinator.sharedInstance.addButtonTapped()
     }
 
     func onPullToRefresh(_ sender: UIRefreshControl) {

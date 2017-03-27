@@ -18,7 +18,6 @@ protocol AlertOutputing {
 
 protocol FlyrOutputing {
     var output: Observable<Flyrs> { get }
-    var flyrFetcher: FlyrFetchable { get }
     var doneLoadingOutput: Observable<Void> { get }
 }
 

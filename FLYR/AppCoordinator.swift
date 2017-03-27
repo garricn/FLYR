@@ -11,57 +11,73 @@ import CloudKit
 import GGNObservable
 import GGNLocationPicker
 import MapKit
+import CoreLocation
 
-typealias LaunchOptions = [UIApplicationLaunchOptionsKey: Any]?
 
-protocol AppCoordinating: AlertOutputing, ViewControllerOutputing {
-    func rootViewController(from launchOptions: LaunchOptions) -> UIViewController
-}
-
-protocol ViewControllerOutputing {
-    var viewControllerOutput: Observable<UIViewController> { get }
-}
-
-class AppCoordinator: NSObject, AppCoordinating {
-    static let sharedInstance = AppCoordinator(
-        authenticator: Authenticator(
-            defaultContainer: CKContainer.default()
-        )
-    )
-
-    let viewControllerOutput = Observable<UIViewController>()
-    let alertOutput = Observable<UIAlertController>()
-
-    fileprivate var tabBarController: UITabBarController!
-    fileprivate let authenticator: Authenticating
-
-    init(authenticator: Authenticating) {
-        self.authenticator = authenticator
-        super.init()
-
-        self.viewControllerOutput.onNext { [unowned self] in
-            self.tabBarController.present($0, animated: true, completion: nil)
-        }
-
-        self.alertOutput.onNext { [unowned self] in
-            self.tabBarController.present($0, animated: true, completion: nil)
-        }
-    }
+class AppCoordinator: CoordinatorDelegate {
+    private var appState: AppState!
+    private var rootViewController: UIViewController!
+    private var childCoordinators: [String: Coordinator] = [:]
 
     func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
-        if launchOptions == nil {
-            tabBarController = resolvedTabBarController()
-            return tabBarController
-        } else {
-            return launchOptions.map(toRootViewController)!
+        guard let appState = AppState(launchOptions: launchOptions) else {
+            fatalError("Expects valid app state!")
         }
+        
+        self.appState = appState
+        
+        let viewController: UIViewController
+        switch appState {
+        case .shouldOnboard: viewController = startOnboarding()
+        case .loggedOut: viewController = startFeed()
+        }
+        
+        rootViewController = viewController
+        return viewController
     }
-
-    fileprivate func toRootViewController(_ launchOptions: LaunchOptions) -> UIViewController {
-        return UIViewController()
+    
+    private func startOnboarding() -> UIViewController {
+        let onboardingCoordinator = OnboardingCoordinator(locationManager: LocationManager())
+        onboardingCoordinator.delegate = self
+        onboardingCoordinator.start()
+        childCoordinators["onboarding"] = onboardingCoordinator
+        return onboardingCoordinator.rootViewController
     }
+    
+    private func startFeed() -> UIViewController {
+        let locationManager = LocationManager()
+        let fetcher = resolvedFlyrFetcher()
+        let feedCoordinator = FeedCoordinator(locationManager: locationManager, fetcher: fetcher)
+        feedCoordinator.delegate = self
+        childCoordinators["feed"] = feedCoordinator
+        
+        let profileCoordinator = ProfileCoordinator()
+        profileCoordinator.delegate = self
+        childCoordinators["profile"] = profileCoordinator
+        
+        let feedVC = feedCoordinator.rootViewController
+        feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
+        feedVC.tabBarItem.accessibilityLabel = "FEED"
+        
+        let profileVC = profileCoordinator.rootViewController
+        profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(), tag: 1)
+        profileVC.accessibilityLabel = "PROFILE"
+        
+        let viewControllers = [feedVC, profileVC]
+        let tabBarController = UITabBarController()
+        tabBarController.setViewControllers(viewControllers, animated: true)
+        
+        return tabBarController
+    }
+    
+    // MARK: - CoordinatorDelegate
+    
+    func coordinatorIsReady(coordinator: Coordinator) {
+    }
+    
+    // MARK: - Private Functions
 
-    func locationButtonTapped() {
+    private func locationButtonTapped() {
         let locationPicker = LocationPickerVC(with: preferredLocation())
         locationPicker.navigationItem.title = "Set Search Area"
         locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(for: locationPicker)
@@ -71,35 +87,35 @@ class AppCoordinator: NSObject, AppCoordinating {
         }
 
         let vc = UINavigationController(rootViewController: locationPicker)
-        tabBarController.present(vc, animated: true, completion: nil)
+        rootViewController.present(vc, animated: true, completion: nil)
     }
 
-    func addButtonTapped() {
-        authenticator.authenticate { ownerReference, error in
-            if let reference = ownerReference {
-                let rootVC = resolvedAddFlyrVC(with: reference)
-                let vc = UINavigationController(rootViewController: rootVC)
-                self.viewControllerOutput.emit(vc)
-            } else if let error = error {
-                let alert = makeAlert(from: error)
-                self.alertOutput.emit(alert)
-            }
-        }
+    private func addButtonTapped() {
+//        authenticator.authenticate { ownerReference, error in
+//            if let reference = ownerReference {
+//                let rootVC = resolvedAddFlyrVC(with: reference)
+//                let vc = UINavigationController(rootViewController: rootVC)
+//                self.viewControllerOutput.emit(vc)
+//            } else if let error = error {
+//                let alert = makeAlert(from: error)
+//                self.alertOutput.emit(alert)
+//            }
+//        }
     }
 
-    func cancelButtonTapped() {
-        tabBarController.dismiss(animated: true, completion: nil)
+    private func cancelButtonTapped() {
+        rootViewController.dismiss(animated: true, completion: nil)
     }
 
-    func didFinishAddingFlyr() {
-        tabBarController.dismiss(animated: true, completion: nil)
+    private func didFinishAddingFlyr() {
+        rootViewController.dismiss(animated: true, completion: nil)
     }
 
-    func ownerReference() -> CKReference? {
-        return authenticator.ownerReference()
-    }
+//    private func ownerReference() -> CKReference? {
+//        return authenticator.ownerReference()
+//    }
 
-    func preferredLocation() -> MKAnnotation? {
+    private func preferredLocation() -> MKAnnotation? {
         guard
             let dictionary = UserDefaults.standard.dictionary(forKey: "PreferredLocation"),
             let title = dictionary["title"] as? String,
@@ -117,7 +133,7 @@ class AppCoordinator: NSObject, AppCoordinating {
         return annotation
     }
 
-    fileprivate func save(preferredLocation annotation: MKAnnotation) {
+    private func save(preferredLocation annotation: MKAnnotation) {
         let preferredLocation: [String: Any] = [
             "title": (annotation.title!)!,
             "subtitle": (annotation.subtitle!)!,
@@ -133,7 +149,7 @@ class AppCoordinator: NSObject, AppCoordinating {
 }
 
 
-func pointAnnotation(from annotation: MKAnnotation) -> MKPointAnnotation {
+private func pointAnnotation(from annotation: MKAnnotation) -> MKPointAnnotation {
     let pointAnnotation = MKPointAnnotation()
     pointAnnotation.coordinate = annotation.coordinate
     pointAnnotation.title = annotation.title!
