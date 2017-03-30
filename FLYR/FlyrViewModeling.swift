@@ -10,15 +10,16 @@ import GGNObservable
 import CoreLocation
 import MapKit
 
-protocol FlyrViewModeling: AlertOutputing, FlyrOutputing, FlyrInteractionHandling, TableViewDataSource {}
+protocol FlyrViewModeling:
+AlertOutputing,
+//FlyrOutputing,
+FlyrInteractionHandling,
+TableViewDataSource {
+    var model: Flyrs { get }
+}
 
 protocol AlertOutputing {
     var alertOutput: Observable<UIAlertController> { get }
-}
-
-protocol FlyrOutputing {
-    var output: Observable<Flyrs> { get }
-    var doneLoadingOutput: Observable<Void> { get }
 }
 
 protocol FlyrInteractionHandling {
@@ -36,8 +37,8 @@ protocol TableViewDataSource {
 // MARK: - Interactivity
 extension FlyrViewModeling {
     func onLongPress(at indexPath: IndexPath, from vc: FlyrTableVC) {
-        let item = output.lastEvent?[indexPath.row]
-        let actionSheet = makeActionSheet(on: item!, for: vc)
+        let item = model[indexPath.row]
+        let actionSheet = makeActionSheet(on: item, for: vc)
         alertOutput.emit(actionSheet)
     }
 
@@ -95,18 +96,20 @@ extension FlyrViewModeling {
     }
 
     func numbersOfRows(inSection section: Int) -> Int {
-        return output.lastEvent?.count ?? 0
+        return model.count
     }
 
     func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
-        let item = output.lastEvent?[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: FlyrCell.description()) as! FlyrCell
-        cell._imageView.image = item?.image
+        let item = model[indexPath.row]
+        let identifier = FlyrCell.identifier
+        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: identifier)
+        let cell = dequeuedCell as? FlyrCell ?? FlyrCell()
+        cell._imageView.image = item.image
         return cell
     }
 
     func heightForRow(at indexPath: IndexPath) -> CGFloat {
-        let image = output.lastEvent?[indexPath.row].image
-        return rowHeight(from: image!)
+        let image = model[indexPath.row].image
+        return rowHeight(from: image)
     }
 }

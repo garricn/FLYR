@@ -21,26 +21,26 @@ extension Resolved {
     }
 }
 
-func resolvedTabBarController() -> UITabBarController {
-    let feedVC = UINavigationController(rootViewController: resolvedFeedVC())
-    let profileVC = UINavigationController(rootViewController: resolvedProfileVC())
-    let viewControllers = [feedVC, profileVC]
-    let tabBarController = UITabBarController()
-    tabBarController.setViewControllers(viewControllers, animated: true)
-    return tabBarController
-}
+//func resolvedTabBarController() -> UITabBarController {
+//    let feedVC = UINavigationController(rootViewController: resolvedFeedVC())
+//    let profileVC = UINavigationController(rootViewController: resolvedProfileVC())
+//    let viewControllers = [feedVC, profileVC]
+//    let tabBarController = UITabBarController()
+//    tabBarController.setViewControllers(viewControllers, animated: true)
+//    return tabBarController
+//}
 
-// MARK: - FEED
-func resolvedFeedVC() -> FlyrTableVC {
-    let feedVC = FlyrTableVC(viewModel: resolvedFeedVM())
-    feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
-    feedVC.tabBarItem.accessibilityLabel = "FEED"
-    return feedVC
-}
-
-func resolvedFeedVM() -> FeedVM {
-    return FeedVM()
-}
+//// MARK: - FEED
+//func resolvedFeedVC() -> FlyrTableVC {
+//    let feedVC = FlyrTableVC(viewModel: resolvedFeedVM())
+//    feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
+//    feedVC.tabBarItem.accessibilityLabel = "FEED"
+//    return feedVC
+//}
+//
+//func resolvedFeedVM() -> FeedVM {
+//    return FeedVM()
+//}
 
 func resolvedFlyrFetcher() -> FlyrFetchable {
     return FlyrFetcher(database: resolvedPublicDatabase())

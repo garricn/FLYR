@@ -10,6 +10,7 @@ import CloudKit
 import GGNObservable
 
 class ProfileVM: FlyrViewModeling {
+    let model: Flyrs = []
     let output = Observable<Flyrs>()
     let flyrFetcher: FlyrFetchable
     let alertOutput = Observable<UIAlertController>()

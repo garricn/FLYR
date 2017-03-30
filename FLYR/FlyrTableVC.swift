@@ -10,7 +10,7 @@ import UIKit
 import GGNObservable
 
 class FlyrTableVC: UITableViewController {
-    var viewModel: FlyrViewModeling
+    private let viewModel: FlyrViewModeling
 
     init(viewModel: FlyrViewModeling) {
         self.viewModel = viewModel
@@ -18,133 +18,23 @@ class FlyrTableVC: UITableViewController {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        self.viewModel = resolvedFeedVM()
+        self.viewModel = FeedVM(model: [])
         super.init(coder: aDecoder)
     }
-}
-
-// MARK: - View Lifecycle
-extension FlyrTableVC {
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupObservers()
-        viewModel.refresh()
-    }
-
-    func setupView() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            title: "◉",
-            style: .plain,
-            target: self,
-            action: #selector(locationButtonTapped)
-        )
-
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(addButtonTapped)
-        )
-
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(
-            self,
-            action: #selector(onPullToRefresh),
-            for: .valueChanged
-        )
-
-        let longPressGestureRecognizer = UILongPressGestureRecognizer(
-            target: self,
-            action: #selector(onLongPress)
-        )
-        tableView.addGestureRecognizer(longPressGestureRecognizer)
-        tableView.showsVerticalScrollIndicator = false
-        tableView.alpha = 0.0
-        tableView.register(
-            FlyrCell.self,
-            forCellReuseIdentifier: FlyrCell.identifier
-        )
-    }
-
-    func setupObservers() {
-        DispatchQueue.main.async {
-            self.viewModel.alertOutput.onNext { [weak self] alert in
-                self?.present(alert, animated: true) {
-                    if alert.preferredStyle == .alert {
-                        self?.resetUI(forState: .errorLoading)
-                    }
-                }
-            }
-        }
-
-        DispatchQueue.main.async {
-            self.viewModel.doneLoadingOutput.onNext { [weak self] in
-                self?.resetUI(forState: .doneLoading)
-            }
-        }
-    }
-
-    func resetUI(forState state: LoadingState) {
-        switch state {
-        case .errorLoading:
-            tableView.alpha = 0.0
-        case .loading:
-            break
-        case .doneLoading:
-            tableView.reloadData()
-            refreshControl?.endRefreshing()
-            if tableView.alpha == 0.0 {
-                UIView.animate(withDuration: 0.3) {
-                    self.tableView.alpha = 1.0
-                }
-            }
-        }
-    }
-}
-
-// MARK: - Interactivity
-extension FlyrTableVC {
-    func locationButtonTapped(_ sender: UIBarButtonItem) {
-//        AppCoordinator.sharedInstance.locationButtonTapped()
-    }
-
-    func addButtonTapped(_ sender: UIBarButtonItem) {
-//        AppCoordinator.sharedInstance.addButtonTapped()
-    }
-
-    func onPullToRefresh(_ sender: UIRefreshControl) {
-        viewModel.refresh()
-    }
-
-    func onLongPress(_ sender: UILongPressGestureRecognizer) {
-        let pressPoint = sender.location(in: tableView)
-
-        guard let indexPath = tableView.indexPathForRow(at: pressPoint), sender.state == .began else {
-            return
-        }
-
-        viewModel.onLongPress(at: indexPath, from: self)
-    }
-}
-
-extension FlyrTableVC {
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections()
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.numbersOfRows(inSection: section)
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         return viewModel.cellForRow(at: indexPath, in: tableView)
     }
-
+    
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return viewModel.heightForRow(at: indexPath)
     }
-}
-
-enum LoadingState {
-    case loading, doneLoading, errorLoading
 }

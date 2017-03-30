@@ -11,25 +11,15 @@ import GGNObservable
 import CloudKit
 
 class FeedVM: FlyrViewModeling {
-    let output = Observable<Flyrs>()
     let alertOutput = Observable<UIAlertController>()
-    let doneLoadingOutput = Observable<Void>()
 
-    init() {
+    let model: Flyrs
+
+    init(model: Flyrs) {
+        self.model = model
     }
-
-    func refresh() {}
-
-    fileprivate func makeQuery(from locations: [CLLocation]) -> CKQuery {
-        let location = locations.last!
-        let radius: CGFloat = 100000000.0
-        let format = "(distanceToLocation:fromLocation:(location, %@) < %f)"
-        let predicate = NSPredicate(
-            format: format,
-            location,
-            radius
-        )
-        return CKQuery(recordType: "Flyr", predicate: predicate)
+    
+    func refresh() {
     }
 }
 

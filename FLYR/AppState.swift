@@ -10,18 +10,16 @@ import Foundation
 
 enum AppState {
     case shouldOnboard
-    case loggedOut
-    
-    private static let userDefaults = UserDefaults.standard
-    
+    case shouldStartFeed(with: FeedCoordinator.Mode)
+
     init?(launchOptions: LaunchOptions) {
         if launchOptions == nil {
-            let shouldOnboard = !AppState.userDefaults.bool(forKey: "hasOnboarded")
-            
-            if shouldOnboard {
-                self = .shouldOnboard
+            let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
+
+            if hasOnboarded {
+                self = .shouldStartFeed(with: .userLocation)
             } else {
-                self = .loggedOut
+                self = .shouldOnboard
             }
         } else {
             fatalError("Handle launch options!")

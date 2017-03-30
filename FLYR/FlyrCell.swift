@@ -11,7 +11,7 @@ import Cartography
 
 class FlyrCell: UITableViewCell {
     let _imageView = UIImageView()
-    static let identifier = FlyrCell.description()
+    static let identifier = "FlyrCell"
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

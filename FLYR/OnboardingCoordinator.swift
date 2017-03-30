@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import GGNLocationPicker
 
 class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     let rootViewController: UIViewController = UINavigationController(rootViewController: OnboardingVC())
     
     weak var delegate: CoordinatorDelegate?
+    
+    private(set) var selectedMode: FeedCoordinator.Mode = .losAngeles(losAngelesCoordinate)
     
     private enum State {
         case stepOne, stepTwo, stepThree, stepFour
@@ -83,20 +86,42 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     
     func didTapPrimaryButton() {
         switch state {
-        case .stepOne: state = .stepTwo
+        case .stepOne: state = stateFrom(state: .stepOne)
         case .stepTwo: requestWhenInUseAuthrization()
-        case .stepThree: break
-        case .stepFour: break
+        case .stepThree: presentPreferredLocationVC()
+        case .stepFour: finishOnboarding()
         }
     }
     
     func didTapSecondaryButton() {
         switch state {
-        case .stepOne: break
-        case .stepTwo: state = .stepThree
-        case .stepThree: state = .stepFour
+        case .stepOne:
+            break
+        case .stepTwo:
+            state = .stepThree
+        case .stepThree:
+            state = .stepFour
+            selectedMode = .losAngeles(losAngelesCoordinate)
+        case .stepFour:
+            break
+        }
+    }
+    
+    private func stateFrom(state: State) -> State {
+        switch state {
+        case .stepOne:
+            if locationManager.enabledAndAuthorized {
+                return .stepFour
+            } else if locationManager.deniedOrRestricted {
+                return .stepThree
+            } else {
+                return  .stepTwo
+            }
+        case .stepTwo: break
+        case .stepThree: break
         case .stepFour: break
         }
+        return .stepFour
     }
     
     private func requestWhenInUseAuthrization() {
@@ -109,125 +134,23 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
         switch response {
         case .authorizationGranted:
             state = .stepFour
+            selectedMode = .userLocation
         case .authorizationDenied, .authorizationRestricted, .servicesNotEnabled:
             state = .stepThree
         }
     }
-}
-
-protocol OnboardingDelegate: class {
-    func didTapPrimaryButton()
-    func didTapSecondaryButton()
-}
-
-class OnboardingVC: UIViewController {
-    weak var delegate: OnboardingDelegate?
     
-    var isSecondaryButtonHidden: Bool {
-        get {
-            return onboardingView.secondaryButton.isHidden
+    private func presentPreferredLocationVC() {
+        let locationPicker = LocationPickerVC()
+        locationPicker.didPick = { [weak self] annotaion in
+            self?.state = .stepFour
+            self?.selectedMode = .preferredLocation(annotaion)
         }
-        set {
-            onboardingView.secondaryButton.isHidden = newValue
-        }
+        let navigationController = UINavigationController(rootViewController: locationPicker)
+        rootViewController.present(navigationController, animated: true)
     }
     
-    private let onboardingView = OnboardingView()
-    
-    override func loadView() {
-        view = onboardingView
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        onboardingView.primarybutton.addTarget(
-            self,
-            action: #selector(didTapPrimaryButton),
-            for: .touchUpInside)
-        onboardingView.secondaryButton.addTarget(
-            self,
-            action: #selector(didTapSecondaryButton),
-            for: .touchUpInside)
-        onboardingView.secondaryButton.setTitle("Skip", for: .normal)
-    }
-    
-    @objc private func didTapPrimaryButton(sender: UIButton) {
-        delegate?.didTapPrimaryButton()
-    }
-
-    @objc private func didTapSecondaryButton(sender: UIButton) {
-        delegate?.didTapSecondaryButton()
-    }
-    
-    func setLabelText(_ labelText: String) {
-        onboardingView.labelText = labelText
-    }
-    
-    func setButtonPrimaryTitle(_ buttonTitle: String) {
-        onboardingView.primaryButtonTitle = buttonTitle
-    }
-}
-
-
-import Cartography
-
-class OnboardingView: BaseView {
-    let primarybutton = UIButton()
-    let secondaryButton = UIButton()
-    
-    var labelText: String? {
-        get {
-            return label.text
-        }
-        set {
-            label.text = newValue
-        }
-    }
-    
-    var primaryButtonTitle: String? {
-        get {
-            return primarybutton.currentTitle
-        }
-        set {
-            primarybutton.setTitle(newValue, for: .normal)
-        }
-    }
-    
-    private let label = UILabel()
-    
-    override func setup() {
-        addSubview(label)
-        addSubview(primarybutton)
-        addSubview(secondaryButton)
-    }
-    
-    override func style() {
-        backgroundColor = .white
-
-        label.numberOfLines = 0
-        label.textAlignment = .center
-        
-        primarybutton.setTitleColor(.blue, for: .normal)
-        
-        secondaryButton.setTitleColor(.gray, for: .normal)
-    }
-    
-    override func layout() {
-        constrain(label) { label in
-            label.leading == label.superview!.leading + 10
-            label.trailing == label.superview!.trailing - 10
-            label.centerY == label.superview!.centerY
-        }
-        
-        constrain(primarybutton, secondaryButton) { primaryButton, secondaryButton in
-            primaryButton.leading == primaryButton.superview!.leading + 10
-            primaryButton.trailing == primaryButton.superview!.trailing - 10
-
-            secondaryButton.top == primaryButton.bottom + 20
-            secondaryButton.leading == secondaryButton.superview!.leading + 10
-            secondaryButton.trailing == secondaryButton.superview!.trailing - 10
-            secondaryButton.bottom == secondaryButton.superview!.bottom - 80
-        }
+    private func finishOnboarding() {
+        delegate?.coordinatorDidFinish(coordinator: self)
     }
 }

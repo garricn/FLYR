@@ -12,6 +12,9 @@ import GGNObservable
 protocol LocationManageable {
     var output: Observable<LocationResponse> { get }
     var enabledAndAuthorized: Bool { get }
+    var deniedOrRestricted: Bool { get }
+    var authorizationStatus: CLAuthorizationStatus { get }
+    var servicesEnabled: Bool { get }
     func requestWhenInUseAuthorization(completion: @escaping (AuthorizationResponse) -> Void)
     func requestLocation(completion: @escaping (LocationResponse) -> Void)
 }
@@ -36,12 +39,17 @@ class LocationManager: NSObject, LocationManageable {
         return CLLocationManager.locationServicesEnabled()
             && CLLocationManager.authorizationStatus() == .authorizedWhenInUse
     }
+    
+    var deniedOrRestricted: Bool {
+        return authorizationStatus == .denied
+        || authorizationStatus == .restricted
+    }
 
-    fileprivate var authorizationStatus: CLAuthorizationStatus {
+    var authorizationStatus: CLAuthorizationStatus {
         return CLLocationManager.authorizationStatus()
     }
 
-    fileprivate var servicesEnabled: Bool {
+    var servicesEnabled: Bool {
         return CLLocationManager.locationServicesEnabled()
     }
 

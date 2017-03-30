@@ -41,6 +41,8 @@
 		4EDFECBF1D57F6C6000E4991 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */; };
 		4EF2E12A1DA9895A00DED55E /* FlyrViewModeling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */; };
 		4EF2E12C1DA98A4000DED55E /* FlyrTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */; };
+		609FE3A31E8CA7BD00E7CE61 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */; };
+		609FE3A51E8CA7EC00E7CE61 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */; };
 		60F9B75C1E887B4F004B8437 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75B1E887B4F004B8437 /* Private.swift */; };
 		60F9B7601E888205004B8437 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75D1E888205004B8437 /* BaseView.swift */; };
 		60F9B7611E888205004B8437 /* LoadingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75E1E888205004B8437 /* LoadingVC.swift */; };
@@ -113,6 +115,8 @@
 		4EDFECBE1D57F6C6000E4991 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrViewModeling.swift; sourceTree = "<group>"; };
 		4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrTableVC.swift; sourceTree = "<group>"; };
+		609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
+		609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		60F9B75B1E887B4F004B8437 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		60F9B75D1E888205004B8437 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		60F9B75E1E888205004B8437 /* LoadingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingVC.swift; sourceTree = "<group>"; };
@@ -197,7 +201,7 @@
 				60F9B75F1E888205004B8437 /* LoadingView.swift */,
 				4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */,
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
-				60F9B76B1E889D27004B8437 /* OnboardingCoordinator.swift */,
+				609FE3A61E8CA7FD00E7CE61 /* Onboarding */,
 				60F9B7691E889CFE004B8437 /* AppState.swift */,
 				60F9B7671E8893F1004B8437 /* Coordinator.swift */,
 				60F9B7651E8893B0004B8437 /* ProfileCoordinator.swift */,
@@ -293,6 +297,16 @@
 				4E9944411DA5D893009AE862 /* Authenticator.swift */,
 			);
 			name = SERVICES;
+			sourceTree = "<group>";
+		};
+		609FE3A61E8CA7FD00E7CE61 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				60F9B76B1E889D27004B8437 /* OnboardingCoordinator.swift */,
+				609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */,
+				609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */,
+			);
+			name = Onboarding;
 			sourceTree = "<group>";
 		};
 		DF26F170CA0A977037507FCD /* Frameworks */ = {
@@ -552,6 +566,7 @@
 				4EF2E12A1DA9895A00DED55E /* FlyrViewModeling.swift in Sources */,
 				4ED7E2271D8DDB0300DB2F4E /* Response.swift in Sources */,
 				60F9B7661E8893B0004B8437 /* ProfileCoordinator.swift in Sources */,
+				609FE3A31E8CA7BD00E7CE61 /* OnboardingVC.swift in Sources */,
 				4E9944401DA5D7CA009AE862 /* User.swift in Sources */,
 				4E0C2D711D60DD08008BA952 /* FlyrCell.swift in Sources */,
 				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,
@@ -563,6 +578,7 @@
 				4E4947331DAB3E5E000CDBBD /* UIViewControllerExtensions.swift in Sources */,
 				60F9B7601E888205004B8437 /* BaseView.swift in Sources */,
 				60F9B7681E8893F1004B8437 /* Coordinator.swift in Sources */,
+				609FE3A51E8CA7EC00E7CE61 /* OnboardingView.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
 				4E1E23AE1D61784300962E29 /* Database.swift in Sources */,
 				60F9B76A1E889CFE004B8437 /* AppState.swift in Sources */,
