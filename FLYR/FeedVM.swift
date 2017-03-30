@@ -18,9 +18,6 @@ class FeedVM: FlyrViewModeling {
     init(model: Flyrs) {
         self.model = model
     }
-    
-    func refresh() {
-    }
 }
 
 func makePreferredLocationAlert() -> UIAlertController {

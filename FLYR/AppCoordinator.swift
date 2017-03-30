@@ -17,7 +17,7 @@ protocol AppCoordinatorDelegate: class {
     func rootViewControllerDidChange(in appCoordinator: AppCoordinator)
 }
 
-class AppCoordinator: CoordinatorDelegate {
+class AppCoordinator: NSObject, UITabBarControllerDelegate, CoordinatorDelegate {
     
     weak var delegate: AppCoordinatorDelegate?
     
@@ -53,25 +53,24 @@ class AppCoordinator: CoordinatorDelegate {
     }
     
     private func startFeed(with mode: FeedCoordinator.Mode) -> UIViewController {
-        let locationManager = LocationManager()
-        let fetcher = resolvedFlyrFetcher()
-        let authenticator = Resolved.authenticator()
         let feedCoordinator = FeedCoordinator(
             mode: mode,
-            fetcher: fetcher,
-            locationManager: locationManager,
-            authenticator: authenticator)
+            fetcher: resolvedFlyrFetcher(),
+            locationManager: LocationManager())
         feedCoordinator.delegate = self
         feedCoordinator.start()
         childCoordinators["feed"] = feedCoordinator
         
-        let profileCoordinator = ProfileCoordinator()
-        profileCoordinator.delegate = self
-        childCoordinators["profile"] = profileCoordinator
-        
         let feedVC = feedCoordinator.rootViewController
         feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
         feedVC.tabBarItem.accessibilityLabel = "FEED"
+        
+        
+        let profileCoordinator = ProfileCoordinator(
+            fetcher: resolvedFlyrFetcher(),
+            ownerReference: <#T##CKReference#>)
+        profileCoordinator.delegate = self
+        childCoordinators["profile"] = profileCoordinator
         
         let profileVC = profileCoordinator.rootViewController
         profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(), tag: 1)
@@ -79,6 +78,7 @@ class AppCoordinator: CoordinatorDelegate {
         
         let viewControllers = [feedVC, profileVC]
         let tabBarController = UITabBarController()
+        tabBarController.delegate = self
         tabBarController.setViewControllers(viewControllers, animated: true)
         
         return tabBarController
@@ -104,5 +104,23 @@ class AppCoordinator: CoordinatorDelegate {
         }
 
         childCoordinators.removeValue(forKey: key)
+    }
+    
+    // MARK: - UITabBarControllerDelegate
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let navigationController = viewController as? UINavigationController
+         , let topViewCotroller = navigationController.topViewController {
+            
+            let key: String
+            switch topViewCotroller.tabBarItem.tag {
+            case 0: key = "feed"
+            case 1: key = "profile"
+            default: fatalError("Incomplete implementation!")
+            }
+
+            let coordinator = childCoordinators[key]
+            coordinator?.start()
+        }
     }
 }

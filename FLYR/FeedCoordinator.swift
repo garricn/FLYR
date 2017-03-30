@@ -27,7 +27,6 @@ class FeedCoordinator: Coordinator {
     private let fetcher: FlyrFetchable
     private let locationManager: LocationManageable
     private let loadingVC = LoadingVC()
-    private let authenticator: Authenticating
 
     private var navigationController: UINavigationController {
         if let viewController = rootViewController as? UINavigationController {
@@ -55,11 +54,10 @@ class FeedCoordinator: Coordinator {
     }
     
     init(mode: FeedCoordinator.Mode,
-         fetcher: FlyrFetchable, locationManager: LocationManageable, authenticator: Authenticating) {
+         fetcher: FlyrFetchable, locationManager: LocationManageable) {
         self.mode = mode
         self.fetcher = fetcher
         self.locationManager = locationManager
-        self.authenticator = authenticator
     }
     
     func start() {
@@ -82,14 +80,6 @@ class FeedCoordinator: Coordinator {
         }
     }
     
-    private func startPrefferedLocationMode(with annotation: MKAnnotation) {
-        
-    }
-    
-    private func startLosAngelesMode(with coordinate: CLLocationCoordinate2D) {
-        
-    }
-    
     private func resolvedFeedVC(with flyrs: Flyrs) -> FlyrTableVC {
         let leftBarButtonItem = UIBarButtonItem(
             title: "◉",
@@ -103,7 +93,7 @@ class FeedCoordinator: Coordinator {
         let gestureRecognizer = UILongPressGestureRecognizer(
             target: self,
             action: #selector(onLongPress))
-
+        
         let viewModel = FeedVM(model: flyrs)
         let viewController = FlyrTableVC(viewModel: viewModel)
         viewController.navigationItem.leftBarButtonItem = leftBarButtonItem
@@ -111,9 +101,16 @@ class FeedCoordinator: Coordinator {
         viewController.tableView.addGestureRecognizer(gestureRecognizer)
         viewController.tableView.showsVerticalScrollIndicator = false
         viewController.tableView.register(FlyrCell.self, forCellReuseIdentifier: FlyrCell.identifier)
-        viewController.refreshControl = UIRefreshControl()
         viewController.refreshControl?.addTarget(self, action: #selector(onPullToRefresh), for: .valueChanged)
         return viewController
+    }
+    
+    private func startPrefferedLocationMode(with annotation: MKAnnotation) {
+        
+    }
+    
+    private func startLosAngelesMode(with coordinate: CLLocationCoordinate2D) {
+        
     }
     
     // MARK: - User Location Mode
@@ -204,6 +201,13 @@ class FeedCoordinator: Coordinator {
         UserDefaults.standard.synchronize()
     }
 }
+
+
+
+
+
+
+
 
 //
 //private func pointAnnotation(from annotation: MKAnnotation) -> MKPointAnnotation {

@@ -22,6 +22,12 @@ class FlyrTableVC: UITableViewController {
         super.init(coder: aDecoder)
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        refreshControl = UIRefreshControl()
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections()
     }
