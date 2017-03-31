@@ -196,28 +196,28 @@
 		4E1D73E51D50521F00648603 /* FLYR */ = {
 			isa = PBXGroup;
 			children = (
-				60F9B75D1E888205004B8437 /* BaseView.swift */,
-				60F9B75E1E888205004B8437 /* LoadingVC.swift */,
-				60F9B75F1E888205004B8437 /* LoadingView.swift */,
 				4EDFECBD1D57F6C3000E4991 /* FLYR.entitlements */,
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
-				609FE3A61E8CA7FD00E7CE61 /* Onboarding */,
-				60F9B7691E889CFE004B8437 /* AppState.swift */,
-				60F9B7671E8893F1004B8437 /* Coordinator.swift */,
-				60F9B7651E8893B0004B8437 /* ProfileCoordinator.swift */,
-				60F9B7631E889388004B8437 /* FeedCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
+				60F9B7691E889CFE004B8437 /* AppState.swift */,
+				60F9B75D1E888205004B8437 /* BaseView.swift */,
+				60F9B7671E8893F1004B8437 /* Coordinator.swift */,
+				60F9B7631E889388004B8437 /* FeedCoordinator.swift */,
 				4E1D74191D505E2700648603 /* FeedVM.swift */,
 				4E0C2D701D60DD08008BA952 /* FlyrCell.swift */,
 				4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */,
 				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
 				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
+				60F9B75E1E888205004B8437 /* LoadingVC.swift */,
+				60F9B75F1E888205004B8437 /* LoadingView.swift */,
+				60F9B75B1E887B4F004B8437 /* Private.swift */,
+				60F9B7651E8893B0004B8437 /* ProfileCoordinator.swift */,
 				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
 				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
-				60F9B75B1E887B4F004B8437 /* Private.swift */,
 				4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */,
 				4EDCC28A1D8F4E070010FEEA /* ADD FLYR */,
 				4E401A4A1DA8AE0F00AA1C1F /* MODEL OBJECTS */,
+				609FE3A61E8CA7FD00E7CE61 /* ONBOARDING */,
 				4EDCC28D1D8F50530010FEEA /* SERVICES */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
 			);
@@ -299,14 +299,14 @@
 			name = SERVICES;
 			sourceTree = "<group>";
 		};
-		609FE3A61E8CA7FD00E7CE61 /* Onboarding */ = {
+		609FE3A61E8CA7FD00E7CE61 /* ONBOARDING */ = {
 			isa = PBXGroup;
 			children = (
 				60F9B76B1E889D27004B8437 /* OnboardingCoordinator.swift */,
 				609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */,
 				609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */,
 			);
-			name = Onboarding;
+			name = ONBOARDING;
 			sourceTree = "<group>";
 		};
 		DF26F170CA0A977037507FCD /* Frameworks */ = {

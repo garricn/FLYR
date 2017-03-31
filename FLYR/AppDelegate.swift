@@ -9,24 +9,24 @@
 import UIKit
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, AppCoordinatorDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    private let appCoordinator = AppCoordinator()
+    private let appCoordinator = Resolved.appCoordinator
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: LaunchOptions) -> Bool {
-        appCoordinator.delegate = self
+        guard launchOptions == nil else {
+            fatalError("Handle launch options!")
+        }
+        
+        appCoordinator.start()
         
         window = UIWindow(frame: screenBounds)
         window?.backgroundColor = .white
-        window?.rootViewController = appCoordinator.rootViewController(from: launchOptions)
+        window?.rootViewController = appCoordinator.rootViewController
         window?.makeKeyAndVisible()
         return true
-    }
-    
-    func rootViewControllerDidChange(in appCoordinator: AppCoordinator) {
-        window?.rootViewController = appCoordinator.rootViewController
     }
 }
 

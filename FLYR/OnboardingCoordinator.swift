@@ -14,7 +14,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     
     weak var delegate: CoordinatorDelegate?
     
-    private(set) var selectedMode: FeedCoordinator.Mode = .losAngeles(losAngelesCoordinate)
+    private(set) var selectedMode: FeedCoordinator.Mode = .losAngeles(losAngelesLocation)
     
     private enum State {
         case stepOne, stepTwo, stepThree, stepFour
@@ -101,7 +101,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
             state = .stepThree
         case .stepThree:
             state = .stepFour
-            selectedMode = .losAngeles(losAngelesCoordinate)
+            selectedMode = .losAngeles(losAngelesLocation)
         case .stepFour:
             break
         }
@@ -144,7 +144,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
         let locationPicker = LocationPickerVC()
         locationPicker.didPick = { [weak self] annotaion in
             self?.state = .stepFour
-            self?.selectedMode = .preferredLocation(annotaion)
+            self?.selectedMode = .preferredLocation(annotaion.location)
         }
         let navigationController = UINavigationController(rootViewController: locationPicker)
         rootViewController.present(navigationController, animated: true)

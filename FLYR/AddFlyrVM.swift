@@ -17,7 +17,6 @@ protocol ViewControllerOutputing {
 
 
 protocol AddFlyrViewModeling:
-AlertOutputing,
 ViewControllerOutputing,
 FlyrAdding,
 TableViewDataSource,

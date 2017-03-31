@@ -10,41 +10,59 @@ import CloudKit
 import GGNObservable
 
 protocol Authenticating {
-    func authenticate(completion: @escaping (CKReference?, Error?) -> Void)
+    func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void)
+    func authenticate()
     func ownerReference() -> CKReference?
 }
 
 class Authenticator: Authenticating {
-    fileprivate let container: Container
-    fileprivate var user: User?
+    
+    enum AuthResponse {
+        case authenticated(CKReference)
+        case notAuthenticated(Error)
+    }
+    
+    private let container: Container
+    private var user: User?
 
     init(defaultContainer: Container) {
         self.container = defaultContainer
-
-        container.fetchUserRecordID { response in
+        self.container.fetchUserRecordID { [weak self] response in
             guard case .successful(let recordID as CKRecordID) = response else { return }
             let reference = CKReference(recordID: recordID, action: .none)
-            self.user = User(ownerReference: reference)
+            self?.user = User(ownerReference: reference)
         }
     }
 
     func ownerReference() -> CKReference? {
         return user?.ownerReference
     }
+    
+    func authenticate() {
+        authenticate(completion: { _ in })
+    }
 
-    func authenticate(completion: @escaping (CKReference?, Error?) -> Void) {
-        guard user == nil else { return completion(user!.ownerReference, nil) }
-
+    func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void) {
+        if let user = user {
+            let response = Authenticator.AuthResponse.authenticated(user.ownerReference)
+            return completion(response)
+        } else {
+            authenticate(with: completion)
+        }
+    }
+    
+    private func authenticate(with completion: @escaping (Authenticator.AuthResponse) -> Void) {
         container.fetchUserRecordID { response in
-            guard case .successful(let recordID as CKRecordID) = response else {
-                if case .notSuccessful(let error) = response {
-                    return completion(nil, error)
-                }
-                return completion(nil, nil)
+            switch response {
+            case .successful(let any):
+                guard let recordID = any as? CKRecordID else { return }
+                let reference = CKReference(recordID: recordID, action: .none)
+                let response = Authenticator.AuthResponse.authenticated(reference)
+                completion(response)
+            case .notSuccessful(let error):
+                let response = Authenticator.AuthResponse.notAuthenticated(error)
+                completion(response)
             }
-
-            let reference = CKReference(recordID: recordID, action: .none)
-            completion(reference, nil)
         }
     }
 }

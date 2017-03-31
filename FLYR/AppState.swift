@@ -8,21 +8,12 @@
 
 import Foundation
 
-enum AppState {
-    case shouldOnboard
-    case shouldStartFeed(with: FeedCoordinator.Mode)
+struct AppState {
+    var isExistingUser: Bool {
+        return UserDefaults.standard.bool(forKey: "isExistingUser")
+    }
 
-    init?(launchOptions: LaunchOptions) {
-        if launchOptions == nil {
-            let hasOnboarded = UserDefaults.standard.bool(forKey: "hasOnboarded")
-
-            if hasOnboarded {
-                self = .shouldStartFeed(with: .userLocation)
-            } else {
-                self = .shouldOnboard
-            }
-        } else {
-            fatalError("Handle launch options!")
-        }
+    var feedMode: FeedCoordinator.Mode {
+        return .userLocation
     }
 }

@@ -20,6 +20,7 @@ let screenHeight = screenBounds.height
 // MARK: Locations
 
 let losAngelesCoordinate = CLLocationCoordinate2D(latitude: 34.0432464, longitude: -118.267463)
+let losAngelesLocation = CLLocation(latitude: losAngelesCoordinate.latitude, longitude: losAngelesCoordinate.longitude)
 
 // MARK: - Functions
 func rowHeight(from image: UIImage) -> CGFloat {

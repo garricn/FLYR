@@ -15,8 +15,8 @@ class FeedCoordinator: Coordinator {
     
     enum Mode {
         case userLocation
-        case preferredLocation(MKAnnotation)
-        case losAngeles(CLLocationCoordinate2D)
+        case preferredLocation(CLLocation)
+        case losAngeles(CLLocation)
     }
     
     weak var delegate: CoordinatorDelegate?
@@ -63,8 +63,8 @@ class FeedCoordinator: Coordinator {
     func start() {
         switch mode {
         case .userLocation: startUserLocationMode()
-        case .preferredLocation(let annotation): startPrefferedLocationMode(with: annotation)
-        case .losAngeles(let coordinate): startLosAngelesMode(with: coordinate)
+        case .preferredLocation(let location): startFeed(with: location)
+        case .losAngeles(let location): startFeed(with: location)
         }
         
         fetcher.output.onNext { [weak self] flyrs in
@@ -105,11 +105,7 @@ class FeedCoordinator: Coordinator {
         return viewController
     }
     
-    private func startPrefferedLocationMode(with annotation: MKAnnotation) {
-        
-    }
-    
-    private func startLosAngelesMode(with coordinate: CLLocationCoordinate2D) {
+    private func startFeed(with location: CLLocation) {
         
     }
     
@@ -165,22 +161,6 @@ class FeedCoordinator: Coordinator {
     }
     
     @objc private func addButtonTapped() {
-        // TODO: Start add flyr flow
-        
-        authenticator.authenticate { [weak self] ownerReference, error in
-            let viewController: UIViewController
-            
-            if let reference = ownerReference {
-                let addFlyrVC = resolvedAddFlyrVC(with: reference)
-                viewController = UINavigationController(rootViewController: addFlyrVC)
-            } else {
-                viewController = makeAlert(from: error)
-            }
-            
-            DispatchQueue.main.async {
-                self?.navigationController.present(viewController, animated: true, completion: nil)
-            }
-        }
     }
     
     @objc private func onPullToRefresh() {}
@@ -203,7 +183,11 @@ class FeedCoordinator: Coordinator {
 }
 
 
-
+extension MKAnnotation {
+    var location: CLLocation {
+        return CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+    }
+}
 
 
 

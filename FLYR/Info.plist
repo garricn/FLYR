@@ -25,7 +25,7 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Use your camera to post a new Flyr</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Tap &apos;Allow&apos;</string>
+	<string>Tap 'Allow'</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Use your photo library to post a new Flyr</string>
 	<key>PreferredLocation</key>
@@ -52,7 +52,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>hasOnboarded</key>
+	<key>isExistingUser</key>
 	<false/>
 </dict>
 </plist>

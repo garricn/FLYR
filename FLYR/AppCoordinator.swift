@@ -13,50 +13,83 @@ import GGNLocationPicker
 import MapKit
 import CoreLocation
 
-protocol AppCoordinatorDelegate: class {
-    func rootViewControllerDidChange(in appCoordinator: AppCoordinator)
-}
+class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDelegate {
+    
+    var rootViewController: UIViewController {
+        let viewController = UIViewController()
+        viewController.view.backgroundColor = .red
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.delegate = self
+        
+        let tabBarController = UITabBarController()
+        tabBarController.setViewControllers([navigationController], animated: true)
+        return tabBarController
+    }
 
-class AppCoordinator: NSObject, UITabBarControllerDelegate, CoordinatorDelegate {
-    
-    weak var delegate: AppCoordinatorDelegate?
-    
-    private(set) var rootViewController: UIViewController!
-    
-    private var appState: AppState!
+    private let appState: AppState
+    private let authenticator: Authenticating
+
     private var childCoordinators: [String: Coordinator] = [:]
+    private var tabBarController: UITabBarController {
+        if let viewController = rootViewController as? UITabBarController {
+            return viewController
+        } else {
+            fatalError("Expects a UITabBarController!")
+        }
+    }
 
-    func rootViewController(from launchOptions: LaunchOptions) -> UIViewController {
-        guard let appState = AppState(launchOptions: launchOptions) else {
-            fatalError("Expects valid app state!")
-        }
-        
+    init(appState: AppState, authenticator: Authenticating) {
         self.appState = appState
-        
-        let viewController: UIViewController
-        switch appState {
-        case .shouldOnboard: viewController = startOnboarding()
-        case .shouldStartFeed(let mode): viewController = startFeed(with: mode)
+        self.authenticator = authenticator
+    }
+    
+    func start() {
+        DispatchQueue.global().async {
+            self.authenticator.authenticate()
         }
-        
-        rootViewController = viewController
-        return viewController
     }
     
-    private func startOnboarding() -> UIViewController {
-        let locationManager = LocationManager()
-        let coordinator = OnboardingCoordinator(locationManager: locationManager)
-        coordinator.delegate = self
-        coordinator.start()
-        childCoordinators["onboarding"] = coordinator
-        return coordinator.rootViewController
+    
+    // MARK: - CoordinatorDelegate
+    
+    func coordinatorIsReady(coordinator: Coordinator) {}
+    
+    func coordinatorDidFinish(coordinator: Coordinator) {
+        if let coordinator = coordinator as? OnboardingCoordinator {
+            startFeed(with: coordinator.selectedMode)
+
+            coordinator.rootViewController.dismiss(animated: true) {
+                self.childCoordinators.removeValue(forKey: "onboarding")
+            }
+        }
     }
     
-    private func startFeed(with mode: FeedCoordinator.Mode) -> UIViewController {
-        let feedCoordinator = FeedCoordinator(
-            mode: mode,
-            fetcher: resolvedFlyrFetcher(),
-            locationManager: LocationManager())
+    // MARK: - UINavigationControllerDelegate
+
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
+    }
+    
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        if appState.isExistingUser {
+            startFeed(with: appState.feedMode)
+        } else {
+            let locationManager = LocationManager()
+            let coordinator = OnboardingCoordinator(locationManager: locationManager)
+            coordinator.delegate = self
+            coordinator.start()
+            navigationController.present(coordinator.rootViewController, animated: true) {
+                self.childCoordinators["onboarding"] = coordinator
+            }
+        }
+    }
+    
+    // MARK: - Private Functions
+    
+    // TODO: - Inject Coordinators with AppState (full/partial?)
+    private func startFeed(with mode: FeedCoordinator.Mode) {
+        let fetcher0 = Resolved.flyrFetcher
+        let manager = LocationManager()
+        let feedCoordinator = FeedCoordinator(mode: mode, fetcher: fetcher0, locationManager: manager)
         feedCoordinator.delegate = self
         feedCoordinator.start()
         childCoordinators["feed"] = feedCoordinator
@@ -65,10 +98,9 @@ class AppCoordinator: NSObject, UITabBarControllerDelegate, CoordinatorDelegate 
         feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
         feedVC.tabBarItem.accessibilityLabel = "FEED"
         
-        
-        let profileCoordinator = ProfileCoordinator(
-            fetcher: resolvedFlyrFetcher(),
-            ownerReference: <#T##CKReference#>)
+        let fetcher1 = Resolved.flyrFetcher
+        let reference = authenticator.ownerReference()
+        let profileCoordinator = ProfileCoordinator(fetcher: fetcher1, ownerReference: reference)
         profileCoordinator.delegate = self
         childCoordinators["profile"] = profileCoordinator
         
@@ -77,50 +109,6 @@ class AppCoordinator: NSObject, UITabBarControllerDelegate, CoordinatorDelegate 
         profileVC.accessibilityLabel = "PROFILE"
         
         let viewControllers = [feedVC, profileVC]
-        let tabBarController = UITabBarController()
-        tabBarController.delegate = self
         tabBarController.setViewControllers(viewControllers, animated: true)
-        
-        return tabBarController
-    }
-    
-    // MARK: - CoordinatorDelegate
-    
-    func coordinatorIsReady(coordinator: Coordinator) {
-        print("Coordinator is ready called!")
-    }
-    
-    func coordinatorDidFinish(coordinator: Coordinator) {
-        let key: String
-        
-        switch coordinator {
-        case let coordinator as OnboardingCoordinator:
-            key = "onboarding"
-            UserDefaults.standard.set(true, forKey: "hasOnboarded")
-            UserDefaults.standard.synchronize()
-            rootViewController = startFeed(with: coordinator.selectedMode)
-            delegate?.rootViewControllerDidChange(in: self)
-        default: fatalError("Incomplete implementation!")
-        }
-
-        childCoordinators.removeValue(forKey: key)
-    }
-    
-    // MARK: - UITabBarControllerDelegate
-    
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if let navigationController = viewController as? UINavigationController
-         , let topViewCotroller = navigationController.topViewController {
-            
-            let key: String
-            switch topViewCotroller.tabBarItem.tag {
-            case 0: key = "feed"
-            case 1: key = "profile"
-            default: fatalError("Incomplete implementation!")
-            }
-
-            let coordinator = childCoordinators[key]
-            coordinator?.start()
-        }
     }
 }

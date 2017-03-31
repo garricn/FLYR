@@ -24,12 +24,7 @@ class AddFlyrVC: UIViewController {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        self.viewModel = resolvedAddFlyrVM()
-        self.ownerReference = CKReference(
-            recordID: CKRecordID(recordName: ""),
-            action: .none
-        )
-        super.init(coder: aDecoder)
+        fatalError("Awww!")
     }
 
     override func loadView() {
@@ -77,10 +72,10 @@ class AddFlyrVC: UIViewController {
         viewModel.shouldEnableCancelButtonOutput.onNext { [weak self] bool in
             self?.navigationItem.rightBarButtonItem?.isEnabled = bool
         }
-
-        viewModel.alertOutput.onNext { [weak self] in
-            self?.present($0, animated: true, completion: nil)
-        }
+//
+//        viewModel.alertOutput.onNext { [weak self] in
+//            self?.present($0, animated: true, completion: nil)
+//        }
 
         viewModel.reloadRowAtIndexPathOutput.onNext { [weak self] in
             self?.tableView.reloadRows(at: [$0], with: .automatic)
