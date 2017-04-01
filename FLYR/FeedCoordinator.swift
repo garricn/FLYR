@@ -86,10 +86,6 @@ class FeedCoordinator: Coordinator {
             style: .plain,
             target: self,
             action: #selector(locationButtonTapped))
-        let rightBarButtonItem = UIBarButtonItem(
-            barButtonSystemItem: .add,
-            target: self,
-            action: #selector(addButtonTapped))
         let gestureRecognizer = UILongPressGestureRecognizer(
             target: self,
             action: #selector(onLongPress))
@@ -97,7 +93,6 @@ class FeedCoordinator: Coordinator {
         let viewModel = FeedVM(model: flyrs)
         let viewController = FlyrTableVC(viewModel: viewModel)
         viewController.navigationItem.leftBarButtonItem = leftBarButtonItem
-        viewController.navigationItem.rightBarButtonItem = rightBarButtonItem
         viewController.tableView.addGestureRecognizer(gestureRecognizer)
         viewController.tableView.showsVerticalScrollIndicator = false
         viewController.tableView.register(FlyrCell.self, forCellReuseIdentifier: FlyrCell.identifier)

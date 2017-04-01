@@ -10,9 +10,9 @@ import CloudKit
 import GGNObservable
 
 protocol Authenticating {
-    func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void)
+    var ownerReference: CKReference? { get }
     func authenticate()
-    func ownerReference() -> CKReference?
+    func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void)
 }
 
 class Authenticator: Authenticating {
@@ -22,6 +22,10 @@ class Authenticator: Authenticating {
         case notAuthenticated(Error)
     }
     
+    var ownerReference: CKReference? {
+        return user?.ownerReference
+    }
+
     private let container: Container
     private var user: User?
 
@@ -29,9 +33,6 @@ class Authenticator: Authenticating {
         self.container = defaultContainer
     }
 
-    func ownerReference() -> CKReference? {
-        return user?.ownerReference
-    }
     
     func authenticate() {
         authenticate(completion: { _ in })

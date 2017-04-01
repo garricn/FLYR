@@ -106,6 +106,7 @@ extension LocationManager: CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         requestLocationCompletion?(.didUpdateLocations(locations))
+        manager.stopUpdatingLocation()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

@@ -24,6 +24,10 @@ extension Resolved {
         return FlyrFetcher(database: Resolved.publicDatabase)
     }
     
+    static var recordSaver: RecordSaveable {
+        return RecordSaver(database: Resolved.publicDatabase)
+    }
+    
     private static var publicDatabase: Database {
         let container = CKContainer(identifier: Private.iCloudContainerID)
         return container.publicCloudDatabase

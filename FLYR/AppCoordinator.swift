@@ -27,7 +27,12 @@ final class LaunchNavigationController: UINavigationController {
     }
 }
 
-class AppCoordinator: NSObject, LaunchNavigationControllerDelegate, CoordinatorDelegate {
+protocol AppCoordinatorProtocolComposite:
+UITabBarControllerDelegate,
+LaunchNavigationControllerDelegate,
+CoordinatorDelegate {}
+
+class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
     
     var rootViewController: UIViewController!
 
@@ -55,6 +60,7 @@ class AppCoordinator: NSObject, LaunchNavigationControllerDelegate, CoordinatorD
         
         let tabBarController = UITabBarController()
         tabBarController.setViewControllers([navigationController], animated: true)
+        tabBarController.delegate = self
         rootViewController = tabBarController
 
         DispatchQueue.global().async {
@@ -65,7 +71,9 @@ class AppCoordinator: NSObject, LaunchNavigationControllerDelegate, CoordinatorD
     
     // MARK: - CoordinatorDelegate
     
-    func coordinatorIsReady(coordinator: Coordinator) {}
+    func coordinatorIsReady(coordinator: Coordinator) {
+        print("Coordinator is ready: \(coordinator)")
+    }
     
     func coordinatorDidFinish(coordinator: Coordinator) {
         if let coordinator = coordinator as? OnboardingCoordinator {
@@ -93,9 +101,26 @@ class AppCoordinator: NSObject, LaunchNavigationControllerDelegate, CoordinatorD
         }
     }
     
+    // MARK: - UITabBarControllerDelegate
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard viewController.tabBarItem.tag == 1 else {
+            return true
+        }
+        
+        let postCoordinator = PostCoordinator(ownerReference: authenticator.ownerReference)
+        postCoordinator.delegate = self
+        postCoordinator.start()
+
+        rootViewController.present(postCoordinator.rootViewController, animated: true) {
+            self.childCoordinators["post"] = postCoordinator
+        }
+
+        return false
+    }
+    
     // MARK: - Private Functions
     
-    // TODO: - Inject Coordinators with AppState (full/partial?)
     private func startFeed(with mode: FeedCoordinator.Mode) {
         
         // Feed
@@ -107,22 +132,54 @@ class AppCoordinator: NSObject, LaunchNavigationControllerDelegate, CoordinatorD
         childCoordinators["feed"] = feedCoordinator
         
         let feedVC = feedCoordinator.rootViewController
-        feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
+        feedVC.tabBarItem = UITabBarItem(title: "FEED", image: nil, tag: 0)
         feedVC.tabBarItem.accessibilityLabel = "FEED"
         
+        // Dummy PostVC
+        let postVC = UIViewController()
+        postVC.tabBarItem = UITabBarItem(title: "POST", image: nil, tag: 1)
+        postVC.accessibilityLabel = "POST"
+
         // Profile
         let fetcher1 = Resolved.flyrFetcher
-        let reference = authenticator.ownerReference()
+        let reference = authenticator.ownerReference
         let profileCoordinator = ProfileCoordinator(fetcher: fetcher1, ownerReference: reference)
         profileCoordinator.delegate = self
         profileCoordinator.start()
         childCoordinators["profile"] = profileCoordinator
         
         let profileVC = profileCoordinator.rootViewController
-        profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(), tag: 1)
+        profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: nil, tag: 2)
         profileVC.accessibilityLabel = "PROFILE"
         
-        let viewControllers = [feedVC, profileVC]
+        let viewControllers = [feedVC, postVC, profileVC]
         tabBarController.setViewControllers(viewControllers, animated: true)
     }
+}
+
+final class PostCoordinator: Coordinator {
+    weak var delegate: CoordinatorDelegate?
+    
+    let rootViewController: UIViewController = UINavigationController(rootViewController: UIViewController())
+    
+    private var ownerReference: CKReference?
+    
+    private var navigationController: UINavigationController {
+        if let viewController = rootViewController as? UINavigationController {
+            return viewController
+        } else {
+            fatalError("Expects a UINavigationController!")
+        }
+    }
+
+    init(ownerReference: CKReference?) {
+        self.ownerReference = ownerReference
+
+        let saver = Resolved.recordSaver
+        let viewModel = AddFlyrVM(recordSaver: saver)
+        let postVC = AddFlyrVC(viewModel: viewModel, ownerReference: ownerReference)
+        navigationController.setViewControllers([postVC], animated: false)
+    }
+    
+    func start() {}
 }

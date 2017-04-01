@@ -14,10 +14,10 @@ import CloudKit
 
 class AddFlyrVC: UIViewController {
     fileprivate let viewModel: AddFlyrViewModeling
-    fileprivate let ownerReference: CKReference
+    fileprivate var ownerReference: CKReference?
     fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
-    init(viewModel: AddFlyrViewModeling, ownerReference: CKReference) {
+    init(viewModel: AddFlyrViewModeling, ownerReference: CKReference?) {
         self.viewModel = viewModel
         self.ownerReference = ownerReference
         super.init(nibName: nil, bundle: nil)
@@ -72,10 +72,6 @@ class AddFlyrVC: UIViewController {
         viewModel.shouldEnableCancelButtonOutput.onNext { [weak self] bool in
             self?.navigationItem.rightBarButtonItem?.isEnabled = bool
         }
-//
-//        viewModel.alertOutput.onNext { [weak self] in
-//            self?.present($0, animated: true, completion: nil)
-//        }
 
         viewModel.reloadRowAtIndexPathOutput.onNext { [weak self] in
             self?.tableView.reloadRows(at: [$0], with: .automatic)
