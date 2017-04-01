@@ -27,11 +27,6 @@ class Authenticator: Authenticating {
 
     init(defaultContainer: Container) {
         self.container = defaultContainer
-        self.container.fetchUserRecordID { [weak self] response in
-            guard case .successful(let recordID as CKRecordID) = response else { return }
-            let reference = CKReference(recordID: recordID, action: .none)
-            self?.user = User(ownerReference: reference)
-        }
     }
 
     func ownerReference() -> CKReference? {
@@ -44,7 +39,7 @@ class Authenticator: Authenticating {
 
     func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void) {
         if let user = user {
-            let response = Authenticator.AuthResponse.authenticated(user.ownerReference)
+            let response: Authenticator.AuthResponse = .authenticated(user.ownerReference)
             return completion(response)
         } else {
             authenticate(with: completion)
@@ -52,11 +47,12 @@ class Authenticator: Authenticating {
     }
     
     private func authenticate(with completion: @escaping (Authenticator.AuthResponse) -> Void) {
-        container.fetchUserRecordID { response in
+        container.fetchUserRecordID { [weak self] response in
             switch response {
             case .successful(let any):
                 guard let recordID = any as? CKRecordID else { return }
                 let reference = CKReference(recordID: recordID, action: .none)
+                self?.user = User(ownerReference: reference)
                 let response = Authenticator.AuthResponse.authenticated(reference)
                 completion(response)
             case .notSuccessful(let error):

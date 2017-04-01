@@ -25,9 +25,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Use your camera to post a new Flyr</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Tap 'Allow'</string>
+	<string>Your location will be used to show you the most relevant flyers.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Use your photo library to post a new Flyr</string>
+	<string>Use your photo library to post a new flyer.</string>
 	<key>PreferredLocation</key>
 	<dict>
 		<key>coordinate</key>

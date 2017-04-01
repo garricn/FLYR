@@ -120,12 +120,11 @@ class FeedCoordinator: Coordinator {
     private func completion(with response: LocationResponse) {
         switch response {
         case .didUpdateLocations(let locations):
-            print(locations)
             fetch(with: locations.last!)
         case .didFail(let error):
-            print(error)
+            assertionFailure("Handle error: \(error)")
         case .didFailAuthorization(let authorization):
-            print(authorization)
+            assertionFailure("Handle did fail authorization: \(authorization)")
         }
     }
     

@@ -19,7 +19,7 @@ extension CKDatabase: Database {
         self.perform(query, inZoneWith: nil) { records, error in
             let response: Response
 
-            if let records = records, records.count > 0 {
+            if let records = records, !records.isEmpty {
                 response = .successful(records)
             } else {
                 let _error: Error

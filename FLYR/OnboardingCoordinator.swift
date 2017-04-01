@@ -14,7 +14,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     
     weak var delegate: CoordinatorDelegate?
     
-    private(set) var selectedMode: FeedCoordinator.Mode = .losAngeles(losAngelesLocation)
+    private(set) var selectedMode: FeedCoordinator.Mode = .userLocation
     
     private enum State {
         case stepOne, stepTwo, stepThree, stepFour

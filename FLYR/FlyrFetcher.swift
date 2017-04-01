@@ -36,17 +36,20 @@ class FlyrFetcher: FlyrFetchable {
     }
 
     func fetch(with query: CKQuery) {
-        database.perform(query) { response in
-            guard case .successful(let records as CKRecords) = response else {
-                if case .notSuccessful(let error) = response { self.errorOutput.emit(error) }
-                return
-            }
-
-            let flyrs = records.map(toFlyr)
-            self.output.emit(flyrs)
+        database.perform(query, completion: completion)
+    }
+    
+    private func completion(with response: Response) {
+        switch response {
+        case .successful(let records):
+            guard let records = records as? CKRecords else { return }
+            output.emit(records.map(toFlyr))
+        case .notSuccessful(let error):
+            errorOutput.emit(error)
         }
     }
 }
+
 
 struct GGNError: Error {
     let message: String

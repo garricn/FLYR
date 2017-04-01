@@ -13,18 +13,23 @@ import GGNLocationPicker
 import MapKit
 import CoreLocation
 
-class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDelegate {
+protocol LaunchNavigationControllerDelegate: class {
+    func viewDidAppear(in launchNavigationController: LaunchNavigationController)
+}
+
+final class LaunchNavigationController: UINavigationController {
     
-    var rootViewController: UIViewController {
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .red
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.delegate = self
-        
-        let tabBarController = UITabBarController()
-        tabBarController.setViewControllers([navigationController], animated: true)
-        return tabBarController
+    weak var launchDelegate: LaunchNavigationControllerDelegate?
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        launchDelegate?.viewDidAppear(in: self)
     }
+}
+
+class AppCoordinator: NSObject, LaunchNavigationControllerDelegate, CoordinatorDelegate {
+    
+    var rootViewController: UIViewController!
 
     private let appState: AppState
     private let authenticator: Authenticating
@@ -44,6 +49,14 @@ class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDeleg
     }
     
     func start() {
+        let viewController = UIViewController()
+        let navigationController = LaunchNavigationController(rootViewController: viewController)
+        navigationController.launchDelegate = self
+        
+        let tabBarController = UITabBarController()
+        tabBarController.setViewControllers([navigationController], animated: true)
+        rootViewController = tabBarController
+
         DispatchQueue.global().async {
             self.authenticator.authenticate()
         }
@@ -64,12 +77,9 @@ class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDeleg
         }
     }
     
-    // MARK: - UINavigationControllerDelegate
-
-    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-    }
+    // MARK: - LaunchNavigationControllerDelegate
     
-    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+    func viewDidAppear(in launchNavigationController: LaunchNavigationController) {
         if appState.isExistingUser {
             startFeed(with: appState.feedMode)
         } else {
@@ -77,7 +87,7 @@ class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDeleg
             let coordinator = OnboardingCoordinator(locationManager: locationManager)
             coordinator.delegate = self
             coordinator.start()
-            navigationController.present(coordinator.rootViewController, animated: true) {
+            launchNavigationController.present(coordinator.rootViewController, animated: true) {
                 self.childCoordinators["onboarding"] = coordinator
             }
         }
@@ -87,6 +97,8 @@ class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDeleg
     
     // TODO: - Inject Coordinators with AppState (full/partial?)
     private func startFeed(with mode: FeedCoordinator.Mode) {
+        
+        // Feed
         let fetcher0 = Resolved.flyrFetcher
         let manager = LocationManager()
         let feedCoordinator = FeedCoordinator(mode: mode, fetcher: fetcher0, locationManager: manager)
@@ -98,10 +110,12 @@ class AppCoordinator: NSObject, UINavigationControllerDelegate, CoordinatorDeleg
         feedVC.tabBarItem = UITabBarItem(title: "FEED", image: UIImage(), tag: 0)
         feedVC.tabBarItem.accessibilityLabel = "FEED"
         
+        // Profile
         let fetcher1 = Resolved.flyrFetcher
         let reference = authenticator.ownerReference()
         let profileCoordinator = ProfileCoordinator(fetcher: fetcher1, ownerReference: reference)
         profileCoordinator.delegate = self
+        profileCoordinator.start()
         childCoordinators["profile"] = profileCoordinator
         
         let profileVC = profileCoordinator.rootViewController

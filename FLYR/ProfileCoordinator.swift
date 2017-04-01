@@ -32,6 +32,10 @@ class ProfileCoordinator: Coordinator {
     }
 
     func start() {
+        guard let reference = ownerReference else {
+            return
+        }
+
         fetcher.output.onNext { flyrs in
             let viewModel = ProfileVM(model: flyrs)
             let viewController = FlyrTableVC(viewModel: viewModel)
@@ -42,7 +46,7 @@ class ProfileCoordinator: Coordinator {
             }
         }
         
-        let predicate = NSPredicate(format: "ownerReference == %@", ownerReference!)
+        let predicate = NSPredicate(format: "ownerReference == %@", reference)
         let query = CKQuery(recordType: "Flyr", predicate: predicate)
         let operation = CKQueryOperation(query: query)
         fetcher.fetch(with: operation, and: query)
