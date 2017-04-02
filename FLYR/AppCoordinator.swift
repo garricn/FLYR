@@ -70,7 +70,6 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         }
     }
     
-    
     // MARK: - CoordinatorDelegate
     
     func coordinatorIsReady(coordinator: Coordinator) {

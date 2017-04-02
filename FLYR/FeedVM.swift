@@ -36,7 +36,7 @@ func makePreferredLocationAlert() -> UIAlertController {
 }
 
 func makeAlert(from error: Error?) -> UIAlertController {
-    return makeAlert(title: "Error", message: "\(error)")
+    return makeAlert(title: "Error", message: "\(error!)")
 }
 
 func makeAlert(title: String?, message: String?) -> UIAlertController {
