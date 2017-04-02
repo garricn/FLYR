@@ -10,9 +10,7 @@ import CloudKit
 import GGNObservable
 
 protocol Authenticating {
-    var ownerReference: CKReference? { get }
-    func authenticate()
-    func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void)
+    func authenticate(with completion: @escaping (Authenticator.AuthResponse) -> Void)
 }
 
 class Authenticator: Authenticating {
@@ -21,39 +19,19 @@ class Authenticator: Authenticating {
         case authenticated(CKReference)
         case notAuthenticated(Error)
     }
-    
-    var ownerReference: CKReference? {
-        return user?.ownerReference
-    }
 
     private let container: Container
-    private var user: User?
 
     init(defaultContainer: Container) {
         self.container = defaultContainer
     }
-
     
-    func authenticate() {
-        authenticate(completion: { _ in })
-    }
-
-    func authenticate(completion: @escaping (Authenticator.AuthResponse) -> Void) {
-        if let user = user {
-            let response: Authenticator.AuthResponse = .authenticated(user.ownerReference)
-            return completion(response)
-        } else {
-            authenticate(with: completion)
-        }
-    }
-    
-    private func authenticate(with completion: @escaping (Authenticator.AuthResponse) -> Void) {
-        container.fetchUserRecordID { [weak self] response in
+    func authenticate(with completion: @escaping (Authenticator.AuthResponse) -> Void) {
+        container.fetchUserRecordID { response in
             switch response {
             case .successful(let any):
                 guard let recordID = any as? CKRecordID else { return }
                 let reference = CKReference(recordID: recordID, action: .none)
-                self?.user = User(ownerReference: reference)
                 let response = Authenticator.AuthResponse.authenticated(reference)
                 completion(response)
             case .notSuccessful(let error):

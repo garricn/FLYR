@@ -52,7 +52,5 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
-	<key>isExistingUser</key>
-	<false/>
 </dict>
 </plist>

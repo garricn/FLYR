@@ -8,6 +8,8 @@
 
 import UIKit
 import CloudKit
+import GGNLocationPicker
+import MapKit
 
 class ProfileCoordinator: Coordinator {
     weak var delegate: CoordinatorDelegate?
@@ -16,7 +18,7 @@ class ProfileCoordinator: Coordinator {
     
     private let loadingVC = LoadingVC()
     private let fetcher: FlyrFetchable
-    private var ownerReference: CKReference?
+    private let appState: ProfileAppState
     
     private var navigationController: UINavigationController {
         if let viewController = rootViewController as? UINavigationController {
@@ -26,23 +28,25 @@ class ProfileCoordinator: Coordinator {
         }
     }
     
-    init(fetcher: FlyrFetchable, ownerReference: CKReference?) {
+    init(appState: ProfileAppState, fetcher: FlyrFetchable) {
+        self.appState = appState
         self.fetcher = fetcher
-        self.ownerReference = ownerReference
     }
 
     func start() {
-        guard let reference = ownerReference else {
+        guard let reference = appState.ownerReference else {
             return
         }
 
-        fetcher.output.onNext { flyrs in
-            let viewModel = ProfileVM(model: flyrs)
-            let viewController = FlyrTableVC(viewModel: viewModel)
+        fetcher.output.onNext { [weak self] flyrs in
+            guard let weakSelf = self else { return }
+            
+            let viewController = weakSelf.resolvedFlyrTableVC(with: flyrs)
             let viewControllers = [viewController]
             
             DispatchQueue.main.async {
-                self.navigationController.setViewControllers(viewControllers, animated: false)
+                weakSelf.navigationController.setViewControllers(viewControllers, animated: true)
+                weakSelf.delegate?.coordinatorIsReady(coordinator: weakSelf)
             }
         }
         
@@ -50,5 +54,11 @@ class ProfileCoordinator: Coordinator {
         let query = CKQuery(recordType: "Flyr", predicate: predicate)
         let operation = CKQueryOperation(query: query)
         fetcher.fetch(with: operation, and: query)
+    }
+    
+    private func resolvedFlyrTableVC(with flyrs: Flyrs) -> UIViewController {
+        let viewModel = ProfileVM(model: flyrs)
+        let viewController = FlyrTableVC(viewModel: viewModel)
+        return viewController
     }
 }

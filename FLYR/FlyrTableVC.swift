@@ -9,7 +9,8 @@
 import UIKit
 import GGNObservable
 
-class FlyrTableVC: UITableViewController {
+final class FlyrTableVC: UITableViewController {
+
     private let viewModel: FlyrViewModeling
 
     init(viewModel: FlyrViewModeling) {
@@ -18,15 +19,17 @@ class FlyrTableVC: UITableViewController {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        self.viewModel = FeedVM(model: [])
-        super.init(coder: aDecoder)
+        fatalError("Init with coder not implemeneted!")
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refreshControl = UIRefreshControl()
+        tableView.showsVerticalScrollIndicator = false
+        tableView.register(FlyrCell.self, forCellReuseIdentifier: FlyrCell.identifier)
     }
+    
+    // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.numberOfSections()

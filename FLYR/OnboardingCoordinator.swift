@@ -14,7 +14,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     
     weak var delegate: CoordinatorDelegate?
     
-    private(set) var selectedMode: FeedCoordinator.Mode = .userLocation
+    private(set) var selectedFeedMode: FeedCoordinator.Mode = .losAngeles
     
     private enum State {
         case stepOne, stepTwo, stepThree, stepFour
@@ -101,7 +101,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
             state = .stepThree
         case .stepThree:
             state = .stepFour
-            selectedMode = .losAngeles(losAngelesLocation)
+            selectedFeedMode = .losAngeles
         case .stepFour:
             break
         }
@@ -134,7 +134,7 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
         switch response {
         case .authorizationGranted:
             state = .stepFour
-            selectedMode = .userLocation
+            selectedFeedMode = .userLocation(nil)
         case .authorizationDenied, .authorizationRestricted, .servicesNotEnabled:
             state = .stepThree
         }
@@ -143,8 +143,10 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     private func presentPreferredLocationVC() {
         let locationPicker = LocationPickerVC()
         locationPicker.didPick = { [weak self] annotaion in
-            self?.state = .stepFour
-            self?.selectedMode = .preferredLocation(annotaion.location)
+            self?.rootViewController.dismiss(animated: true) {
+                self?.selectedFeedMode = .preferred(annotaion)
+                self?.state = .stepFour
+            }
         }
         let navigationController = UINavigationController(rootViewController: locationPicker)
         rootViewController.present(navigationController, animated: true)

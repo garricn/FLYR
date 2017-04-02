@@ -57,14 +57,16 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         let viewController = UIViewController()
         let navigationController = LaunchNavigationController(rootViewController: viewController)
         navigationController.launchDelegate = self
-        
+
         let tabBarController = UITabBarController()
         tabBarController.setViewControllers([navigationController], animated: true)
         tabBarController.delegate = self
         rootViewController = tabBarController
 
         DispatchQueue.global().async {
-            self.authenticator.authenticate()
+            self.authenticator.authenticate { [weak self] response in
+                self?.authenticationCompletion(response: response)
+            }
         }
     }
     
@@ -77,10 +79,13 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
     
     func coordinatorDidFinish(coordinator: Coordinator) {
         if let coordinator = coordinator as? OnboardingCoordinator {
-            startFeed(with: coordinator.selectedMode)
+            let selectedFeedMode = coordinator.selectedFeedMode
+            
+            startFeed(with: selectedFeedMode)
 
             coordinator.rootViewController.dismiss(animated: true) {
                 self.childCoordinators.removeValue(forKey: "onboarding")
+                self.appState.onboardingCompleted(with: selectedFeedMode)
             }
         }
     }
@@ -108,7 +113,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
             return true
         }
         
-        let postCoordinator = PostCoordinator(ownerReference: authenticator.ownerReference)
+        let postCoordinator = PostCoordinator(ownerReference: appState.ownerReference)
         postCoordinator.delegate = self
         postCoordinator.start()
 
@@ -124,9 +129,9 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
     private func startFeed(with mode: FeedCoordinator.Mode) {
         
         // Feed
-        let fetcher0 = Resolved.flyrFetcher
+        let fetcher = Resolved.flyrFetcher
         let manager = LocationManager()
-        let feedCoordinator = FeedCoordinator(mode: mode, fetcher: fetcher0, locationManager: manager)
+        let feedCoordinator = FeedCoordinator(appState: appState, fetcher: fetcher, locationManager: manager)
         feedCoordinator.delegate = self
         feedCoordinator.start()
         childCoordinators["feed"] = feedCoordinator
@@ -141,9 +146,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         postVC.accessibilityLabel = "POST"
 
         // Profile
-        let fetcher1 = Resolved.flyrFetcher
-        let reference = authenticator.ownerReference
-        let profileCoordinator = ProfileCoordinator(fetcher: fetcher1, ownerReference: reference)
+        let profileCoordinator = ProfileCoordinator(appState: appState, fetcher: Resolved.flyrFetcher)
         profileCoordinator.delegate = self
         profileCoordinator.start()
         childCoordinators["profile"] = profileCoordinator
@@ -154,6 +157,13 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         
         let viewControllers = [feedVC, postVC, profileVC]
         tabBarController.setViewControllers(viewControllers, animated: true)
+    }
+    
+    private func authenticationCompletion(response: Authenticator.AuthResponse) {
+        switch response {
+        case .authenticated(let reference): appState.authenticationCompleted(with: reference)
+        case .notAuthenticated(let error): fatalError("Error authenticating: \(error)")
+        }
     }
 }
 

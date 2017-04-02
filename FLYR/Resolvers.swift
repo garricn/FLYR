@@ -13,7 +13,7 @@ enum Resolved {}
 
 extension Resolved {
     static var appCoordinator: AppCoordinator {
-        return AppCoordinator(appState: AppState(), authenticator: Resolved.authenticator)
+        return AppCoordinator(appState: AppState.loadAppState(), authenticator: Resolved.authenticator)
     }
     
     private static var authenticator: Authenticating {

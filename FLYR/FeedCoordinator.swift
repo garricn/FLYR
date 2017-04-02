@@ -6,24 +6,60 @@
 //  Copyright © 2017 Garric Nahapetian. All rights reserved.
 //
 
-//import UIKit
 import MapKit
 import CloudKit
 import GGNLocationPicker
 
 class FeedCoordinator: Coordinator {
     
-    enum Mode {
-        case userLocation
-        case preferredLocation(CLLocation)
-        case losAngeles(CLLocation)
+    enum Mode: Equatable {
+        case userLocation(MKAnnotation?)
+        case preferred(MKAnnotation)
+        case losAngeles
+        
+        init?(integer: Int, annotation: MKAnnotation) {
+            switch integer {
+            case 0: self = .userLocation(nil)
+            case 1: self = .preferred(annotation)
+            case 2: self = .losAngeles
+            default: return nil
+            }
+        }
+        
+        static func ==(lhs: Mode, rhs: Mode) -> Bool {
+            return lhs.integerValue == rhs.integerValue
+        }
+        
+        var integerValue: Int {
+            switch self {
+            case .userLocation: return 0
+            case .preferred: return 1
+            case .losAngeles: return 2
+            }
+        }
+        
+        var displayName: String {
+            switch self {
+            case .userLocation: return "Current Location"
+            case .preferred: return "Preferred Location"
+            case .losAngeles: return "Los Angeles"
+            }
+        }
+        
+        var annotation: MKAnnotation? {
+            switch self {
+            case .userLocation(let annotation): return annotation
+            case .preferred(let annotation): return annotation
+            case .losAngeles: return losAngelesAnnotation
+            }
+        }
     }
     
     weak var delegate: CoordinatorDelegate?
     
     let rootViewController: UIViewController = UINavigationController(rootViewController: LoadingVC())
     
-    private let mode: Mode
+    private let appState: FeedAppState
     private let fetcher: FlyrFetchable
     private let locationManager: LocationManageable
     private let loadingVC = LoadingVC()
@@ -53,20 +89,20 @@ class FeedCoordinator: Coordinator {
         return annotation
     }
     
-    init(mode: FeedCoordinator.Mode,
+    init(appState: FeedAppState,
          fetcher: FlyrFetchable, locationManager: LocationManageable) {
-        self.mode = mode
+        self.appState = appState
         self.fetcher = fetcher
         self.locationManager = locationManager
     }
     
     func start() {
-        switch mode {
+        switch appState.feedMode {
         case .userLocation: startUserLocationMode()
-        case .preferredLocation(let location): startFeed(with: location)
-        case .losAngeles(let location): startFeed(with: location)
+        case .preferred(let annotation): startFeed(with: annotation.location)
+        case .losAngeles: startFeed(with: losAngelesAnnotation.location)
         }
-        
+
         fetcher.output.onNext { [weak self] flyrs in
             guard let weakSelf = self else { return }
 
@@ -80,47 +116,101 @@ class FeedCoordinator: Coordinator {
         }
     }
     
-    private func resolvedFeedVC(with flyrs: Flyrs) -> FlyrTableVC {
-        let leftBarButtonItem = UIBarButtonItem(
-            title: "◉",
-            style: .plain,
-            target: self,
-            action: #selector(locationButtonTapped))
-        let gestureRecognizer = UILongPressGestureRecognizer(
-            target: self,
-            action: #selector(onLongPress))
-        
-        let viewModel = FeedVM(model: flyrs)
-        let viewController = FlyrTableVC(viewModel: viewModel)
-        viewController.navigationItem.leftBarButtonItem = leftBarButtonItem
-        viewController.tableView.addGestureRecognizer(gestureRecognizer)
-        viewController.tableView.showsVerticalScrollIndicator = false
-        viewController.tableView.register(FlyrCell.self, forCellReuseIdentifier: FlyrCell.identifier)
-        viewController.refreshControl?.addTarget(self, action: #selector(onPullToRefresh), for: .valueChanged)
-        return viewController
-    }
+    // MARK: - Feed Start Modes
     
     private func startFeed(with location: CLLocation) {
-        
+        fetch(with: location)
     }
-    
-    // MARK: - User Location Mode
 
     private func startUserLocationMode() {
         locationManager.requestLocation { [weak self] response in
-            self?.completion(with: response)
+            self?.requestLocationCompletion(with: response)
         }
     }
     
-    private func completion(with response: LocationResponse) {
+    private func requestLocationCompletion(with response: LocationResponse) {
         switch response {
         case .didUpdateLocations(let locations):
             fetch(with: locations.last!)
+            appState.didReceive(userLocation: locations.last!)
         case .didFail(let error):
             assertionFailure("Handle error: \(error)")
         case .didFailAuthorization(let authorization):
             assertionFailure("Handle did fail authorization: \(authorization)")
         }
+    }
+
+    // MARK: - Private Functions
+    
+    private func resolvedFeedVC(with flyrs: Flyrs) -> FlyrTableVC {
+        let viewModel = FeedVM(model: flyrs)
+        let viewController = FlyrTableVC(viewModel: viewModel)
+        let selector = #selector(didTapSettingsBarButtonItem)
+        let rightBarButtonItem = UIBarButtonItem(title: "⚙️", style: .plain, target: self, action: selector)
+        viewController.navigationItem.rightBarButtonItem = rightBarButtonItem
+        return viewController
+    }
+    
+    @objc private func didTapSettingsBarButtonItem(sender: UIBarButtonItem) {
+        let description: String
+        let mode = appState.feedMode
+        
+        switch mode {
+        case .preferred(let annotation): description = "\(mode.displayName): \(annotation.displayName)"
+        default: description = mode.displayName
+        }
+        
+        let title = "Current Feed Mode is:\n\(description)"
+        let message = "Feel free to select a different mode:"
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
+        let current = UIAlertAction(title: "Current Location", style: .default, handler: currentHandler)
+        let preferred = UIAlertAction(title: "Preferred Location", style: .default, handler: preferredHandler)
+        let losAngeles = UIAlertAction(title: "Los Angeles", style: .default, handler: losAngelesHandler)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let actions: [UIAlertAction]
+        switch appState.feedMode {
+        case .userLocation: actions = [preferred, losAngeles]
+        case .preferred: actions = [current, preferred, losAngeles]
+        case .losAngeles: actions = [current, preferred]
+        }
+        
+        actions.forEach { action in
+            alertController.addAction(action)
+        }
+        
+        alertController.addAction(cancel)
+        
+        rootViewController.present(alertController, animated: true, completion: nil)
+    }
+    
+    private func currentHandler(action: UIAlertAction) {
+        startUserLocationMode()
+    }
+    
+    private func preferredHandler(action: UIAlertAction) {
+        let selector = #selector(didTapCancelBarButtonItem)
+        let rightBarButton = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: selector)
+        let locationPickerVC = LocationPickerVC(with: appState.feedMode.annotation)
+        locationPickerVC.didPick = annotationCompletion
+        locationPickerVC.navigationItem.title = "Preferred Location"
+        locationPickerVC.navigationItem.rightBarButtonItem = rightBarButton
+        let navigationController = UINavigationController(rootViewController: locationPickerVC)
+        rootViewController.present(navigationController, animated: true, completion: nil)
+        
+    }
+    
+    private func losAngelesHandler(action: UIAlertAction) {
+        appState.didSelect(newFeedMode: .losAngeles)
+    }
+    
+    @objc private func didTapCancelBarButtonItem(sender: UIBarButtonItem) {
+        rootViewController.dismiss(animated: true, completion: nil)
+    }
+    
+    private func annotationCompletion(annotation: MKAnnotation) {
+        appState.didSelect(newFeedMode: .preferred(annotation))
+        rootViewController.dismiss(animated: true, completion: nil)
     }
     
     private func fetch(with location: CLLocation) {
@@ -139,59 +229,9 @@ class FeedCoordinator: Coordinator {
         return CKQuery(recordType: "Flyr", predicate: predicate)
     }
     
-    // MARK: - Private Functions
+    // MARK: - FlyrTableViewControllerDelegate
     
-    @objc private func locationButtonTapped() {
-        let locationPicker = LocationPickerVC(with: preferredLocation)
-        locationPicker.navigationItem.title = "Set Search Area"
-        locationPicker.navigationItem.rightBarButtonItem = makeCancelButton(for: locationPicker)
-        locationPicker.didPick = {
-            self.save(preferredLocation: $0)
-            locationPicker.presentingViewController?.dismiss(animated: true, completion: nil)
-        }
+    func didLongPress(at indexPath: IndexPath, in viewController: FlyrTableVC) {
         
-        let vc = UINavigationController(rootViewController: locationPicker)
-        rootViewController.present(vc, animated: true, completion: nil)
-    }
-    
-    @objc private func addButtonTapped() {
-    }
-    
-    @objc private func onPullToRefresh() {}
-    
-    @objc private func onLongPress() {}
-    
-    private func save(preferredLocation annotation: MKAnnotation) {
-        let preferredLocation: [String: Any] = [
-            "title": (annotation.title!)!,
-            "subtitle": (annotation.subtitle!)!,
-            "coordinate": [
-                "latitude": annotation.coordinate.latitude,
-                "longitude": annotation.coordinate.longitude
-            ]
-        ]
-    
-        UserDefaults.standard.set(preferredLocation, forKey: "PreferredLocation")
-        UserDefaults.standard.synchronize()
     }
 }
-
-
-extension MKAnnotation {
-    var location: CLLocation {
-        return CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-    }
-}
-
-
-
-
-
-//
-//private func pointAnnotation(from annotation: MKAnnotation) -> MKPointAnnotation {
-//    let pointAnnotation = MKPointAnnotation()
-//    pointAnnotation.coordinate = annotation.coordinate
-//    pointAnnotation.title = annotation.title!
-//    pointAnnotation.subtitle = annotation.subtitle!
-//    return pointAnnotation
-//}

@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import MapKit
 
 // MARK: - Properties
 
@@ -20,7 +21,13 @@ let screenHeight = screenBounds.height
 // MARK: Locations
 
 let losAngelesCoordinate = CLLocationCoordinate2D(latitude: 34.0432464, longitude: -118.267463)
-let losAngelesLocation = CLLocation(latitude: losAngelesCoordinate.latitude, longitude: losAngelesCoordinate.longitude)
+var losAngelesAnnotation: MKAnnotation {
+    let annotation = MKPointAnnotation()
+    annotation.coordinate = losAngelesCoordinate
+    annotation.title = "Los Angeles, CA"
+    annotation.subtitle = "Best City in the World!"
+    return annotation
+}
 
 // MARK: - Functions
 func rowHeight(from image: UIImage) -> CGFloat {
