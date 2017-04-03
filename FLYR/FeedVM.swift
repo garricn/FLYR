@@ -8,48 +8,46 @@
 
 import UIKit
 import GGNObservable
-import CloudKit
 
 class FeedVM: FlyrViewModeling {
-    let alertOutput = Observable<UIAlertController>()
+    let output = Observable<Flyrs>()
 
-    let model: Flyrs
+    weak var delegate: FlyrViewModelingDelegate?
+
+    private var model: Flyrs
 
     init(model: Flyrs) {
         self.model = model
     }
-}
+    
+    func didPullToRefresh() {
+        delegate?.didPullToRefresh(in: self)
+    }
+    
+    func didReceive(_ flyrs: Flyrs) {
+        model = flyrs
+        output.emit(flyrs)
+    }
 
-func makePreferredLocationAlert() -> UIAlertController {
-    let alert = makeAlert(
-        title: "Authorization Denied",
-        message: "You denied location services authorization."
-    )
-    let setPreferredLocationAction = UIAlertAction(
-        title: "Set Preferred Location",
-        style: .default,
-        handler: { _ in
-//            AppCoordinator.sharedInstance.locationButtonTapped()
-    })
-    alert.addAction(setPreferredLocationAction)
-    return alert
-}
-
-func makeAlert(from error: Error?) -> UIAlertController {
-    return makeAlert(title: "Error", message: "\(error!)")
-}
-
-func makeAlert(title: String?, message: String?) -> UIAlertController {
-    let okAction = UIAlertAction(
-        title: "OK",
-        style: .default,
-        handler: nil
-    )
-    let alert = UIAlertController(
-        title: title,
-        message: message,
-        preferredStyle: .alert
-    )
-    alert.addAction(okAction)
-    return alert
+    func numberOfSections() -> Int {
+        return 1
+    }
+    
+    func numbersOfRows(inSection section: Int) -> Int {
+        return model.count
+    }
+    
+    func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
+        let item = model[indexPath.row]
+        let identifier = FlyrCell.identifier
+        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: identifier)
+        let cell = dequeuedCell as? FlyrCell ?? FlyrCell()
+        cell._imageView.image = item.image
+        return cell
+    }
+    
+    func heightForRow(at indexPath: IndexPath) -> CGFloat {
+        let image = model[indexPath.row].image
+        return rowHeight(from: image)
+    }
 }

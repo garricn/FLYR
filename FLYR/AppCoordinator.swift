@@ -125,7 +125,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
     
     // MARK: - Private Functions
     
-    private func startFeed(with mode: FeedCoordinator.Mode) {
+    private func startFeed(with mode: FeedMode) {
         
         // Feed
         let fetcher = Resolved.flyrFetcher

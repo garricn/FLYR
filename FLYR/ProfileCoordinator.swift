@@ -16,7 +16,6 @@ class ProfileCoordinator: Coordinator {
     
     let rootViewController: UIViewController = UINavigationController(rootViewController: LoadingVC())
     
-    private let loadingVC = LoadingVC()
     private let fetcher: FlyrFetchable
     private let appState: ProfileAppState
     

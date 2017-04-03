@@ -7,11 +7,19 @@
 //
 
 import GGNObservable
-import CoreLocation
-import MapKit
 
-protocol FlyrViewModeling: TableViewDataSource {
-    var model: Flyrs { get }
+protocol FlyrViewModelingDelegate: class {
+    func didPullToRefresh(in viewModel: FlyrViewModeling)
+}
+
+protocol FlyrViewModeling: TableViewDataSource, FlyrInteracting {
+    var output: Observable<Flyrs> { get }
+    weak var delegate: FlyrViewModelingDelegate? { get set }
+    func didReceive(_ flyrs: Flyrs)
+}
+
+protocol FlyrInteracting {
+    func didPullToRefresh()
 }
 
 protocol TableViewDataSource {
@@ -19,29 +27,4 @@ protocol TableViewDataSource {
     func numbersOfRows(inSection section: Int) -> Int
     func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell
     func heightForRow(at indexPath: IndexPath) -> CGFloat
-}
-
-extension FlyrViewModeling {
-
-    func numberOfSections() -> Int {
-        return 1
-    }
-    
-    func numbersOfRows(inSection section: Int) -> Int {
-        return model.count
-    }
-    
-    func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
-        let item = model[indexPath.row]
-        let identifier = FlyrCell.identifier
-        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: identifier)
-        let cell = dequeuedCell as? FlyrCell ?? FlyrCell()
-        cell._imageView.image = item.image
-        return cell
-    }
-    
-    func heightForRow(at indexPath: IndexPath) -> CGFloat {
-        let image = model[indexPath.row].image
-        return rowHeight(from: image)
-    }
 }

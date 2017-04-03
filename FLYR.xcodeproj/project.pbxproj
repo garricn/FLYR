@@ -44,6 +44,7 @@
 		6078D2F61E90991E00A7EFB4 /* MKAnnotationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6078D2F51E90991E00A7EFB4 /* MKAnnotationExtensions.swift */; };
 		609FE3A31E8CA7BD00E7CE61 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */; };
 		609FE3A51E8CA7EC00E7CE61 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */; };
+		60D769421E90B8AD000CB220 /* FeedMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D769411E90B8AD000CB220 /* FeedMode.swift */; };
 		60F9B75C1E887B4F004B8437 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75B1E887B4F004B8437 /* Private.swift */; };
 		60F9B7601E888205004B8437 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75D1E888205004B8437 /* BaseView.swift */; };
 		60F9B7611E888205004B8437 /* LoadingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75E1E888205004B8437 /* LoadingVC.swift */; };
@@ -119,6 +120,7 @@
 		6078D2F51E90991E00A7EFB4 /* MKAnnotationExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKAnnotationExtensions.swift; sourceTree = "<group>"; };
 		609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		60D769411E90B8AD000CB220 /* FeedMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedMode.swift; sourceTree = "<group>"; };
 		60F9B75B1E887B4F004B8437 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		60F9B75D1E888205004B8437 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		60F9B75E1E888205004B8437 /* LoadingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingVC.swift; sourceTree = "<group>"; };
@@ -204,8 +206,6 @@
 				60F9B7691E889CFE004B8437 /* AppState.swift */,
 				60F9B75D1E888205004B8437 /* BaseView.swift */,
 				60F9B7671E8893F1004B8437 /* Coordinator.swift */,
-				60F9B7631E889388004B8437 /* FeedCoordinator.swift */,
-				4E1D74191D505E2700648603 /* FeedVM.swift */,
 				4E0C2D701D60DD08008BA952 /* FlyrCell.swift */,
 				4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */,
 				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
@@ -213,13 +213,13 @@
 				60F9B75E1E888205004B8437 /* LoadingVC.swift */,
 				60F9B75F1E888205004B8437 /* LoadingView.swift */,
 				60F9B75B1E887B4F004B8437 /* Private.swift */,
-				60F9B7651E8893B0004B8437 /* ProfileCoordinator.swift */,
-				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
 				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
-				6078D2F41E9098C800A7EFB4 /* EXTENSIONS */,
 				4EDCC28A1D8F4E070010FEEA /* ADD FLYR */,
+				6078D2F41E9098C800A7EFB4 /* EXTENSIONS */,
+				60D769431E90B8DC000CB220 /* FEED */,
 				4E401A4A1DA8AE0F00AA1C1F /* MODEL OBJECTS */,
 				609FE3A61E8CA7FD00E7CE61 /* ONBOARDING */,
+				60D769441E90B8EF000CB220 /* PROFILE */,
 				4EDCC28D1D8F50530010FEEA /* SERVICES */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
 			);
@@ -318,6 +318,25 @@
 				609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */,
 			);
 			name = ONBOARDING;
+			sourceTree = "<group>";
+		};
+		60D769431E90B8DC000CB220 /* FEED */ = {
+			isa = PBXGroup;
+			children = (
+				60F9B7631E889388004B8437 /* FeedCoordinator.swift */,
+				4E1D74191D505E2700648603 /* FeedVM.swift */,
+				60D769411E90B8AD000CB220 /* FeedMode.swift */,
+			);
+			name = FEED;
+			sourceTree = "<group>";
+		};
+		60D769441E90B8EF000CB220 /* PROFILE */ = {
+			isa = PBXGroup;
+			children = (
+				60F9B7651E8893B0004B8437 /* ProfileCoordinator.swift */,
+				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
+			);
+			name = PROFILE;
 			sourceTree = "<group>";
 		};
 		DF26F170CA0A977037507FCD /* Frameworks */ = {
@@ -569,6 +588,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */,
+				60D769421E90B8AD000CB220 /* FeedMode.swift in Sources */,
 				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,

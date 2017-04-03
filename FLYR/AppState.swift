@@ -22,21 +22,21 @@ final class AppState: NSObject, NSCoding {
     }
     
     var isExistingUser: Bool = false
-    var feedMode: FeedCoordinator.Mode = .losAngeles
+    var feedMode: FeedMode = .losAngeles
     var ownerReference: CKReference?
     
     private static let archiveURL = AppState.documentsDirectory.appendingPathComponent("appState")
     private static let documentsDirectory = FileManager.default.urls(for: .documentDirectory,
                                                                      in: .userDomainMask).first!
     
-    init(isExistingUser: Bool = false, feedMode: FeedCoordinator.Mode? = .losAngeles) {
+    init(isExistingUser: Bool = false, feedMode: FeedMode? = .losAngeles) {
         self.isExistingUser = isExistingUser
         self.feedMode = feedMode ?? .losAngeles
     }
     
     convenience init?(coder aDecoder: NSCoder) {
         let feedModeInteger = aDecoder.decodeInteger(forKey: Keys.feedMode)
-        let preferredInteger = FeedCoordinator.Mode.preferred(MKPointAnnotation()).integerValue
+        let preferredInteger = FeedMode.preferred(MKPointAnnotation()).integerValue
         let annotation = MKPointAnnotation()
         
         if feedModeInteger == preferredInteger {
@@ -50,7 +50,7 @@ final class AppState: NSObject, NSCoding {
             annotation.subtitle = annotationSubtitle            
         }
 
-        let feedMode = FeedCoordinator.Mode.init(integer: feedModeInteger, annotation: annotation)
+        let feedMode = FeedMode.init(integer: feedModeInteger, annotation: annotation)
         let isExistingUser = aDecoder.decodeBool(forKey: Keys.isExistingUser)
         
         self.init(isExistingUser: isExistingUser, feedMode: feedMode)
@@ -72,7 +72,7 @@ final class AppState: NSObject, NSCoding {
         }
     }
     
-    func onboardingCompleted(with selectedFeedMode: FeedCoordinator.Mode) {
+    func onboardingCompleted(with selectedFeedMode: FeedMode) {
         isExistingUser = true
         feedMode = selectedFeedMode
         archive()
@@ -99,14 +99,14 @@ final class AppState: NSObject, NSCoding {
 }
 
 protocol FeedAppState {
-    var feedMode: FeedCoordinator.Mode { get }
+    var feedMode: FeedMode { get }
     func didReceive(userLocation: CLLocation)
-    func didSelect(newFeedMode mode: FeedCoordinator.Mode)
+    func didSelect(newFeedMode mode: FeedMode)
 }
 
 extension AppState: FeedAppState {
     
-    func didSelect(newFeedMode mode: FeedCoordinator.Mode) {
+    func didSelect(newFeedMode mode: FeedMode) {
         feedMode = mode
         archive()
     }

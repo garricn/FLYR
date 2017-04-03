@@ -25,8 +25,24 @@ final class FlyrTableVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        refreshControl = UIRefreshControl()
+        refreshControl?.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        
         tableView.showsVerticalScrollIndicator = false
         tableView.register(FlyrCell.self, forCellReuseIdentifier: FlyrCell.identifier)
+        
+        viewModel.output.onNext { [weak self] flyrs in
+            DispatchQueue.main.async {
+                self?.refreshControl?.endRefreshing()
+                self?.tableView.reloadData()                
+            }
+        }
+    }
+    
+    // MARK: - Private Selectors
+    
+    @objc private func didPullToRefresh(sender: UIRefreshControl) {
+        viewModel.didPullToRefresh()
     }
     
     // MARK: - UITableViewDataSource

@@ -15,6 +15,7 @@ typealias Flyrs = [Flyr]
 
 protocol FlyrFetchable {
     var output: Observable<Flyrs> { get }
+    var refreshOutput: Observable<Flyrs> { get }
     var errorOutput: Observable<Error?> { get }
     func fetch(with query: CKQuery)
     func fetch(with operation: CKQueryOperation, and query: CKQuery)
@@ -22,6 +23,7 @@ protocol FlyrFetchable {
 
 class FlyrFetcher: FlyrFetchable {
     let output = Observable<Flyrs>()
+    let refreshOutput = Observable<Flyrs>()
     let errorOutput = Observable<Error?>()
 
     fileprivate let database: Database
@@ -43,7 +45,9 @@ class FlyrFetcher: FlyrFetchable {
         switch response {
         case .successful(let records):
             guard let records = records as? CKRecords else { return }
-            output.emit(records.map(toFlyr))
+            let flyrs = records.map(toFlyr)
+            output.emit(flyrs)
+            refreshOutput.emit(flyrs)
         case .notSuccessful(let error):
             errorOutput.emit(error)
         }

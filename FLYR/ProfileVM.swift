@@ -6,13 +6,48 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-import CloudKit
 import GGNObservable
 
 class ProfileVM: FlyrViewModeling {
-    let model: Flyrs
+
+    let output = Observable<Flyrs>()
+    
+    var delegate: FlyrViewModelingDelegate?
+    
+    private var model: Flyrs
 
     init(model: Flyrs) {
         self.model = model
+    }
+    
+    func didPullToRefresh() {
+        delegate?.didPullToRefresh(in: self)
+    }
+    
+    func didReceive(_ flyrs: Flyrs) {
+        model = flyrs
+        output.emit(flyrs)
+    }
+    
+    func numberOfSections() -> Int {
+        return 1
+    }
+    
+    func numbersOfRows(inSection section: Int) -> Int {
+        return model.count
+    }
+    
+    func cellForRow(at indexPath: IndexPath, in tableView: UITableView) -> UITableViewCell {
+        let item = model[indexPath.row]
+        let identifier = FlyrCell.identifier
+        let dequeuedCell = tableView.dequeueReusableCell(withIdentifier: identifier)
+        let cell = dequeuedCell as? FlyrCell ?? FlyrCell()
+        cell._imageView.image = item.image
+        return cell
+    }
+    
+    func heightForRow(at indexPath: IndexPath) -> CGFloat {
+        let image = model[indexPath.row].image
+        return rowHeight(from: image)
     }
 }
