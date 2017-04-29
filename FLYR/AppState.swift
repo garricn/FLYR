@@ -12,26 +12,40 @@ import CloudKit
 import MapKit
 
 final class AppState: NSObject, NSCoding {
-    private struct Keys {
-        static let isExistingUser = "isExistingUser"
-        static let feedMode = "feedMode"
-        static let latitude = "latitude"
-        static let longitude = "longitude"
-        static let annotationTitle = "annotationTitle"
-        static let annotationSubtitle = "annotationSubtitle"
-    }
+    
+    let launchReason: LaunchReason
     
     var isExistingUser: Bool = false
     var feedMode: FeedMode = .losAngeles
     var ownerReference: CKReference?
     
-    private static let archiveURL = AppState.documentsDirectory.appendingPathComponent("appState")
-    private static let documentsDirectory = FileManager.default.urls(for: .documentDirectory,
-                                                                     in: .userDomainMask).first!
+    private static let archiveURL = AppState.documentsDirectoryURL.appendingPathComponent("appState")
+    private static var documentsDirectoryURL: URL {
+        if let URL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+            return URL
+        } else {
+            fatalError("Expects a documents directory URL!")
+        }
+    }
     
-    init(isExistingUser: Bool = false, feedMode: FeedMode? = .losAngeles) {
+    init(isExistingUser: Bool, feedMode: FeedMode?, launchReason: LaunchReason = .normal) {
         self.isExistingUser = isExistingUser
         self.feedMode = feedMode ?? .losAngeles
+        self.launchReason = launchReason
+    }
+
+    convenience init(launchReason: LaunchReason) {
+        let file = AppState.archiveURL.path
+        let unarchivedObject = NSKeyedUnarchiver.unarchiveObject(withFile: file)
+        
+        guard let appState = unarchivedObject as? AppState else {
+            self.init(isExistingUser: false, feedMode: nil, launchReason: launchReason)
+            return
+        }
+        
+        let isExistingUser = appState.isExistingUser
+        let feedMode = appState.feedMode
+        self.init(isExistingUser: isExistingUser, feedMode: feedMode, launchReason: launchReason)
     }
     
     convenience init?(coder aDecoder: NSCoder) {
@@ -69,7 +83,7 @@ final class AppState: NSObject, NSCoding {
             aCoder.encode(longitude, forKey: Keys.longitude)
             aCoder.encode(annotationTitle, forKey: Keys.annotationTitle)
             aCoder.encode(annotationSubtitle, forKey: Keys.annotationSubtitle)
-        }
+        }        
     }
     
     func onboardingCompleted(with selectedFeedMode: FeedMode) {
@@ -82,19 +96,21 @@ final class AppState: NSObject, NSCoding {
         ownerReference = reference
     }
     
-    static func loadAppState() -> AppState {
-        let unarchivedObject = NSKeyedUnarchiver.unarchiveObject(withFile: AppState.archiveURL.path)
-        if let appState = unarchivedObject as? AppState {
-            return appState
-        } else {
-            return AppState()
-        }
-    }
-    
     fileprivate func archive() {
         DispatchQueue.global().async {
             NSKeyedArchiver.archiveRootObject(self, toFile: AppState.archiveURL.path)
         }
+    }
+    
+    // MARK: - Nested Types
+    
+    private struct Keys {
+        static let isExistingUser = "isExistingUser"
+        static let feedMode = "feedMode"
+        static let latitude = "latitude"
+        static let longitude = "longitude"
+        static let annotationTitle = "annotationTitle"
+        static let annotationSubtitle = "annotationSubtitle"
     }
 }
 
@@ -116,6 +132,7 @@ extension AppState: FeedAppState {
             let annotation = MKPointAnnotation()
             annotation.coordinate = userLocation.coordinate
             annotation.title = "Current Location"
+            feedMode = .userLocation(annotation)
         }
     }
 }

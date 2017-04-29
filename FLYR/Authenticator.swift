@@ -22,7 +22,7 @@ class Authenticator: Authenticating {
 
     private let container: Container
 
-    init(defaultContainer: Container) {
+    init(defaultContainer: Container = CKContainer.default()) {
         self.container = defaultContainer
     }
     

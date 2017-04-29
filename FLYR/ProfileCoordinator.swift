@@ -11,13 +11,14 @@ import CloudKit
 import GGNLocationPicker
 import MapKit
 
-class ProfileCoordinator: Coordinator {
+class ProfileCoordinator: Coordinator, FlyrViewModelingDelegate {
     weak var delegate: CoordinatorDelegate?
     
-    let rootViewController: UIViewController = UINavigationController(rootViewController: LoadingVC())
+    let rootViewController: UIViewController
     
     private let fetcher: FlyrFetchable
     private let appState: ProfileAppState
+    private let viewModel: FlyrConfigurable
     
     private var navigationController: UINavigationController {
         if let viewController = rootViewController as? UINavigationController {
@@ -30,23 +31,28 @@ class ProfileCoordinator: Coordinator {
     init(appState: ProfileAppState, fetcher: FlyrFetchable) {
         self.appState = appState
         self.fetcher = fetcher
+        
+        let viewModel = ProfileVM(model: [])
+        let viewController = FlyrTableVC(viewModel: viewModel)
+        rootViewController = UINavigationController(rootViewController: viewController)
+        
+        self.viewModel = viewModel
+        self.viewModel.delegate = self
     }
 
-    func start() {
+    func start() {}
+    
+    func refresh() {
         guard let reference = appState.ownerReference else {
             return
         }
-
+        
         fetcher.output.onNext { [weak self] flyrs in
-            guard let weakSelf = self else { return }
-            
-            let viewController = weakSelf.resolvedFlyrTableVC(with: flyrs)
-            let viewControllers = [viewController]
-            
-            DispatchQueue.main.async {
-                weakSelf.navigationController.setViewControllers(viewControllers, animated: true)
-                weakSelf.delegate?.coordinatorIsReady(coordinator: weakSelf)
-            }
+            self?.viewModel.configure(with: flyrs)
+        }
+        
+        fetcher.errorOutput.onNext { error in
+            print(error!)
         }
         
         let predicate = NSPredicate(format: "ownerReference == %@", reference)
@@ -55,9 +61,7 @@ class ProfileCoordinator: Coordinator {
         fetcher.fetch(with: operation, and: query)
     }
     
-    private func resolvedFlyrTableVC(with flyrs: Flyrs) -> UIViewController {
-        let viewModel = ProfileVM(model: flyrs)
-        let viewController = FlyrTableVC(viewModel: viewModel)
-        return viewController
+    func didPullToRefresh(in viewModel: FlyrConfigurable) {
+        refresh()
     }
 }

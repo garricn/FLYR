@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import GGNObservable
 
 final class FlyrTableVC: UITableViewController {
 
@@ -27,16 +26,19 @@ final class FlyrTableVC: UITableViewController {
         
         refreshControl = UIRefreshControl()
         refreshControl?.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
+        refreshControl?.beginRefreshing()
         
         tableView.showsVerticalScrollIndicator = false
         tableView.register(FlyrCell.self, forCellReuseIdentifier: FlyrCell.identifier)
         
-        viewModel.output.onNext { [weak self] flyrs in
+        viewModel.onModelUpdated = { [weak self] in
             DispatchQueue.main.async {
                 self?.refreshControl?.endRefreshing()
-                self?.tableView.reloadData()                
+                self?.tableView.reloadData()
             }
         }
+        
+        viewModel.refresh()
     }
     
     // MARK: - Private Selectors

@@ -6,7 +6,7 @@
 //  Copyright © 2017 Garric Nahapetian. All rights reserved.
 //
 
-import Cartography
+import UIKit
 
 class OnboardingView: BaseView {
     let primarybutton = UIButton()
@@ -50,20 +50,26 @@ class OnboardingView: BaseView {
     }
     
     override func layout() {
-        constrain(label) { label in
-            label.leading == label.superview!.leading + 10
-            label.trailing == label.superview!.trailing - 10
-            label.centerY == label.superview!.centerY
-        }
+        label.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate(
+            [
+                label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+                label.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+                label.centerYAnchor.constraint(equalTo: centerYAnchor),
+            ]
+        )
         
-        constrain(primarybutton, secondaryButton) { primaryButton, secondaryButton in
-            primaryButton.leading == primaryButton.superview!.leading + 10
-            primaryButton.trailing == primaryButton.superview!.trailing - 10
-            
-            secondaryButton.top == primaryButton.bottom + 20
-            secondaryButton.leading == secondaryButton.superview!.leading + 10
-            secondaryButton.trailing == secondaryButton.superview!.trailing - 10
-            secondaryButton.bottom == secondaryButton.superview!.bottom - 80
-        }
+        primarybutton.translatesAutoresizingMaskIntoConstraints = false
+        secondaryButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate(
+            [
+                primarybutton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+                primarybutton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: 10),
+                secondaryButton.topAnchor.constraint(equalTo: primarybutton.bottomAnchor, constant: 20),
+                secondaryButton.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 10),
+                secondaryButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -10),
+                secondaryButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -80),
+            ]
+        )
     }
 }

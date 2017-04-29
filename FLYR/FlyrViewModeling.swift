@@ -6,15 +6,21 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-import GGNObservable
+import UIKit
 
-protocol FlyrViewModelingDelegate: class {
-    func didPullToRefresh(in viewModel: FlyrViewModeling)
+protocol FlyrConfigurable: class {
+    func configure(with flyrs: [Flyr])
+    weak var delegate: FlyrViewModelingDelegate? { get set }
 }
 
-protocol FlyrViewModeling: TableViewDataSource, FlyrInteracting {
-    var output: Observable<Flyrs> { get }
-    weak var delegate: FlyrViewModelingDelegate? { get set }
+protocol FlyrViewModelingDelegate: class {
+    func refresh()
+    func didPullToRefresh(in viewModel: FlyrConfigurable)
+}
+
+protocol FlyrViewModeling: class, TableViewDataSource, FlyrInteracting {
+    var onModelUpdated: (() -> Void)? { get set }
+    func refresh()
     func didReceive(_ flyrs: Flyrs)
 }
 

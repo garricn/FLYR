@@ -9,7 +9,6 @@
 import UIKit
 
 protocol CoordinatorDelegate: class {
-    func coordinatorIsReady(coordinator: Coordinator)
     func coordinatorDidFinish(coordinator: Coordinator)
 }
 

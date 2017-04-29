@@ -16,7 +16,6 @@
 		4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D74191D505E2700648603 /* FeedVM.swift */; };
 		4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AB1D614F1900962E29 /* Flyr.swift */; };
 		4E1E23AE1D61784300962E29 /* Database.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1E23AD1D61784300962E29 /* Database.swift */; };
-		4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */; };
 		4E4947331DAB3E5E000CDBBD /* UIViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */; };
 		4E99443E1DA5D69C009AE862 /* ProfileVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443D1DA5D69C009AE862 /* ProfileVM.swift */; };
 		4E9944401DA5D7CA009AE862 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E99443F1DA5D7CA009AE862 /* User.swift */; };
@@ -24,16 +23,9 @@
 		4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA439F11D8BAD3A005B0570 /* Globals.swift */; };
 		4EA7BDD51DA1E162004D3723 /* DatePickerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */; };
 		4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E421D56824E001DF486 /* FlyrFetcher.swift */; };
-		4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */; };
 		4EC9F49F1D90FD970097A2DC /* Resolvers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EC9F49E1D90FD970097A2DC /* Resolvers.swift */; };
 		4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */; };
 		4ED7E2271D8DDB0300DB2F4E /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E2261D8DDB0300DB2F4E /* Response.swift */; };
-		4ED7E22B1D8F160A00DB2F4E /* MockDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E22A1D8F160A00DB2F4E /* MockDatabase.swift */; };
-		4ED7E22D1D8F169A00DB2F4E /* MockRecords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E22C1D8F169A00DB2F4E /* MockRecords.swift */; };
-		4ED7E22F1D8F16CB00DB2F4E /* MockFlyrFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E22E1D8F16CB00DB2F4E /* MockFlyrFetcher.swift */; };
-		4ED7E2311D8F175600DB2F4E /* MockLocationManagers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */; };
-		4EDCC2801D8F3FA30010FEEA /* AppLaunchUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC27F1D8F3FA30010FEEA /* AppLaunchUITestCase.swift */; };
-		4EDCC2821D8F4AA00010FEEA /* AddFlyrUITestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC2811D8F4AA00010FEEA /* AddFlyrUITestCase.swift */; };
 		4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */; };
 		4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */; };
 		4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */; };
@@ -45,6 +37,9 @@
 		609FE3A31E8CA7BD00E7CE61 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */; };
 		609FE3A51E8CA7EC00E7CE61 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */; };
 		60D769421E90B8AD000CB220 /* FeedMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60D769411E90B8AD000CB220 /* FeedMode.swift */; };
+		60F40D861E940FD700176BBC /* ErrorVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F40D851E940FD700176BBC /* ErrorVC.swift */; };
+		60F5C4D31E93319000BD6FA3 /* PostCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F5C4D21E93319000BD6FA3 /* PostCoordinator.swift */; };
+		60F5C4D51E9331DB00BD6FA3 /* LaunchNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F5C4D41E9331DB00BD6FA3 /* LaunchNavigationController.swift */; };
 		60F9B75C1E887B4F004B8437 /* Private.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75B1E887B4F004B8437 /* Private.swift */; };
 		60F9B7601E888205004B8437 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75D1E888205004B8437 /* BaseView.swift */; };
 		60F9B7611E888205004B8437 /* LoadingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F9B75E1E888205004B8437 /* LoadingVC.swift */; };
@@ -91,7 +86,6 @@
 		4E1D74191D505E2700648603 /* FeedVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVM.swift; sourceTree = "<group>"; };
 		4E1E23AB1D614F1900962E29 /* Flyr.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Flyr.swift; sourceTree = "<group>"; };
 		4E1E23AD1D61784300962E29 /* Database.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Database.swift; sourceTree = "<group>"; };
-		4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedVMSpec.swift; sourceTree = "<group>"; };
 		4E4947321DAB3E5E000CDBBD /* UIViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtensions.swift; sourceTree = "<group>"; };
 		4E99443D1DA5D69C009AE862 /* ProfileVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileVM.swift; sourceTree = "<group>"; };
 		4E99443F1DA5D7CA009AE862 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -99,16 +93,9 @@
 		4EA439F11D8BAD3A005B0570 /* Globals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Globals.swift; sourceTree = "<group>"; };
 		4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatePickerVC.swift; sourceTree = "<group>"; };
 		4EC34E421D56824E001DF486 /* FlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcher.swift; sourceTree = "<group>"; };
-		4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlyrFetcherSpec.swift; sourceTree = "<group>"; };
 		4EC9F49E1D90FD970097A2DC /* Resolvers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Resolvers.swift; sourceTree = "<group>"; };
 		4ED7E2221D8CC84700DB2F4E /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		4ED7E2261D8DDB0300DB2F4E /* Response.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
-		4ED7E22A1D8F160A00DB2F4E /* MockDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockDatabase.swift; sourceTree = "<group>"; };
-		4ED7E22C1D8F169A00DB2F4E /* MockRecords.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRecords.swift; sourceTree = "<group>"; };
-		4ED7E22E1D8F16CB00DB2F4E /* MockFlyrFetcher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockFlyrFetcher.swift; sourceTree = "<group>"; };
-		4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockLocationManagers.swift; sourceTree = "<group>"; };
-		4EDCC27F1D8F3FA30010FEEA /* AppLaunchUITestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppLaunchUITestCase.swift; sourceTree = "<group>"; };
-		4EDCC2811D8F4AA00010FEEA /* AddFlyrUITestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFlyrUITestCase.swift; sourceTree = "<group>"; };
 		4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFlyrVC.swift; sourceTree = "<group>"; };
 		4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFlyrVM.swift; sourceTree = "<group>"; };
 		4EDCC28B1D8F4EFB0010FEEA /* RecordSaver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordSaver.swift; sourceTree = "<group>"; };
@@ -121,6 +108,9 @@
 		609FE3A21E8CA7BD00E7CE61 /* OnboardingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		609FE3A41E8CA7EC00E7CE61 /* OnboardingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		60D769411E90B8AD000CB220 /* FeedMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedMode.swift; sourceTree = "<group>"; };
+		60F40D851E940FD700176BBC /* ErrorVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ErrorVC.swift; sourceTree = "<group>"; };
+		60F5C4D21E93319000BD6FA3 /* PostCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostCoordinator.swift; sourceTree = "<group>"; };
+		60F5C4D41E9331DB00BD6FA3 /* LaunchNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LaunchNavigationController.swift; sourceTree = "<group>"; };
 		60F9B75B1E887B4F004B8437 /* Private.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Private.swift; sourceTree = "<group>"; };
 		60F9B75D1E888205004B8437 /* BaseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		60F9B75E1E888205004B8437 /* LoadingVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingVC.swift; sourceTree = "<group>"; };
@@ -204,24 +194,19 @@
 				4E1D74151D50561700648603 /* AppCoordinator.swift */,
 				4E1D73E61D50521F00648603 /* AppDelegate.swift */,
 				60F9B7691E889CFE004B8437 /* AppState.swift */,
-				60F9B75D1E888205004B8437 /* BaseView.swift */,
 				60F9B7671E8893F1004B8437 /* Coordinator.swift */,
 				4E0C2D701D60DD08008BA952 /* FlyrCell.swift */,
 				4EF2E12B1DA98A4000DED55E /* FlyrTableVC.swift */,
 				4EF2E1291DA9895A00DED55E /* FlyrViewModeling.swift */,
-				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
-				60F9B75E1E888205004B8437 /* LoadingVC.swift */,
-				60F9B75F1E888205004B8437 /* LoadingView.swift */,
-				60F9B75B1E887B4F004B8437 /* Private.swift */,
-				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
-				4EDCC28A1D8F4E070010FEEA /* ADD FLYR */,
 				6078D2F41E9098C800A7EFB4 /* EXTENSIONS */,
 				60D769431E90B8DC000CB220 /* FEED */,
 				4E401A4A1DA8AE0F00AA1C1F /* MODEL OBJECTS */,
 				609FE3A61E8CA7FD00E7CE61 /* ONBOARDING */,
+				4EDCC28A1D8F4E070010FEEA /* POST */,
 				60D769441E90B8EF000CB220 /* PROFILE */,
 				4EDCC28D1D8F50530010FEEA /* SERVICES */,
 				4E1D74141D5053C600648603 /* Supporting Files */,
+				60F5C4D61E9332FB00BD6FA3 /* UI */,
 			);
 			path = FLYR;
 			sourceTree = "<group>";
@@ -229,10 +214,7 @@
 		4E1D73FA1D50521F00648603 /* FLYRTests */ = {
 			isa = PBXGroup;
 			children = (
-				4E309AFE1D56A83A005867E7 /* FeedVMSpec.swift */,
-				4EC34E441D5682A0001DF486 /* FlyrFetcherSpec.swift */,
 				4E1D73FD1D50521F00648603 /* Info.plist */,
-				4ED7E2321D8F17F200DB2F4E /* Mocks */,
 			);
 			path = FLYRTests;
 			sourceTree = "<group>";
@@ -241,8 +223,6 @@
 			isa = PBXGroup;
 			children = (
 				4E1D74081D50521F00648603 /* Info.plist */,
-				4EDCC27F1D8F3FA30010FEEA /* AppLaunchUITestCase.swift */,
-				4EDCC2811D8F4AA00010FEEA /* AddFlyrUITestCase.swift */,
 			);
 			path = FLYRUITests;
 			sourceTree = "<group>";
@@ -250,6 +230,8 @@
 		4E1D74141D5053C600648603 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				4EA439F11D8BAD3A005B0570 /* Globals.swift */,
+				60F9B75B1E887B4F004B8437 /* Private.swift */,
 				4E1D73ED1D50521F00648603 /* Assets.xcassets */,
 				4E1D73EF1D50521F00648603 /* LaunchScreen.storyboard */,
 				4E1D73F21D50521F00648603 /* Info.plist */,
@@ -266,31 +248,22 @@
 			name = "MODEL OBJECTS";
 			sourceTree = "<group>";
 		};
-		4ED7E2321D8F17F200DB2F4E /* Mocks */ = {
-			isa = PBXGroup;
-			children = (
-				4ED7E22A1D8F160A00DB2F4E /* MockDatabase.swift */,
-				4ED7E22C1D8F169A00DB2F4E /* MockRecords.swift */,
-				4ED7E22E1D8F16CB00DB2F4E /* MockFlyrFetcher.swift */,
-				4ED7E2301D8F175600DB2F4E /* MockLocationManagers.swift */,
-			);
-			name = Mocks;
-			sourceTree = "<group>";
-		};
-		4EDCC28A1D8F4E070010FEEA /* ADD FLYR */ = {
+		4EDCC28A1D8F4E070010FEEA /* POST */ = {
 			isa = PBXGroup;
 			children = (
 				4EDCC2831D8F4D790010FEEA /* AddFlyrVC.swift */,
 				4EDCC2851D8F4D9A0010FEEA /* AddFlyrVM.swift */,
 				4EDCC28E1D8F50B50010FEEA /* AddImageCell.swift */,
 				4EA7BDD41DA1E162004D3723 /* DatePickerVC.swift */,
+				60F5C4D21E93319000BD6FA3 /* PostCoordinator.swift */,
 			);
-			name = "ADD FLYR";
+			name = POST;
 			sourceTree = "<group>";
 		};
 		4EDCC28D1D8F50530010FEEA /* SERVICES */ = {
 			isa = PBXGroup;
 			children = (
+				4EC9F49E1D90FD970097A2DC /* Resolvers.swift */,
 				4ED7E2261D8DDB0300DB2F4E /* Response.swift */,
 				4E1E23AD1D61784300962E29 /* Database.swift */,
 				4EC34E421D56824E001DF486 /* FlyrFetcher.swift */,
@@ -337,6 +310,18 @@
 				4E99443D1DA5D69C009AE862 /* ProfileVM.swift */,
 			);
 			name = PROFILE;
+			sourceTree = "<group>";
+		};
+		60F5C4D61E9332FB00BD6FA3 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				60F5C4D41E9331DB00BD6FA3 /* LaunchNavigationController.swift */,
+				60F9B75D1E888205004B8437 /* BaseView.swift */,
+				60F9B75E1E888205004B8437 /* LoadingVC.swift */,
+				60F9B75F1E888205004B8437 /* LoadingView.swift */,
+				60F40D851E940FD700176BBC /* ErrorVC.swift */,
+			);
+			name = UI;
 			sourceTree = "<group>";
 		};
 		DF26F170CA0A977037507FCD /* Frameworks */ = {
@@ -433,7 +418,7 @@
 					};
 					4E1D73F61D50521F00648603 = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0810;
+						LastSwiftMigration = 0830;
 						TestTargetID = 4E1D73E21D50521E00648603;
 					};
 					4E1D74011D50521F00648603 = {
@@ -590,6 +575,7 @@
 				4EDCC2841D8F4D790010FEEA /* AddFlyrVC.swift in Sources */,
 				60D769421E90B8AD000CB220 /* FeedMode.swift in Sources */,
 				4EDCC2861D8F4D9A0010FEEA /* AddFlyrVM.swift in Sources */,
+				60F40D861E940FD700176BBC /* ErrorVC.swift in Sources */,
 				4EC34E431D56824E001DF486 /* FlyrFetcher.swift in Sources */,
 				4E1D74161D50561700648603 /* AppCoordinator.swift in Sources */,
 				4EA439F21D8BAD3A005B0570 /* Globals.swift in Sources */,
@@ -600,6 +586,7 @@
 				60F9B7661E8893B0004B8437 /* ProfileCoordinator.swift in Sources */,
 				609FE3A31E8CA7BD00E7CE61 /* OnboardingVC.swift in Sources */,
 				4E9944401DA5D7CA009AE862 /* User.swift in Sources */,
+				60F5C4D51E9331DB00BD6FA3 /* LaunchNavigationController.swift in Sources */,
 				4E0C2D711D60DD08008BA952 /* FlyrCell.swift in Sources */,
 				4E1E23AC1D614F1900962E29 /* Flyr.swift in Sources */,
 				60F9B7621E888205004B8437 /* LoadingView.swift in Sources */,
@@ -613,6 +600,7 @@
 				609FE3A51E8CA7EC00E7CE61 /* OnboardingView.swift in Sources */,
 				4E1D741A1D505E2700648603 /* FeedVM.swift in Sources */,
 				4E1E23AE1D61784300962E29 /* Database.swift in Sources */,
+				60F5C4D31E93319000BD6FA3 /* PostCoordinator.swift in Sources */,
 				60F9B76A1E889CFE004B8437 /* AppState.swift in Sources */,
 				4EDCC28C1D8F4EFB0010FEEA /* RecordSaver.swift in Sources */,
 				4ED7E2231D8CC84700DB2F4E /* LocationManager.swift in Sources */,
@@ -629,12 +617,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4ED7E22B1D8F160A00DB2F4E /* MockDatabase.swift in Sources */,
-				4E309AFF1D56A83A005867E7 /* FeedVMSpec.swift in Sources */,
-				4ED7E22D1D8F169A00DB2F4E /* MockRecords.swift in Sources */,
-				4ED7E2311D8F175600DB2F4E /* MockLocationManagers.swift in Sources */,
-				4EC34E451D5682A0001DF486 /* FlyrFetcherSpec.swift in Sources */,
-				4ED7E22F1D8F16CB00DB2F4E /* MockFlyrFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -642,8 +624,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4EDCC2821D8F4AA00010FEEA /* AddFlyrUITestCase.swift in Sources */,
-				4EDCC2801D8F3FA30010FEEA /* AppLaunchUITestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -808,11 +788,13 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)/**";
 				INFOPLIST_FILE = FLYRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.ggn.FLYRTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0.1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FLYR.app/FLYR";
 			};
@@ -824,6 +806,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = "$(inherited)/**";
 				INFOPLIST_FILE = FLYRTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";

@@ -6,27 +6,38 @@
 //  Copyright © 2016 Garric Nahapetian. All rights reserved.
 //
 
-import GGNObservable
+import UIKit
 
-class ProfileVM: FlyrViewModeling {
+class ProfileVM: FlyrViewModeling, FlyrConfigurable {
 
-    let output = Observable<Flyrs>()
+    var onModelUpdated: (() -> Void)?
     
     var delegate: FlyrViewModelingDelegate?
     
-    private var model: Flyrs
+    private var model: Flyrs {
+        didSet {
+            onModelUpdated?()
+        }
+    }
 
     init(model: Flyrs) {
         self.model = model
+    }
+    
+    func refresh() {
+        delegate?.refresh()
     }
     
     func didPullToRefresh() {
         delegate?.didPullToRefresh(in: self)
     }
     
+    func configure(with flyrs: [Flyr]) {
+        model = flyrs
+    }
+    
     func didReceive(_ flyrs: Flyrs) {
         model = flyrs
-        output.emit(flyrs)
     }
     
     func numberOfSections() -> Int {

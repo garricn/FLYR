@@ -13,33 +13,22 @@ import GGNLocationPicker
 import MapKit
 import CoreLocation
 
-protocol LaunchNavigationControllerDelegate: class {
-    func viewDidAppear(in launchNavigationController: LaunchNavigationController)
-}
+private typealias ProtocolComposite = UITabBarControllerDelegate
+    & Coordinator
+    & LaunchNavigationControllerDelegate
+    & CoordinatorDelegate
 
-final class LaunchNavigationController: UINavigationController {
-    
-    weak var launchDelegate: LaunchNavigationControllerDelegate?
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        launchDelegate?.viewDidAppear(in: self)
-    }
-}
+class AppCoordinator: NSObject, ProtocolComposite {
 
-protocol AppCoordinatorProtocolComposite:
-UITabBarControllerDelegate,
-LaunchNavigationControllerDelegate,
-CoordinatorDelegate {}
-
-class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
+    weak var delegate: CoordinatorDelegate?
     
-    var rootViewController: UIViewController!
+    var rootViewController: UIViewController = UITabBarController()
 
     private let appState: AppState
     private let authenticator: Authenticating
 
-    private var childCoordinators: [String: Coordinator] = [:]
+    private var childCoordinators: [CoordinatorKey: Coordinator] = [:]
+    
     private var tabBarController: UITabBarController {
         if let viewController = rootViewController as? UITabBarController {
             return viewController
@@ -58,7 +47,6 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         let navigationController = LaunchNavigationController(rootViewController: viewController)
         navigationController.launchDelegate = self
 
-        let tabBarController = UITabBarController()
         tabBarController.setViewControllers([navigationController], animated: true)
         tabBarController.delegate = self
         rootViewController = tabBarController
@@ -72,10 +60,6 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
     
     // MARK: - CoordinatorDelegate
     
-    func coordinatorIsReady(coordinator: Coordinator) {
-        print("Coordinator is ready: \(coordinator)")
-    }
-    
     func coordinatorDidFinish(coordinator: Coordinator) {
         if let coordinator = coordinator as? OnboardingCoordinator {
             let selectedFeedMode = coordinator.selectedFeedMode
@@ -83,7 +67,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
             startFeed(with: selectedFeedMode)
 
             coordinator.rootViewController.dismiss(animated: true) {
-                self.childCoordinators.removeValue(forKey: "onboarding")
+                self.childCoordinators.removeValue(forKey: .onboarding)
                 self.appState.onboardingCompleted(with: selectedFeedMode)
             }
         }
@@ -100,7 +84,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
             coordinator.delegate = self
             coordinator.start()
             launchNavigationController.present(coordinator.rootViewController, animated: true) {
-                self.childCoordinators["onboarding"] = coordinator
+                self.childCoordinators[.onboarding] = coordinator
             }
         }
     }
@@ -117,7 +101,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         postCoordinator.start()
 
         rootViewController.present(postCoordinator.rootViewController, animated: true) {
-            self.childCoordinators["post"] = postCoordinator
+            self.childCoordinators[.post] = postCoordinator
         }
 
         return false
@@ -133,7 +117,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         let feedCoordinator = FeedCoordinator(appState: appState, fetcher: fetcher, locationManager: manager)
         feedCoordinator.delegate = self
         feedCoordinator.start()
-        childCoordinators["feed"] = feedCoordinator
+        childCoordinators[.feed] = feedCoordinator
         
         let feedVC = feedCoordinator.rootViewController
         feedVC.tabBarItem = UITabBarItem(title: "FEED", image: nil, tag: 0)
@@ -148,7 +132,7 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         let profileCoordinator = ProfileCoordinator(appState: appState, fetcher: Resolved.flyrFetcher)
         profileCoordinator.delegate = self
         profileCoordinator.start()
-        childCoordinators["profile"] = profileCoordinator
+        childCoordinators[.profile] = profileCoordinator
         
         let profileVC = profileCoordinator.rootViewController
         profileVC.tabBarItem = UITabBarItem(title: "PROFILE", image: nil, tag: 2)
@@ -164,31 +148,13 @@ class AppCoordinator: NSObject, AppCoordinatorProtocolComposite {
         case .notAuthenticated(let error): fatalError("Error authenticating: \(error)")
         }
     }
-}
-
-final class PostCoordinator: Coordinator {
-    weak var delegate: CoordinatorDelegate?
     
-    let rootViewController: UIViewController = UINavigationController(rootViewController: UIViewController())
+    // MARK - Nested Types
     
-    private var ownerReference: CKReference?
-    
-    private var navigationController: UINavigationController {
-        if let viewController = rootViewController as? UINavigationController {
-            return viewController
-        } else {
-            fatalError("Expects a UINavigationController!")
-        }
+    enum CoordinatorKey: String {
+        case feed = "feed"
+        case profile = "profile"
+        case post = "post"
+        case onboarding = "onboarding"
     }
-
-    init(ownerReference: CKReference?) {
-        self.ownerReference = ownerReference
-
-        let saver = Resolved.recordSaver
-        let viewModel = AddFlyrVM(recordSaver: saver)
-        let postVC = AddFlyrVC(viewModel: viewModel, ownerReference: ownerReference)
-        navigationController.setViewControllers([postVC], animated: false)
-    }
-    
-    func start() {}
 }

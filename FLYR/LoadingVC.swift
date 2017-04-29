@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LoadingVC: UIViewController {
+final class LoadingVC: UIViewController {
     private let loadingView = LoadingView()
     
     override func loadView() {

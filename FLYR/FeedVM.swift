@@ -7,26 +7,37 @@
 //
 
 import UIKit
-import GGNObservable
 
-class FeedVM: FlyrViewModeling {
-    let output = Observable<Flyrs>()
+class FeedVM: FlyrViewModeling, FlyrConfigurable {
 
+    var onModelUpdated: (() -> Void)?
+    
     weak var delegate: FlyrViewModelingDelegate?
 
-    private var model: Flyrs
+    private var model: Flyrs {
+        didSet {
+            onModelUpdated?()
+        }
+    }
 
     init(model: Flyrs) {
         self.model = model
     }
     
+    func configure(with flyrs: [Flyr]) {
+        model = flyrs
+    }
+    
+    func refresh() {
+        delegate?.refresh()
+    }
+
     func didPullToRefresh() {
         delegate?.didPullToRefresh(in: self)
     }
     
     func didReceive(_ flyrs: Flyrs) {
         model = flyrs
-        output.emit(flyrs)
     }
 
     func numberOfSections() -> Int {

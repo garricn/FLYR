@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Cartography
 
 class FlyrCell: UITableViewCell {
     let _imageView = UIImageView()
@@ -16,12 +15,19 @@ class FlyrCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
-        imageView?.contentMode = .scaleAspectFit
         addSubview(_imageView)
-
-        constrain(_imageView) { imageView in
-            imageView.edges == imageView.superview!.edges
-        }
+        
+        _imageView.contentMode = .scaleAspectFit
+        _imageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate(
+            [
+                _imageView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                _imageView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                _imageView.topAnchor.constraint(equalTo: topAnchor),
+                _imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            ]
+        )
     }
 
     required init?(coder aDecoder: NSCoder) {

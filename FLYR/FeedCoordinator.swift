@@ -14,11 +14,12 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
 
     weak var delegate: CoordinatorDelegate?
     
-    let rootViewController: UIViewController = UINavigationController(rootViewController: LoadingVC())
+    let rootViewController: UIViewController
     
     private let appState: FeedAppState
     private let fetcher: FlyrFetchable
     private let locationManager: LocationManageable
+    private let viewModel: FlyrConfigurable
 
     private var navigationController: UINavigationController {
         if let viewController = rootViewController as? UINavigationController {
@@ -33,31 +34,32 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         self.appState = appState
         self.fetcher = fetcher
         self.locationManager = locationManager
+        
+        let viewModel = FeedVM(model: [])
+        self.viewModel = viewModel
+
+        let viewController = FlyrTableVC(viewModel: viewModel)
+        rootViewController = UINavigationController(rootViewController: viewController)
+    
+        let selector = #selector(didTapSettingsBarButtonItem)
+        let rightBarButtonItem = UIBarButtonItem(title: "⚙️", style: .plain, target: self, action: selector)
+        viewController.navigationItem.rightBarButtonItem = rightBarButtonItem
+        
+        self.viewModel.delegate = self
     }
     
-    func start() {
-        startFeed(with: appState.feedMode)
-    }
+    func start() {}
     
     // MARK: - Feed Start Modes
     
     private func startFeed(with mode: FeedMode) {
         switch mode {
-        case .userLocation: startUserLocationMode()
-        case .preferred(let annotation): startFeed(with: annotation.location)
-        case .losAngeles: startFeed(with: losAngelesAnnotation.location)
-        }
-        
-        fetcher.output.onNext { [weak self] flyrs in
-            guard let weakSelf = self else { return }
-            
-            let viewController = weakSelf.resolvedFeedVC(with: flyrs)
-            let viewControllers = [viewController]
-            
-            DispatchQueue.main.async {
-                weakSelf.navigationController.setViewControllers(viewControllers, animated: false)
-                weakSelf.delegate?.coordinatorIsReady(coordinator: weakSelf)
-            }
+        case .userLocation:
+            startUserLocationMode()
+        case .preferred(let annotation):
+            startFeed(with: annotation.location)
+        case .losAngeles:
+            startFeed(with: losAngelesAnnotation.location)
         }
     }
 
@@ -70,7 +72,7 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
     private func requestLocationCompletion(with response: LocationResponse) {
         switch response {
         case .didUpdateLocations(let locations):
-            fetch(with: locations.last!)
+            startFeed(with: locations.last!)
             appState.didReceive(userLocation: locations.last!)
         case .didFail(let error):
             assertionFailure("Handle error: \(error)")
@@ -79,24 +81,10 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         }
     }
 
-    private func startFeed(with location: CLLocation) {
-        fetch(with: location)
-    }
-
     // MARK: - Private Functions
     
-    private func resolvedFeedVC(with flyrs: Flyrs) -> FlyrTableVC {
-        let viewModel = FeedVM(model: flyrs)
-        viewModel.delegate = self
-
-        let viewController = FlyrTableVC(viewModel: viewModel)
-        let selector = #selector(didTapSettingsBarButtonItem)
-        let rightBarButtonItem = UIBarButtonItem(title: "⚙️", style: .plain, target: self, action: selector)
-        viewController.navigationItem.rightBarButtonItem = rightBarButtonItem
-        return viewController
-    }
-    
     private func currentHandler(action: UIAlertAction) {
+        appState.didSelect(newFeedMode: .userLocation(nil))
         startUserLocationMode()
     }
     
@@ -121,7 +109,15 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         rootViewController.dismiss(animated: true, completion: nil)
     }
     
-    private func fetch(with location: CLLocation) {
+    private func startFeed(with location: CLLocation) {
+        fetcher.output.onNext { [weak self] flyrs in
+            self?.viewModel.configure(with: flyrs)
+        }
+        
+        fetcher.errorOutput.onNext { error in
+            print(error!)
+        }
+        
         let query = makeQuery(from: location)
         fetcher.fetch(with: query)
     }
@@ -144,7 +140,7 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         let mode = appState.feedMode
         
         switch mode {
-        case .preferred(let annotation): description = "\(mode.displayName): \(annotation.displayName)"
+        case .preferred(let annotation): description = "\(mode.displayName)\n\(annotation.displayName)"
         default: description = mode.displayName
         }
         
@@ -178,14 +174,12 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
     
     // MARK: - FlyrViewModelingDelegate
     
-    func didPullToRefresh(in viewModel: FlyrViewModeling) {
-        fetcher.refreshOutput.onNext { flyrs in
-            viewModel.didReceive(flyrs)
-        }
-        
-        locationManager.requestLocation { [weak self] response in
-            self?.refreshLocationCompletion(response: response)
-        }
+    func refresh() {
+        startFeed(with: appState.feedMode)
+    }
+    
+    func didPullToRefresh(in viewModel: FlyrConfigurable) {
+        refresh()
     }
     
     private func refreshLocationCompletion(response: LocationResponse) {

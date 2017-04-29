@@ -12,13 +12,6 @@ import CloudKit
 enum Resolved {}
 
 extension Resolved {
-    static var appCoordinator: AppCoordinator {
-        return AppCoordinator(appState: AppState.loadAppState(), authenticator: Resolved.authenticator)
-    }
-    
-    private static var authenticator: Authenticating {
-        return Authenticator(defaultContainer: CKContainer.default())
-    }
     
     static var flyrFetcher: FlyrFetchable {
         return FlyrFetcher(database: Resolved.publicDatabase)

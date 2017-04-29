@@ -14,6 +14,10 @@ extension MKAnnotation {
     }
     
     var displayName: String {
-        return (title ?? "") ?? ""
+        let _title = title ?? ""
+        let __title = _title ?? ""
+        let _subtitle = subtitle ?? ""
+        let __subtitle = _subtitle ?? ""
+        return "\(__title)\n\(__subtitle)"
     }
 }

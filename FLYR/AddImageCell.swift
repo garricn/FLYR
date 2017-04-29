@@ -7,28 +7,28 @@
 //
 
 import UIKit
-import Cartography
 
 class AddImageCell: UITableViewCell {
     let flyrImageView = UIImageView()
+    static let identifier: String = "AddImageCell"
 
-    init() {
-        super.init(
-            style: .default,
-            reuseIdentifier: AddImageCell.description()
-        )
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
 
         accessoryType = .disclosureIndicator
         addSubview(flyrImageView)
 
         flyrImageView.contentMode = .scaleAspectFit
-
-        constrain(flyrImageView) { imageView in
-            imageView.top == imageView.superview!.top + 8
-            imageView.bottom == imageView.superview!.bottom - 8
-            imageView.leading == imageView.superview!.leading + 8
-            imageView.trailing == imageView.superview!.trailing - 8
-        }
+        flyrImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate(
+            [
+                flyrImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+                flyrImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+                flyrImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+                flyrImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8),
+            ]
+        )
     }
     
     required init?(coder aDecoder: NSCoder) {

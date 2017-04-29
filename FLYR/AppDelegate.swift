@@ -13,21 +13,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    private var appCoordinator = Resolved.appCoordinator
+    private var coordinator: Coordinator?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: LaunchOptions) -> Bool {
-        guard launchOptions == nil else {
-            fatalError("Handle launch options!")
-        }
+        let launchReason = LaunchReason(launchOptions: launchOptions)
+        let appState = AppState(launchReason: launchReason)
+        let authenticator = Authenticator()
         
-        appCoordinator.start()
+        coordinator = AppCoordinator(appState: appState, authenticator: authenticator)
+        coordinator?.start()
         
-        window = UIWindow(frame: screenBounds)
+        window = UIWindow()
         window?.backgroundColor = .white
-        window?.rootViewController = appCoordinator.rootViewController
+        window?.rootViewController = coordinator?.rootViewController
         window?.makeKeyAndVisible()
         return true
     }
 }
 
 typealias LaunchOptions = [UIApplicationLaunchOptionsKey: Any]?
+
+enum LaunchReason {
+    case normal
+    
+    init(launchOptions: LaunchOptions) {
+        if launchOptions == nil {
+            self = .normal
+        } else {
+            fatalError("Handle Launch Options!")
+        }
+    }
+}
