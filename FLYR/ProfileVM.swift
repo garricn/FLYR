@@ -32,14 +32,25 @@ class ProfileVM: FlyrViewModeling, FlyrConfigurable {
         delegate?.didPullToRefresh(in: self)
     }
     
+    func didLongPress(sender: UILongPressGestureRecognizer, in tableView: UITableView) {
+        guard sender.state == .began else {
+            return
+        }
+        
+        let pressPoint = sender.location(in: tableView)
+        
+        guard let indexPath = tableView.indexPathForRow(at: pressPoint) else {
+            return
+        }
+        
+        let flyr = model[indexPath.row]
+        delegate?.didLongPress(on: flyr)
+    }
+    
     func configure(with flyrs: [Flyr]) {
         model = flyrs
     }
-    
-    func didReceive(_ flyrs: Flyrs) {
-        model = flyrs
-    }
-    
+
     func numberOfSections() -> Int {
         return 1
     }

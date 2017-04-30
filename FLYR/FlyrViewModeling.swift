@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreLocation
+import MapKit
 
 protocol FlyrConfigurable: class {
     func configure(with flyrs: [Flyr])
@@ -16,16 +18,17 @@ protocol FlyrConfigurable: class {
 protocol FlyrViewModelingDelegate: class {
     func refresh()
     func didPullToRefresh(in viewModel: FlyrConfigurable)
+    func didLongPress(on flyr: Flyr)
 }
 
 protocol FlyrViewModeling: class, TableViewDataSource, FlyrInteracting {
     var onModelUpdated: (() -> Void)? { get set }
     func refresh()
-    func didReceive(_ flyrs: Flyrs)
 }
 
 protocol FlyrInteracting {
     func didPullToRefresh()
+    func didLongPress(sender: UILongPressGestureRecognizer, in tableView: UITableView)
 }
 
 protocol TableViewDataSource {

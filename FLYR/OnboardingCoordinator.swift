@@ -10,53 +10,30 @@ import UIKit
 import GGNLocationPicker
 
 class OnboardingCoordinator: Coordinator, OnboardingDelegate {
-    let rootViewController: UIViewController = UINavigationController(rootViewController: OnboardingVC())
+    
+    let rootViewController: UIViewController
     
     weak var delegate: CoordinatorDelegate?
     
     private(set) var selectedFeedMode: FeedMode = .losAngeles
     
-    private enum State {
-        case stepOne, stepTwo, stepThree, stepFour
-        
-        var labelText: String {
-            switch self {
-            case .stepOne:
-                return "Welcome to FLYR,\n"
-                + "the app that shows you flyers\n"
-                + "for events happening near and now.\n"
-                + "Tap \"Get Started\" to begin."
-            case .stepTwo:
-                return "FLYR needs your permission\n"
-                + "to show you flyers based on your location.\n"
-                + "Tap \"Allow When Use In Authorization\" to use your location.\n"
-            case .stepThree:
-                return "Instead of using your location,\n"
-                + "FLYR can use your preferred location\n"
-                + "to show you the most relevant flyers.\n"
-            case .stepFour:
-                return "Have fun using FLYR!"
-            }
-        }
-        
-        var buttonTitle: String {
-            switch self {
-            case .stepOne: return "Get Started"
-            case .stepTwo: return "Allow When In Use Authorization"
-            case .stepThree: return "Set Preferred Location Now"
-            case .stepFour: return "Let's go!"
-            }
-        }
-    }
-    
     private let locationManager: LocationManageable
     
     private var navigationController: UINavigationController {
-        guard let viewController = rootViewController as? UINavigationController else {
+        if let viewController = rootViewController as? UINavigationController {
+            return viewController
+        } else {
             fatalError("Expects a UINavigationController!")
         }
         
-        return viewController
+    }
+
+    private var onboardingVC: OnboardingVC {
+        if let viewController = navigationController.topViewController as? OnboardingVC {
+            return viewController
+        } else {
+            fatalError("Expects an ObboardingVC!")
+        }
     }
     
     private var state: OnboardingCoordinator.State = .stepOne {
@@ -72,18 +49,16 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     
     init(locationManager: LocationManageable) {
         self.locationManager = locationManager
-        self.navigationController.isNavigationBarHidden = true
+        
+        rootViewController = UINavigationController(rootViewController: OnboardingVC())
+        navigationController.isNavigationBarHidden = true
+        
+        onboardingVC.delegate = self
+        onboardingVC.setLabelText(state.labelText)
+        onboardingVC.setButtonPrimaryTitle(state.buttonTitle)
+        onboardingVC.isSecondaryButtonHidden = true
     }
-    
-    func start() {
-        if let onboardingVC = navigationController.topViewController as? OnboardingVC {
-            onboardingVC.delegate = self
-            onboardingVC.setLabelText(state.labelText)
-            onboardingVC.setButtonPrimaryTitle(state.buttonTitle)
-            onboardingVC.isSecondaryButtonHidden = true
-        }
-    }
-    
+
     func didTapPrimaryButton() {
         switch state {
         case .stepOne: state = stateFrom(state: .stepOne)
@@ -154,5 +129,40 @@ class OnboardingCoordinator: Coordinator, OnboardingDelegate {
     
     private func finishOnboarding() {
         delegate?.coordinatorDidFinish(coordinator: self)
+    }
+    
+    // MARK: - Nested Types
+    
+    private enum State {
+        case stepOne, stepTwo, stepThree, stepFour
+        
+        var labelText: String {
+            switch self {
+            case .stepOne:
+                return "Welcome to FLYR,\n"
+                    + "the app that shows you flyers\n"
+                    + "for events happening near and now.\n"
+                    + "Tap \"Get Started\" to begin."
+            case .stepTwo:
+                return "FLYR needs your permission\n"
+                    + "to show you flyers based on your location.\n"
+                    + "Tap \"Allow When Use In Authorization\" to use your location.\n"
+            case .stepThree:
+                return "Instead of using your location,\n"
+                    + "FLYR can use your preferred location\n"
+                    + "to show you the most relevant flyers.\n"
+            case .stepFour:
+                return "Have fun using FLYR!"
+            }
+        }
+        
+        var buttonTitle: String {
+            switch self {
+            case .stepOne: return "Get Started"
+            case .stepTwo: return "Allow When In Use Authorization"
+            case .stepThree: return "Set Preferred Location Now"
+            case .stepFour: return "Let's go!"
+            }
+        }
     }
 }

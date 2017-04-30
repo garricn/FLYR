@@ -24,21 +24,40 @@ class FeedVM: FlyrViewModeling, FlyrConfigurable {
         self.model = model
     }
     
+    // MARK: - FlyrConfigurable
+    
     func configure(with flyrs: [Flyr]) {
         model = flyrs
     }
+    
+    // MARK: - FlyrViewModeling
     
     func refresh() {
         delegate?.refresh()
     }
 
+    // MARK: - FlyrInteracting
+    
     func didPullToRefresh() {
         delegate?.didPullToRefresh(in: self)
     }
     
-    func didReceive(_ flyrs: Flyrs) {
-        model = flyrs
+    func didLongPress(sender: UILongPressGestureRecognizer, in tableView: UITableView) {
+        guard sender.state == .began else {
+            return
+        }
+        
+        let pressPoint = sender.location(in: tableView)
+        
+        guard let indexPath = tableView.indexPathForRow(at: pressPoint) else {
+            return
+        }
+        
+        let flyr = model[indexPath.row]
+        delegate?.didLongPress(on: flyr)
     }
+    
+    // MARK: - TableViewDataSource
 
     func numberOfSections() -> Int {
         return 1

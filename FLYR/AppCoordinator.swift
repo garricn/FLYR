@@ -19,11 +19,11 @@ private typealias ProtocolComposite = UITabBarControllerDelegate
     & CoordinatorDelegate
 
 class AppCoordinator: NSObject, ProtocolComposite {
+    
+    let rootViewController: UIViewController
 
     weak var delegate: CoordinatorDelegate?
     
-    var rootViewController: UIViewController = UITabBarController()
-
     private let appState: AppState
     private let authenticator: Authenticating
 
@@ -40,24 +40,24 @@ class AppCoordinator: NSObject, ProtocolComposite {
     init(appState: AppState, authenticator: Authenticating) {
         self.appState = appState
         self.authenticator = authenticator
-    }
-    
-    func start() {
+        self.rootViewController = UITabBarController()
+        
+        super.init()
+        
         let viewController = UIViewController()
         let navigationController = LaunchNavigationController(rootViewController: viewController)
         navigationController.launchDelegate = self
-
+        
         tabBarController.setViewControllers([navigationController], animated: true)
         tabBarController.delegate = self
-        rootViewController = tabBarController
-
+        
         DispatchQueue.global().async {
             self.authenticator.authenticate { [weak self] response in
                 self?.authenticationCompletion(response: response)
             }
         }
     }
-    
+
     // MARK: - CoordinatorDelegate
     
     func coordinatorDidFinish(coordinator: Coordinator) {
@@ -82,7 +82,6 @@ class AppCoordinator: NSObject, ProtocolComposite {
             let locationManager = LocationManager()
             let coordinator = OnboardingCoordinator(locationManager: locationManager)
             coordinator.delegate = self
-            coordinator.start()
             launchNavigationController.present(coordinator.rootViewController, animated: true) {
                 self.childCoordinators[.onboarding] = coordinator
             }
@@ -97,9 +96,6 @@ class AppCoordinator: NSObject, ProtocolComposite {
         }
         
         let postCoordinator = PostCoordinator(ownerReference: appState.ownerReference)
-        postCoordinator.delegate = self
-        postCoordinator.start()
-
         rootViewController.present(postCoordinator.rootViewController, animated: true) {
             self.childCoordinators[.post] = postCoordinator
         }
@@ -115,8 +111,6 @@ class AppCoordinator: NSObject, ProtocolComposite {
         let fetcher = Resolved.flyrFetcher
         let manager = LocationManager()
         let feedCoordinator = FeedCoordinator(appState: appState, fetcher: fetcher, locationManager: manager)
-        feedCoordinator.delegate = self
-        feedCoordinator.start()
         childCoordinators[.feed] = feedCoordinator
         
         let feedVC = feedCoordinator.rootViewController
@@ -129,9 +123,7 @@ class AppCoordinator: NSObject, ProtocolComposite {
         postVC.accessibilityLabel = "POST"
 
         // Profile
-        let profileCoordinator = ProfileCoordinator(appState: appState, fetcher: Resolved.flyrFetcher)
-        profileCoordinator.delegate = self
-        profileCoordinator.start()
+        let profileCoordinator = ProfileCoordinator(appState: appState, fetcher: Resolved.flyrFetcher)        
         childCoordinators[.profile] = profileCoordinator
         
         let profileVC = profileCoordinator.rootViewController

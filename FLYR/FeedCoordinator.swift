@@ -10,7 +10,7 @@ import MapKit
 import CloudKit
 import GGNLocationPicker
 
-class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
+class FeedCoordinator: NSObject, Coordinator, FlyrViewModelingDelegate {
 
     weak var delegate: CoordinatorDelegate?
     
@@ -40,6 +40,8 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
 
         let viewController = FlyrTableVC(viewModel: viewModel)
         rootViewController = UINavigationController(rootViewController: viewController)
+        
+        super.init()
     
         let selector = #selector(didTapSettingsBarButtonItem)
         let rightBarButtonItem = UIBarButtonItem(title: "⚙️", style: .plain, target: self, action: selector)
@@ -47,10 +49,8 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         
         self.viewModel.delegate = self
     }
-    
-    func start() {}
-    
-    // MARK: - Feed Start Modes
+        
+    // MARK: - Private Functions
     
     private func startFeed(with mode: FeedMode) {
         switch mode {
@@ -80,8 +80,6 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
             assertionFailure("Handle did fail authorization: \(authorization)")
         }
     }
-
-    // MARK: - Private Functions
     
     private func currentHandler(action: UIAlertAction) {
         appState.didSelect(newFeedMode: .userLocation(nil))
@@ -133,6 +131,15 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         return CKQuery(recordType: "Flyr", predicate: predicate)
     }
     
+    private func refreshLocationCompletion(response: LocationResponse) {
+        switch response {
+        case .didUpdateLocations(let locations):
+            let query = self.makeQuery(from: locations.last!)
+            fetcher.fetch(with: query)
+        default: break
+        }
+    }
+    
     // MARK: - Private Selectors
     
     @objc private func didTapSettingsBarButtonItem(sender: UIBarButtonItem) {
@@ -172,6 +179,21 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         rootViewController.dismiss(animated: true, completion: nil)
     }
     
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeMutableRawPointer) {
+        let message: String
+        
+        if let error = error {
+            message = "Error saving photo: \(error). Please try again later."
+        } else {
+            message = "Photo saved."
+        }
+        
+        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        let alertController = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+        alertController.addAction(action)
+        rootViewController.present(alertController, animated: true, completion: nil)
+    }
+    
     // MARK: - FlyrViewModelingDelegate
     
     func refresh() {
@@ -182,12 +204,40 @@ class FeedCoordinator: Coordinator, FlyrViewModelingDelegate {
         refresh()
     }
     
-    private func refreshLocationCompletion(response: LocationResponse) {
-        switch response {
-        case .didUpdateLocations(let locations):
-            let query = self.makeQuery(from: locations.last!)
-            fetcher.fetch(with: query)
-        default: break
-        }
+    func didLongPress(on flyr: Flyr) {
+        let save = UIAlertAction(title: "Save", style: .default, handler: { [weak self] _ in
+            UIImageWriteToSavedPhotosAlbum(
+                flyr.image,
+                self,
+                #selector(self?.image(_:didFinishSavingWithError:contextInfo:)),
+                nil
+            )
+        })
+        
+        let share = UIAlertAction(title: "Share", style: .default, handler: { [weak self] _ in
+            let items = [flyr.image]
+            let shareSheet = UIActivityViewController(activityItems: items, applicationActivities: nil)
+            self?.rootViewController.present(shareSheet, animated: true, completion: nil)
+        })
+        
+        let directions = UIAlertAction(title: "Directions", style: .default, handler: { _ in
+            let geocoder = CLGeocoder()
+            geocoder.reverseGeocodeLocation(flyr.location) { placemarks, error in
+                if let placemark = placemarks?.first {
+                    let mapItem = MKMapItem(placemark: MKPlacemark(placemark: placemark))
+                    mapItem.openInMaps(launchOptions: nil)
+                } else {
+                    assertionFailure("Unable to reverse geocode location!")
+                }
+            }
+        })
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        
+        [save, share, directions, cancel].forEach({ alertController.addAction($0) })
+        
+        rootViewController.present(alertController, animated: true, completion: nil)
     }
 }

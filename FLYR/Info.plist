@@ -23,11 +23,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Use your camera to post a new Flyr</string>
+	<string>Use your camera to post a new Flyr.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Your location will be used to show you the most relevant flyers.</string>
+	<string>Used your location to see the most relevant flyers or to find locations when posting a flyer.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Use your photo library to post a new flyer.</string>
+	<string>Use your photo library to post a new flyer or to save flyers to your camera roll.</string>
 	<key>PreferredLocation</key>
 	<dict>
 		<key>coordinate</key>

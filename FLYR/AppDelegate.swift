@@ -21,7 +21,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let authenticator = Authenticator()
         
         coordinator = AppCoordinator(appState: appState, authenticator: authenticator)
-        coordinator?.start()
         
         window = UIWindow()
         window?.backgroundColor = .white

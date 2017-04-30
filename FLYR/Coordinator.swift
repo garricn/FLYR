@@ -15,5 +15,4 @@ protocol CoordinatorDelegate: class {
 protocol Coordinator {
     weak var delegate: CoordinatorDelegate? { get set }
     var rootViewController: UIViewController { get }
-    func start()
 }

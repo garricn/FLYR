@@ -12,7 +12,7 @@ import CloudKit
 final class PostCoordinator: Coordinator {
     weak var delegate: CoordinatorDelegate?
     
-    let rootViewController: UIViewController = UINavigationController(rootViewController: UIViewController())
+    let rootViewController: UIViewController //= UINavigationController(rootViewController: UIViewController())
     
     private var ownerReference: CKReference?
     
@@ -30,8 +30,6 @@ final class PostCoordinator: Coordinator {
         let saver = Resolved.recordSaver
         let viewModel = AddFlyrVM(recordSaver: saver)
         let postVC = AddFlyrVC(viewModel: viewModel, ownerReference: ownerReference)
-        navigationController.setViewControllers([postVC], animated: false)
+        rootViewController = UINavigationController(rootViewController: postVC)
     }
-    
-    func start() {}
 }
