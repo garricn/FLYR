@@ -40,7 +40,14 @@ final class PostCoordinator: Coordinator, PostViewModelDelegate {
     
     func didFinishAddingFlyr(in viewModel: AddFlyrViewModeling) {
         DispatchQueue.main.async {
-            self.delegate?.coordinatorDidFinish(coordinator: self)
+            let action = UIAlertAction(title: "Ok", style: .default, handler: { _ in
+                self.delegate?.coordinatorDidFinish(coordinator: self)
+            })
+
+            let alertController = UIAlertController(title: "", message: "Flyr Posted!", preferredStyle: .alert)
+            alertController.addAction(action)
+            
+            self.rootViewController.present(alertController, animated: true, completion: nil)
         }
     }
 }
