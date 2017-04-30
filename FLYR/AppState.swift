@@ -142,3 +142,9 @@ protocol ProfileAppState {
 }
 
 extension AppState: ProfileAppState {}
+
+protocol PostAppState {
+    var ownerReference: CKReference? { get }
+}
+
+extension AppState: PostAppState {}

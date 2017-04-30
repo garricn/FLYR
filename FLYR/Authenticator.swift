@@ -7,7 +7,6 @@
 //
 
 import CloudKit
-import GGNObservable
 
 protocol Authenticating {
     func authenticate(with completion: @escaping (Authenticator.AuthResponse) -> Void)

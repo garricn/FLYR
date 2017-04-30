@@ -14,12 +14,10 @@ import CloudKit
 
 class AddFlyrVC: UIViewController {
     fileprivate let viewModel: AddFlyrViewModeling
-    fileprivate var ownerReference: CKReference?
     fileprivate let tableView = UITableView(frame: CGRect.zero, style: .grouped)
 
-    init(viewModel: AddFlyrViewModeling, ownerReference: CKReference?) {
+    init(viewModel: AddFlyrViewModeling) {
         self.viewModel = viewModel
-        self.ownerReference = ownerReference
         super.init(nibName: nil, bundle: nil)
     }
     

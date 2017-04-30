@@ -7,11 +7,10 @@
 //
 
 import UIKit
-import CloudKit
-import GGNObservable
-import GGNLocationPicker
 import MapKit
+import CloudKit
 import CoreLocation
+import GGNLocationPicker
 
 private typealias ProtocolComposite = UITabBarControllerDelegate
     & Coordinator
@@ -71,6 +70,12 @@ class AppCoordinator: NSObject, ProtocolComposite {
                 self.appState.onboardingCompleted(with: selectedFeedMode)
             }
         }
+        
+        if let coordinator = coordinator as? PostCoordinator {
+            coordinator.rootViewController.dismiss(animated: true) {
+                self.childCoordinators.removeValue(forKey: .post)
+            }
+        }
     }
     
     // MARK: - LaunchNavigationControllerDelegate
@@ -95,7 +100,8 @@ class AppCoordinator: NSObject, ProtocolComposite {
             return true
         }
         
-        let postCoordinator = PostCoordinator(ownerReference: appState.ownerReference)
+        let postCoordinator = PostCoordinator(appState: appState)
+        postCoordinator.delegate = self
         rootViewController.present(postCoordinator.rootViewController, animated: true) {
             self.childCoordinators[.post] = postCoordinator
         }

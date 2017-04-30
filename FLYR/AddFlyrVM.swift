@@ -15,12 +15,20 @@ protocol ViewControllerOutputing {
     var viewControllerOutput: Observable<UIViewController> { get }
 }
 
+protocol PostViewModel: class {
+    weak var delegate: PostViewModelDelegate? { get set }
+}
+
+protocol PostViewModelDelegate: class {
+    func didFinishAddingFlyr(in viewModel: AddFlyrViewModeling)
+}
 
 protocol AddFlyrViewModeling:
-ViewControllerOutputing,
-FlyrAdding,
-TableViewDataSource,
-AddFlyrTableViewDelegate {}
+    ViewControllerOutputing,
+    FlyrAdding,
+    TableViewDataSource,
+    AddFlyrTableViewDelegate,
+    PostViewModel {}
 
 protocol FlyrAdding {
     var imageInput: Observable<UIImage?> { get }
@@ -44,13 +52,18 @@ class AddFlyrVM: AddFlyrViewModeling {
     let recordSaver: RecordSaveable
     let viewControllerOutput = Observable<UIViewController>()
 
+    weak var delegate: PostViewModelDelegate?
+    
     fileprivate var shouldEnableDoneButton: Bool {
         return imageInput.lastEvent != nil
         && locationInput.lastEvent != nil
         && startDateInput.lastEvent != nil
     }
+    
+    private let appState: PostAppState
 
-    init(recordSaver: RecordSaveable) {
+    init(appState: PostAppState, recordSaver: RecordSaveable) {
+        self.appState = appState
         self.recordSaver = recordSaver
 
         imageInput.onNext { _ in
@@ -75,30 +88,37 @@ class AddFlyrVM: AddFlyrViewModeling {
     func doneButtonTapped() {
         shouldEnableDoneButtonOutput.emit(false)
         shouldEnableCancelButtonOutput.emit(false)
+        
+        guard let image = imageInput.lastEvent!
+            , let annotation = locationInput.lastEvent!
+            , let startDate = startDateInput.lastEvent!
+            , let reference = self.appState.ownerReference
+        else { return }
+        
+        let loc = location(from: annotation)
+        
+        let flyr = Flyr(
+            image: image,
+            location: loc,
+            startDate: startDate,
+            ownerReference: reference
+        )
 
-//        let image = imageInput.lastEvent!
-//        let _location = location(from: locationInput.lastEvent!!)
-//        let startDate = startDateInput.lastEvent!
-//        let reference = AppCoordinator.sharedInstance.ownerReference()!
-//        let flyr = Flyr(
-//            image: image!,
-//            location: _location,
-//            startDate: startDate!,
-//            ownerReference: reference
-//        )
-//
-//        let record = toFlyrRecord(from: flyr)
-//        recordSaver.save(record) { response in
-//            switch response {
-//            case .successful:
-//                AppCoordinator.sharedInstance.didFinishAddingFlyr()
-//            case .notSuccessful(let error):
-//                let alert = makeAlert(from: error)
-//                self.alertOutput.emit(alert)
-//                self.shouldEnableDoneButtonOutput.emit(true)
-//                self.shouldEnableCancelButtonOutput.emit(true)
-//            }
-//        }
+        // TODO: - The record saving can happen in post or app coordinator.
+        // Dismiss vc and let user get on with app
+        // Save should happen in the background
+        
+        let record = toFlyrRecord(from: flyr)
+        recordSaver.save(record) { [weak self] response in
+            guard let weakSelf = self else { return }
+            
+            switch response {
+            case .successful:
+                weakSelf.delegate?.didFinishAddingFlyr(in: weakSelf)
+            case .notSuccessful(let error):
+                assertionFailure("Handle error: \(error)")
+            }
+        }
     }
 }
 
