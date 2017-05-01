@@ -19,6 +19,7 @@ protocol FlyrFetchable {
     var errorOutput: Observable<Error?> { get }
     func fetch(with query: CKQuery)
     func fetch(with operation: CKQueryOperation, and query: CKQuery)
+    func fetch(with operation: CKQueryOperation, completion: @escaping (FlyrFetcher.Response) -> Void)
 }
 
 class FlyrFetcher: FlyrFetchable {
@@ -26,7 +27,8 @@ class FlyrFetcher: FlyrFetchable {
     let refreshOutput = Observable<Flyrs>()
     let errorOutput = Observable<Error?>()
 
-    fileprivate let database: Database
+    private let database: Database
+    private var cursor: CKQueryCursor?
 
     init(database: Database) {
         self.database = database
@@ -41,47 +43,53 @@ class FlyrFetcher: FlyrFetchable {
         database.perform(query, completion: completion)
     }
     
-    private func completion(with response: Response) {
+    func fetch(with operation: CKQueryOperation, completion: @escaping (FlyrFetcher.Response) -> Void) {
+        var records: [CKRecord] = []
+        
+        operation.recordFetchedBlock = { record in
+            records.append(record)
+        }
+        
+        operation.queryCompletionBlock = { cursor, error in
+            let response: Response
+            
+            if let cursor = cursor {
+                self.cursor = cursor
+                let flyrs = records.flatMap(toFlyr)
+                response = .successful(flyrs)
+            } else if let error = error {
+                response = .notSuccessful(error)
+            } else {
+                let err: FLYR.Response.Error = .unknown
+                response = .notSuccessful(err)
+            }
+            
+            completion(response)
+        }
+        
+        database.add_(operation)
+    }
+    
+    private func completion(with response: FLYR.Response) {
         switch response {
         case .successful(let records):
             guard let records = records as? CKRecords else { return }
-            let flyrs = records.map(toFlyr)
+            let flyrs = records.flatMap(toFlyr)
             output.emit(flyrs)
             refreshOutput.emit(flyrs)
         case .notSuccessful(let error):
             errorOutput.emit(error)
         }
     }
+    
+    // MARK: - Nested Types
+    
+    enum Response {
+        case notSuccessful(Swift.Error)
+        case successful(Flyrs)
+    }
 }
 
-
-struct GGNError: Error {
-    let message: String
-}
-
-func toFlyr(_ record: CKRecord) -> Flyr {
-    return Flyr(
-        image: image(from: record),
-        location: location(from: record),
-        startDate: startDate(from: record),
-        ownerReference: ownerReference(from: record)
-    )
-}
-
-func image(from record: CKRecord) -> UIImage {
-    let imageAsset = record["image"] as! CKAsset
-    let path = imageAsset.fileURL.path
-    return UIImage(contentsOfFile: path)!
-}
-
-func location(from record: CKRecord) -> CLLocation {
-    return record["location"] as! CLLocation
-}
-
-func startDate(from record: CKRecord) -> Date {
-    return record["startDate"] as! Date
-}
-
-func ownerReference(from record: CKRecord) -> CKReference {
-    return record["ownerReference"] as! CKReference
+func toFlyr(_ record: CKRecord) -> Flyr? {
+    return Flyr(record: record)
 }

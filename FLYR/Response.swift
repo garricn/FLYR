@@ -8,5 +8,13 @@
 
 enum Response {
     case successful(Any)
-    case notSuccessful(Error)
+    case notSuccessful(Swift.Error)
+    
+    enum Error: Swift.Error {
+        case unknown
+        
+        var localizedDescription: String {
+            return "Unknown error"
+        }
+    }
 }

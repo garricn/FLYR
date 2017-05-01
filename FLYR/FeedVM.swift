@@ -19,7 +19,7 @@ class FeedVM: FlyrViewModeling, FlyrConfigurable {
             onModelUpdated?()
         }
     }
-
+    
     init(model: Flyrs) {
         self.model = model
     }

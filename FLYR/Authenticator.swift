@@ -53,16 +53,17 @@ extension CKContainer: Container {
             if let recordID = recordID {
                 response = .successful(recordID)
             } else {
-                let _error: Error
+                let err: Error
 
                 if let error = error {
-                    _error = error
+                    err = error
                 } else {
-                    _error = GGNError(message: "Unknown container error.")
+                    err = Response.Error.unknown
                 }
 
-                response = .notSuccessful(_error)
+                response = .notSuccessful(err)
             }
+            
             completion(response)
         }
     }

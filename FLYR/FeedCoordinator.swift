@@ -11,16 +11,16 @@ import CloudKit
 import GGNLocationPicker
 
 class FeedCoordinator: NSObject, Coordinator, FlyrViewModelingDelegate {
-
-    weak var delegate: CoordinatorDelegate?
     
     let rootViewController: UIViewController
+
+    weak var delegate: CoordinatorDelegate?
     
     private let appState: FeedAppState
     private let fetcher: FlyrFetchable
     private let locationManager: LocationManageable
     private let viewModel: FlyrConfigurable
-
+    
     private var navigationController: UINavigationController {
         if let viewController = rootViewController as? UINavigationController {
             return viewController
@@ -81,6 +81,31 @@ class FeedCoordinator: NSObject, Coordinator, FlyrViewModelingDelegate {
         }
     }
     
+    private func startFeed(with location: CLLocation) {
+        let query = makeQuery(from: location)
+        let operation = CKQueryOperation(query: query)
+        operation.resultsLimit = 2
+        
+        fetcher.fetch(with: operation) { [weak self] response in
+            let block: Void?
+            
+            switch response {
+            case .notSuccessful(let error):
+                let title = "Error Fetching Flyrs:"
+                let message = error.localizedDescription
+                let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                block = self?.rootViewController.present(alertController, animated: true)
+            case .successful(let flyrs):
+                block = self?.viewModel.configure(with: flyrs)
+            }
+            
+            DispatchQueue.main.async {
+                block
+            }
+        }
+    }
+    
     private func currentHandler(action: UIAlertAction) {
         appState.didSelect(newFeedMode: .userLocation(nil))
         startUserLocationMode()
@@ -105,19 +130,6 @@ class FeedCoordinator: NSObject, Coordinator, FlyrViewModelingDelegate {
     private func annotationCompletion(annotation: MKAnnotation) {
         appState.didSelect(newFeedMode: .preferred(annotation))
         rootViewController.dismiss(animated: true, completion: nil)
-    }
-    
-    private func startFeed(with location: CLLocation) {
-        fetcher.output.onNext { [weak self] flyrs in
-            self?.viewModel.configure(with: flyrs)
-        }
-        
-        fetcher.errorOutput.onNext { error in
-            print(error!)
-        }
-        
-        let query = makeQuery(from: location)
-        fetcher.fetch(with: query)
     }
     
     private func makeQuery(from location: CLLocation) -> CKQuery {

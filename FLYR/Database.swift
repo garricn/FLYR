@@ -16,33 +16,42 @@ protocol Database {
 
 extension CKDatabase: Database {
     func perform(_ query: CKQuery, completion: @escaping (Response) -> Void) {
+        
         self.perform(query, inZoneWith: nil) { records, error in
             let response: Response
 
             if let records = records, !records.isEmpty {
                 response = .successful(records)
             } else {
-                let _error: Error
+                let err: Swift.Error
+                
                 if let error = error {
-                    _error = error
-                } else if records?.count == 0 {
-                    _error = GGNError(message: "No records found.")
+                    err = error
                 } else {
-                    _error = GGNError(message: "Unknown database error.")
+                    err = Response.Error.unknown
                 }
-                response = .notSuccessful(_error)
+                
+                response = .notSuccessful(err)
             }
+            
             completion(response)
         }
     }
 
     func save(_ record: CKRecord, completion: @escaping (Response) -> Void) {
         self.save(record) { record, error in
-            if error != nil {
-                completion(.notSuccessful(error!))
+            let response: Response
+            
+            if let record = record {
+                response = .successful(record)
+            } else if let error = error {
+                response = .notSuccessful(error)
             } else {
-                completion(.successful([record!]))
+                let err: Response.Error = .unknown
+                response = .notSuccessful(err)
             }
+            
+            completion(response)
         }
     }
 
