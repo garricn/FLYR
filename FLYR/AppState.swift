@@ -28,9 +28,9 @@ final class AppState: NSObject, NSCoding {
         }
     }
     
-    init(isExistingUser: Bool, feedMode: FeedMode?, launchReason: LaunchReason = .normal) {
+    private init(isExistingUser: Bool, feedMode: FeedMode = .losAngeles, launchReason: LaunchReason = .normal) {
         self.isExistingUser = isExistingUser
-        self.feedMode = feedMode ?? .losAngeles
+        self.feedMode = feedMode
         self.launchReason = launchReason
     }
 
@@ -39,7 +39,7 @@ final class AppState: NSObject, NSCoding {
         let unarchivedObject = NSKeyedUnarchiver.unarchiveObject(withFile: file)
         
         guard let appState = unarchivedObject as? AppState else {
-            self.init(isExistingUser: false, feedMode: nil, launchReason: launchReason)
+            self.init(isExistingUser: false, feedMode: .losAngeles, launchReason: launchReason)
             return
         }
         
@@ -64,7 +64,7 @@ final class AppState: NSObject, NSCoding {
             annotation.subtitle = annotationSubtitle            
         }
 
-        let feedMode = FeedMode.init(integer: feedModeInteger, annotation: annotation)
+        let feedMode = FeedMode(integer: feedModeInteger, annotation: annotation) ?? .losAngeles
         let isExistingUser = aDecoder.decodeBool(forKey: Keys.isExistingUser)
         
         self.init(isExistingUser: isExistingUser, feedMode: feedMode)
